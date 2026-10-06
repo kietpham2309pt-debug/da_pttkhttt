@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Loại sản phẩm - Bep Nè</title>
+    <script src="../assets/js/khoi-dau.js"></script>
+    <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="../assets/img/icon-180.png">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <link rel="stylesheet" href="../assets/css/ung-dung.css">
+</head>
+<body>
+    <div data-khung="dau-trang"></div>
+
+    <main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="tong-quan.html">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="danh-muc.html">Loại sản phẩm</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Thêm mới</span>
+            </nav>
+
+            <div class="qt">
+                <nav class="qt-ben" aria-label="Menu quản trị" data-khung="menu-quan-tri" data-chon="danh-muc"></nav>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Thêm loại sản phẩm</h1>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <form action="danh-muc.html" method="get">
+                            <input type="hidden" id="id" name="id" value="">
+
+                            <div class="o-nhap">
+                                <label for="tenLoai">Tên loại</label>
+                                <input type="text" id="tenLoai" placeholder="Bếp điện từ" name="tenLoai" value="">
+                                
+                            </div>
+
+                            <div class="o-nhap">
+                                <label for="maLoai">Mã loại</label>
+                                <input type="text" id="maLoai" placeholder="bep-dien-tu" name="maLoai" value="">
+                                <span class="goi-y">Chữ thường không dấu, nối bằng dấu gạch ngang. Mã này chọn icon,
+                                    ảnh danh mục <b>/img/sp-&lt;mã&gt;.jpg</b> và ảnh banner <b>/img/banner-&lt;mã&gt;.jpg</b>.
+                                    Mã có sẵn ảnh: bep-dien-tu, bep-hong-ngoai, hut-mui, rua-chen, lo-nuong, lo-vi-song.</span>
+                                
+                            </div>
+
+                            <div class="o-nhap">
+                                <label for="moTa">Mô tả</label>
+                                <textarea id="moTa" rows="3" placeholder="Một câu ngắn mô tả nhóm hàng này" name="moTa"></textarea>
+                                
+                            </div>
+
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu</button>
+                                <a class="nut" href="danh-muc.html">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <div data-khung="chan-trang"></div>
+
+    <script src="../assets/js/menu-quan-tri.js"></script>
+    <script src="../assets/js/khung.js"></script>
+    <script src="../assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đơn hàng - Bep Nè</title>
+    <script src="../assets/js/khoi-dau.js"></script>
+    <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="../assets/img/icon-180.png">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <link rel="stylesheet" href="../assets/css/ung-dung.css">
+</head>
+<body>
+    <div data-khung="dau-trang"></div>
+
+    <main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="../khach/trang-chu.html">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="tong-quan.html">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Đơn hàng</span>
+            </nav>
+
+            <div class="qt">
+                <nav class="qt-ben" aria-label="Menu quản trị" data-khung="menu-quan-tri" data-chon="don-hang"></nav>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Đơn hàng</h1>
+                            <p>Quản lý đơn hàng và theo dõi trạng thái xử lý.</p>
+                        </div>
+                    </div>
+
+                    <div class="thanh-loc">
+                        <form action="don-hang.html" method="get">
+                            <select name="trangThai">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="CHO_XAC_NHAN">
+                                    Chờ xác nhận
+                                </option>
+                                <option value="DA_XAC_NHAN">
+                                    Đã xác nhận
+                                </option>
+                                <option value="DANG_GIAO">
+                                    Đang giao
+                                </option>
+                                <option value="HOAN_THANH">
+                                    Hoàn thành
+                                </option>
+                                <option value="DA_HUY">
+                                    Đã huỷ
+                                </option>
+                            </select>
+
+                            <button class="nut nut--nho" type="submit">Lọc</button>
+
+                        </form>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Người nhận</th>
+                                    <th>Số điện thoại</th>
+                                    <th class="canh-phai">Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="ma-mo">#1025</td>
+                                    <td>07/10/2026 09:15</td>
+                                    <td>Trần Thị Mai</td>
+                                    <td>0903 456 781</td>
+                                    <td class="canh-phai">18.900.000 ₫</td>
+                                    <td><span class="the-nhan the-nhan--vang">Chờ xác nhận</span></td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" href="#">Chi tiết</a></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="ma-mo">#1024</td>
+                                    <td>06/10/2026 20:42</td>
+                                    <td>Lê Văn Hùng</td>
+                                    <td>0918 223 640</td>
+                                    <td class="canh-phai">7.290.000 ₫</td>
+                                    <td><span class="the-nhan">Đã xác nhận</span></td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" href="#">Chi tiết</a></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="ma-mo">#1023</td>
+                                    <td>06/10/2026 14:05</td>
+                                    <td>Phạm Ngọc Anh</td>
+                                    <td>0987 551 902</td>
+                                    <td class="canh-phai">26.180.000 ₫</td>
+                                    <td><span class="the-nhan">Đang giao</span></td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" href="#">Chi tiết</a></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="ma-mo">#1022</td>
+                                    <td>05/10/2026 10:30</td>
+                                    <td>Võ Minh Quân</td>
+                                    <td>0935 118 274</td>
+                                    <td class="canh-phai">12.490.000 ₫</td>
+                                    <td><span class="the-nhan the-nhan--ok">Hoàn thành</span></td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" href="#">Chi tiết</a></div></td>
+                                </tr>
+                                <tr>
+                                    <td class="ma-mo">#1021</td>
+                                    <td>04/10/2026 16:58</td>
+                                    <td>Đỗ Thu Hà</td>
+                                    <td>0972 640 315</td>
+                                    <td class="canh-phai">9.990.000 ₫</td>
+                                    <td><span class="the-nhan the-nhan--do">Đã huỷ</span></td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" href="#">Chi tiết</a></div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <div data-khung="chan-trang"></div>
+
+    <script src="../assets/js/menu-quan-tri.js"></script>
+    <script src="../assets/js/khung.js"></script>
+    <script src="../assets/js/site.js"></script>
+</body>
+</html>

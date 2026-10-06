@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Loại sản phẩm - Bep Nè</title>
+    <script src="../assets/js/khoi-dau.js"></script>
+    <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="../assets/img/icon-180.png">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <link rel="stylesheet" href="../assets/css/ung-dung.css">
+</head>
+<body>
+    <div data-khung="dau-trang"></div>
+
+    <main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="../khach/trang-chu.html">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="tong-quan.html">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Loại sản phẩm</span>
+            </nav>
+
+            <div class="qt">
+                <nav class="qt-ben" aria-label="Menu quản trị" data-khung="menu-quan-tri" data-chon="danh-muc"></nav>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Loại sản phẩm</h1>
+                            <p>Nhóm hàng hiển thị trên menu, trang chủ và trang sản phẩm.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac nut--nho" href="danh-muc-form.html">Thêm loại</a>
+                        </div>
+                    </div>
+
+                    <div class="thanh-loc">
+                        <form action="danh-muc.html" method="get">
+                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên loại"
+                                   aria-label="Từ khoá" value="">
+                            <button class="nut nut--nho" type="submit">Tìm</button>
+                            
+                        </form>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Icon</th>
+                                    <th>Tên loại</th>
+                                    <th>Mã loại</th>
+                                    <th>Mô tả</th>
+                                    <th class="canh-giua">Số SP</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <svg class="ic ic-dm"><use href="#ic-bep-dien-tu"></use></svg>
+                                    </td>
+                                    <td>Bếp điện từ</td>
+                                    <td><span class="the-nhan">bep-dien-tu</span></td>
+                                    <td class="o-dai">Ghép vùng từ với vùng hồng ngoại, dùng được cả nồi đất và nồi nhôm.</td>
+                                    <td class="canh-giua">4</td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" href="danh-muc-form.html">Sửa</a>
+                                            <form action="danh-muc.html" method="get"
+                                                  onsubmit="return confirm('Bạn chắc chắn muốn xoá loại này?');">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <svg class="ic ic-dm"><use href="#ic-bep-hong-ngoai"></use></svg>
+                                    </td>
+                                    <td>Bếp hồng ngoại</td>
+                                    <td><span class="the-nhan">bep-hong-ngoai</span></td>
+                                    <td class="o-dai">Nhiệt toả đều từ vòng sợi đốt, rất hợp món kho và món nướng lâu.</td>
+                                    <td class="canh-giua">4</td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" href="danh-muc-form.html">Sửa</a>
+                                            <form action="danh-muc.html" method="get"
+                                                  onsubmit="return confirm('Bạn chắc chắn muốn xoá loại này?');">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <svg class="ic ic-dm"><use href="#ic-lo-nuong"></use></svg>
+                                    </td>
+                                    <td>Lò nướng</td>
+                                    <td><span class="the-nhan">lo-nuong</span></td>
+                                    <td class="o-dai">Âm tủ 60 cm, nướng đối lưu nhiều tầng, có chế độ tự vệ sinh.</td>
+                                    <td class="canh-giua">4</td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" href="danh-muc-form.html">Sửa</a>
+                                            <form action="danh-muc.html" method="get"
+                                                  onsubmit="return confirm('Bạn chắc chắn muốn xoá loại này?');">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <svg class="ic ic-dm"><use href="#ic-lo-vi-song"></use></svg>
+                                    </td>
+                                    <td>Lò vi sóng</td>
+                                    <td><span class="the-nhan">lo-vi-song</span></td>
+                                    <td class="o-dai">Âm tủ và để bàn, kèm nướng thanh nhiệt, khay xoay tháo rời được.</td>
+                                    <td class="canh-giua">4</td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" href="danh-muc-form.html">Sửa</a>
+                                            <form action="danh-muc.html" method="get"
+                                                  onsubmit="return confirm('Bạn chắc chắn muốn xoá loại này?');">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <svg class="ic ic-dm"><use href="#ic-hut-mui"></use></svg>
+                                    </td>
+                                    <td>Máy hút mùi</td>
+                                    <td><span class="the-nhan">hut-mui</span></td>
+                                    <td class="o-dai">Ống khói, âm tủ và đảo. Hút sạch khói dầu, chạy êm dưới 45 dB.</td>
+                                    <td class="canh-giua">5</td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" href="danh-muc-form.html">Sửa</a>
+                                            <form action="danh-muc.html" method="get"
+                                                  onsubmit="return confirm('Bạn chắc chắn muốn xoá loại này?');">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <svg class="ic ic-dm"><use href="#ic-rua-chen"></use></svg>
+                                    </td>
+                                    <td>Máy rửa chén</td>
+                                    <td><span class="the-nhan">rua-chen</span></td>
+                                    <td class="o-dai">Loại độc lập và âm tủ, 8 tới 14 bộ, sấy khô bằng khoáng zeolite.</td>
+                                    <td class="canh-giua">4</td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" href="danh-muc-form.html">Sửa</a>
+                                            <form action="danh-muc.html" method="get"
+                                                  onsubmit="return confirm('Bạn chắc chắn muốn xoá loại này?');">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <div data-khung="chan-trang"></div>
+
+    <script src="../assets/js/menu-quan-tri.js"></script>
+    <script src="../assets/js/khung.js"></script>
+    <script src="../assets/js/site.js"></script>
+</body>
+</html>

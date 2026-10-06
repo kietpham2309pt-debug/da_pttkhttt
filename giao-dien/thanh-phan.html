@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thành phần giao diện - Bep Nè</title>
+    <script src="assets/js/khoi-dau.js"></script>
+    <link rel="icon" href="assets/img/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="assets/img/icon-180.png">
+    <link rel="stylesheet" href="assets/css/site.css">
+    <link rel="stylesheet" href="assets/css/ung-dung.css">
+    <link rel="stylesheet" href="assets/css/tai-lieu.css">
+</head>
+<body>
+    <div data-khung="dau-trang"></div>
+
+    <main>
+        <section class="muc muc--dau-trang">
+            <div class="khung">
+                <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                    <a href="index.html">Bộ giao diện chung</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <span aria-current="page">Thành phần</span>
+                </nav>
+
+                <div class="qt-dau">
+                    <div>
+                        <h1>Thành phần giao diện</h1>
+                        <p>Mỗi mục có bản xem trực tiếp và đoạn mã để chép. Lớp CSS nằm sẵn trong site.css và ung-dung.css.</p>
+                    </div>
+                    <div class="qt-dau__nut">
+                        <a class="nut nut--nho" href="index.html">Về mục lục</a>
+                    </div>
+                </div>
+
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Màu</h2>
+                    </div>
+                    <p class="tl-ghi">Giao diện nền tối. Không đặt mã màu trực tiếp trong trang, luôn gọi qua biến, ví dụ <code>color:var(--dong)</code>.</p>
+                    <div class="tl-mau">
+                        <div class="tl-mau__o"><div class="tl-mau__mau" style="background:var(--nen)"></div><div class="tl-mau__chu"><b>--nen</b>#131313 · Nền trang</div></div>
+                        <div class="tl-mau__o"><div class="tl-mau__mau" style="background:var(--nen-noi)"></div><div class="tl-mau__chu"><b>--nen-noi</b>#1B1B1B · Nền khối, thẻ</div></div>
+                        <div class="tl-mau__o"><div class="tl-mau__mau" style="background:var(--nen-luoi)"></div><div class="tl-mau__chu"><b>--nen-luoi</b>#1A1A1A · Nền dòng đang chọn</div></div>
+                        <div class="tl-mau__o"><div class="tl-mau__mau" style="background:var(--chu)"></div><div class="tl-mau__chu"><b>--chu</b>#EDE7E0 · Chữ chính</div></div>
+                        <div class="tl-mau__o"><div class="tl-mau__mau" style="background:var(--chu-nhat)"></div><div class="tl-mau__chu"><b>--chu-nhat</b>#C4BCB4 · Chữ phụ</div></div>
+                        <div class="tl-mau__o"><div class="tl-mau__mau" style="background:var(--chu-mo)"></div><div class="tl-mau__chu"><b>--chu-mo</b>#9C948C · Chú thích, gợi ý</div></div>
+                        <div class="tl-mau__o"><div class="tl-mau__mau" style="background:var(--vien)"></div><div class="tl-mau__chu"><b>--vien</b>#2C2A28 · Viền</div></div>
+                        <div class="tl-mau__o"><div class="tl-mau__mau" style="background:var(--vien-sang)"></div><div class="tl-mau__chu"><b>--vien-sang</b>#413D39 · Viền khi rê chuột</div></div>
+                        <div class="tl-mau__o"><div class="tl-mau__mau" style="background:var(--dong)"></div><div class="tl-mau__chu"><b>--dong</b>#CBAA7D · Màu nhấn vàng đồng</div></div>
+                        <div class="tl-mau__o"><div class="tl-mau__mau" style="background:var(--do)"></div><div class="tl-mau__chu"><b>--do</b>#D9534F · Lỗi, xoá, huỷ</div></div>
+                    </div>
+                </div>
+
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Chữ</h2>
+                    </div>
+                    <p class="tl-ghi">Một font duy nhất là Montserrat, nhúng sẵn trong assets/fonts nên mở không cần mạng. Viết tiếng Việt có dấu đầy đủ, không dùng gạch ngang dài trong câu.</p>
+                    <div class="tl-xem tl-xem--cot tl-chu">
+                        <span class="nhan">Nhãn mục · lớp nhan</span>
+                        <p class="tieu-de-muc">Tiêu đề mục · lớp tieu-de-muc</p>
+                        <p>Chữ thường của trang, cỡ 15 đến 16px, màu var(--chu).</p>
+                        <p class="ma-mo">Mã, số hiệu, chú thích nhỏ · lớp ma-mo</p>
+                    </div>
+                </div>
+
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Nút</h2>
+                    </div>
+                    <p class="tl-ghi">Nút đặc dùng cho hành động chính, mỗi màn hình một nút. Nút viền cho hành động phụ. Nút đỏ chỉ dùng cho xoá hoặc huỷ.</p>
+                    <div class="tl-xem">
+<button class="nut nut--dac" type="button">Đặt hàng</button>
+<button class="nut" type="button">Tiếp tục mua</button>
+<a class="nut nut--dac nut--nho" href="#">Thêm mới</a>
+<a class="nut nut--nho" href="#">Sửa</a>
+<button class="nut nut--nho nut--do" type="button">Xoá</button>
+                    </div>
+                    <pre class="tl-ma"><code>&lt;button class="nut nut--dac" type="button"&gt;Đặt hàng&lt;/button&gt;
+&lt;button class="nut" type="button"&gt;Tiếp tục mua&lt;/button&gt;
+&lt;a class="nut nut--dac nut--nho" href="#"&gt;Thêm mới&lt;/a&gt;
+&lt;a class="nut nut--nho" href="#"&gt;Sửa&lt;/a&gt;
+&lt;button class="nut nut--nho nut--do" type="button"&gt;Xoá&lt;/button&gt;</code></pre>
+                </div>
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Ô nhập một cột</h2>
+                    </div>
+                    <p class="tl-ghi">Nhãn luôn nằm trên ô. Lỗi hiện ngay dưới ô bằng loi-nhap, gợi ý bằng goi-y.</p>
+                    <div class="tl-xem tl-xem--cot">
+<div class="o-nhap">
+    <label for="ten-sp">Tên sản phẩm</label>
+    <input type="text" id="ten-sp" name="tenSanPham" placeholder="Bếp điện từ Bosch PID675DC1E">
+    <span class="goi-y">Ghi đúng tên trên tem máy.</span>
+</div>
+<div class="o-nhap">
+    <label for="so-luong">Số lượng nhập</label>
+    <input type="number" id="so-luong" name="soLuong" value="0">
+    <span class="loi-nhap">Số lượng phải lớn hơn 0.</span>
+</div>
+<div class="o-nhap">
+    <label for="nha-cc">Nhà cung cấp</label>
+    <select id="nha-cc" name="nhaCungCap">
+        <option>Công ty Bosch Việt Nam</option>
+        <option>Công ty KAFF Việt Nam</option>
+    </select>
+</div>
+<div class="o-nhap">
+    <label for="ghi-chu">Ghi chú</label>
+    <textarea id="ghi-chu" name="ghiChu" placeholder="Máy móp hộp, đã chụp ảnh lưu lại."></textarea>
+</div>
+                    </div>
+                    <pre class="tl-ma"><code>&lt;div class="o-nhap"&gt;
+    &lt;label for="ten-sp"&gt;Tên sản phẩm&lt;/label&gt;
+    &lt;input type="text" id="ten-sp" name="tenSanPham" placeholder="Bếp điện từ Bosch PID675DC1E"&gt;
+    &lt;span class="goi-y"&gt;Ghi đúng tên trên tem máy.&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="o-nhap"&gt;
+    &lt;label for="so-luong"&gt;Số lượng nhập&lt;/label&gt;
+    &lt;input type="number" id="so-luong" name="soLuong" value="0"&gt;
+    &lt;span class="loi-nhap"&gt;Số lượng phải lớn hơn 0.&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="o-nhap"&gt;
+    &lt;label for="nha-cc"&gt;Nhà cung cấp&lt;/label&gt;
+    &lt;select id="nha-cc" name="nhaCungCap"&gt;
+        &lt;option&gt;Công ty Bosch Việt Nam&lt;/option&gt;
+        &lt;option&gt;Công ty KAFF Việt Nam&lt;/option&gt;
+    &lt;/select&gt;
+&lt;/div&gt;
+&lt;div class="o-nhap"&gt;
+    &lt;label for="ghi-chu"&gt;Ghi chú&lt;/label&gt;
+    &lt;textarea id="ghi-chu" name="ghiChu" placeholder="Máy móp hộp, đã chụp ảnh lưu lại."&gt;&lt;/textarea&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Ô nhập hai cột</h2>
+                    </div>
+                    <p class="tl-ghi">Bọc hai o-nhap trong o-doi. Màn hình hẹp tự xuống một cột.</p>
+                    <div class="tl-xem tl-xem--cot">
+<div class="o-doi">
+    <div class="o-nhap">
+        <label for="ho-ten">Họ và tên</label>
+        <input type="text" id="ho-ten" name="hoTen" placeholder="Nguyễn Văn An">
+    </div>
+    <div class="o-nhap">
+        <label for="dien-thoai">Số điện thoại</label>
+        <input type="tel" id="dien-thoai" name="soDienThoai" placeholder="0903 456 781">
+    </div>
+</div>
+                    </div>
+                    <pre class="tl-ma"><code>&lt;div class="o-doi"&gt;
+    &lt;div class="o-nhap"&gt;
+        &lt;label for="ho-ten"&gt;Họ và tên&lt;/label&gt;
+        &lt;input type="text" id="ho-ten" name="hoTen" placeholder="Nguyễn Văn An"&gt;
+    &lt;/div&gt;
+    &lt;div class="o-nhap"&gt;
+        &lt;label for="dien-thoai"&gt;Số điện thoại&lt;/label&gt;
+        &lt;input type="tel" id="dien-thoai" name="soDienThoai" placeholder="0903 456 781"&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Ô tích và ô chọn một</h2>
+                    </div>
+                    <p class="tl-ghi">o-tich cho câu đồng ý hoặc bật tắt. o-chon cho các lựa chọn có mô tả, ví dụ cách thanh toán, cách giao hàng.</p>
+                    <div class="tl-xem tl-xem--cot">
+<label class="o-tich">
+    <input type="checkbox" name="canLapDat" checked>
+    <span class="o-tich__o" aria-hidden="true"></span>
+    <span>Cần lắp đặt tận nơi</span>
+</label>
+
+<div class="o-chon__ds">
+    <label class="o-chon">
+        <input type="radio" name="thanhToan" value="nhan-hang" checked>
+        <span class="o-chon__o" aria-hidden="true"></span>
+        <span class="o-chon__chu">
+            <b>Thanh toán khi nhận hàng</b>
+            <span>Trả tiền mặt cho nhân viên giao, sau khi đã kiểm hàng.</span>
+        </span>
+    </label>
+    <label class="o-chon">
+        <input type="radio" name="thanhToan" value="chuyen-khoan">
+        <span class="o-chon__o" aria-hidden="true"></span>
+        <span class="o-chon__chu">
+            <b>Chuyển khoản ngân hàng</b>
+            <span>Nhân viên gọi xác nhận rồi gửi số tài khoản cho bạn.</span>
+        </span>
+    </label>
+</div>
+                    </div>
+                    <pre class="tl-ma"><code>&lt;label class="o-tich"&gt;
+    &lt;input type="checkbox" name="canLapDat" checked&gt;
+    &lt;span class="o-tich__o" aria-hidden="true"&gt;&lt;/span&gt;
+    &lt;span&gt;Cần lắp đặt tận nơi&lt;/span&gt;
+&lt;/label&gt;
+
+&lt;div class="o-chon__ds"&gt;
+    &lt;label class="o-chon"&gt;
+        &lt;input type="radio" name="thanhToan" value="nhan-hang" checked&gt;
+        &lt;span class="o-chon__o" aria-hidden="true"&gt;&lt;/span&gt;
+        &lt;span class="o-chon__chu"&gt;
+            &lt;b&gt;Thanh toán khi nhận hàng&lt;/b&gt;
+            &lt;span&gt;Trả tiền mặt cho nhân viên giao, sau khi đã kiểm hàng.&lt;/span&gt;
+        &lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class="o-chon"&gt;
+        &lt;input type="radio" name="thanhToan" value="chuyen-khoan"&gt;
+        &lt;span class="o-chon__o" aria-hidden="true"&gt;&lt;/span&gt;
+        &lt;span class="o-chon__chu"&gt;
+            &lt;b&gt;Chuyển khoản ngân hàng&lt;/b&gt;
+            &lt;span&gt;Nhân viên gọi xác nhận rồi gửi số tài khoản cho bạn.&lt;/span&gt;
+        &lt;/span&gt;
+    &lt;/label&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Thanh lọc</h2>
+                    </div>
+                    <p class="tl-ghi">Đặt ngay trên bảng dữ liệu của trang quản trị.</p>
+                    <div class="tl-xem tl-xem--cot">
+<div class="thanh-loc">
+    <form action="#" method="get">
+        <input type="search" name="tuKhoa" placeholder="Tìm theo mã phiếu" aria-label="Từ khoá">
+        <select name="trangThai" aria-label="Trạng thái">
+            <option value="">Tất cả trạng thái</option>
+            <option value="cho">Chờ duyệt</option>
+            <option value="xong">Đã nhập kho</option>
+        </select>
+        <button class="nut nut--nho" type="submit">Lọc</button>
+    </form>
+</div>
+                    </div>
+                    <pre class="tl-ma"><code>&lt;div class="thanh-loc"&gt;
+    &lt;form action="#" method="get"&gt;
+        &lt;input type="search" name="tuKhoa" placeholder="Tìm theo mã phiếu" aria-label="Từ khoá"&gt;
+        &lt;select name="trangThai" aria-label="Trạng thái"&gt;
+            &lt;option value=""&gt;Tất cả trạng thái&lt;/option&gt;
+            &lt;option value="cho"&gt;Chờ duyệt&lt;/option&gt;
+            &lt;option value="xong"&gt;Đã nhập kho&lt;/option&gt;
+        &lt;/select&gt;
+        &lt;button class="nut nut--nho" type="submit"&gt;Lọc&lt;/button&gt;
+    &lt;/form&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Bảng dữ liệu</h2>
+                    </div>
+                    <p class="tl-ghi">Luôn bọc trong khoi và cuon-ngang để điện thoại cuộn ngang được. Cột số và cột thao tác căn phải.</p>
+                    <div class="tl-xem tl-xem--cot">
+<div class="khoi">
+    <div class="khoi__dau">
+        <h2>Phiếu nhập gần đây</h2>
+        <span class="the-nhan">3 phiếu</span>
+    </div>
+    <div class="cuon-ngang">
+        <table class="bang-dl">
+            <thead>
+            <tr>
+                <th>Mã phiếu</th>
+                <th>Nhà cung cấp</th>
+                <th class="canh-phai">Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th class="canh-phai">Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="ma-mo">PN-0012</td>
+                <td>Công ty Bosch Việt Nam</td>
+                <td class="canh-phai">54.600.000 ₫</td>
+                <td><span class="the-nhan the-nhan--ok">Đã nhập kho</span></td>
+                <td><div class="hang-thao-tac"><a class="nut nut--nho" href="#">Xem</a></div></td>
+            </tr>
+            <tr>
+                <td class="ma-mo">PN-0013</td>
+                <td>Công ty KAFF Việt Nam</td>
+                <td class="canh-phai">18.200.000 ₫</td>
+                <td><span class="the-nhan the-nhan--vang">Chờ duyệt</span></td>
+                <td><div class="hang-thao-tac"><a class="nut nut--nho" href="#">Xem</a></div></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+                    </div>
+                    <pre class="tl-ma"><code>&lt;div class="khoi"&gt;
+    &lt;div class="khoi__dau"&gt;
+        &lt;h2&gt;Phiếu nhập gần đây&lt;/h2&gt;
+        &lt;span class="the-nhan"&gt;3 phiếu&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="cuon-ngang"&gt;
+        &lt;table class="bang-dl"&gt;
+            &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;Mã phiếu&lt;/th&gt;
+                &lt;th&gt;Nhà cung cấp&lt;/th&gt;
+                &lt;th class="canh-phai"&gt;Tổng tiền&lt;/th&gt;
+                &lt;th&gt;Trạng thái&lt;/th&gt;
+                &lt;th class="canh-phai"&gt;Thao tác&lt;/th&gt;
+            &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td class="ma-mo"&gt;PN-0012&lt;/td&gt;
+                &lt;td&gt;Công ty Bosch Việt Nam&lt;/td&gt;
+                &lt;td class="canh-phai"&gt;54.600.000 ₫&lt;/td&gt;
+                &lt;td&gt;&lt;span class="the-nhan the-nhan--ok"&gt;Đã nhập kho&lt;/span&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;div class="hang-thao-tac"&gt;&lt;a class="nut nut--nho" href="#"&gt;Xem&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td class="ma-mo"&gt;PN-0013&lt;/td&gt;
+                &lt;td&gt;Công ty KAFF Việt Nam&lt;/td&gt;
+                &lt;td class="canh-phai"&gt;18.200.000 ₫&lt;/td&gt;
+                &lt;td&gt;&lt;span class="the-nhan the-nhan--vang"&gt;Chờ duyệt&lt;/span&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;div class="hang-thao-tac"&gt;&lt;a class="nut nut--nho" href="#"&gt;Xem&lt;/a&gt;&lt;/div&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Nhãn trạng thái</h2>
+                    </div>
+                    <p class="tl-ghi">Mỗi trạng thái một màu cố định trên mọi màn hình: vàng là đang chờ người xử lý, xanh là xong, đỏ là huỷ hoặc lỗi, xám là đã tắt.</p>
+                    <div class="tl-xem">
+<span class="the-nhan the-nhan--vang">Chờ xác nhận</span>
+<span class="the-nhan">Đang giao</span>
+<span class="the-nhan the-nhan--ok">Hoàn thành</span>
+<span class="the-nhan the-nhan--do">Đã huỷ</span>
+<span class="the-nhan the-nhan--tat">Đã khoá</span>
+                    </div>
+                    <pre class="tl-ma"><code>&lt;span class="the-nhan the-nhan--vang"&gt;Chờ xác nhận&lt;/span&gt;
+&lt;span class="the-nhan"&gt;Đang giao&lt;/span&gt;
+&lt;span class="the-nhan the-nhan--ok"&gt;Hoàn thành&lt;/span&gt;
+&lt;span class="the-nhan the-nhan--do"&gt;Đã huỷ&lt;/span&gt;
+&lt;span class="the-nhan the-nhan--tat"&gt;Đã khoá&lt;/span&gt;</code></pre>
+                </div>
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Ô số liệu</h2>
+                    </div>
+                    <p class="tl-ghi">Dùng ở đầu trang tổng quan hoặc báo cáo. Thêm o-so--nhac cho con số cần người xử lý.</p>
+                    <div class="tl-xem tl-xem--cot">
+<div class="o-so-ds">
+    <div class="o-so">
+        <div class="o-so__nhan">Doanh thu tháng 10</div>
+        <div class="o-so__gt">412,5 tr</div>
+    </div>
+    <div class="o-so">
+        <div class="o-so__nhan">Đơn hoàn thành</div>
+        <div class="o-so__gt">38</div>
+    </div>
+    <div class="o-so o-so--nhac">
+        <div class="o-so__nhan">Máy đang bảo hành</div>
+        <div class="o-so__gt">5</div>
+    </div>
+</div>
+                    </div>
+                    <pre class="tl-ma"><code>&lt;div class="o-so-ds"&gt;
+    &lt;div class="o-so"&gt;
+        &lt;div class="o-so__nhan"&gt;Doanh thu tháng 10&lt;/div&gt;
+        &lt;div class="o-so__gt"&gt;412,5 tr&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="o-so"&gt;
+        &lt;div class="o-so__nhan"&gt;Đơn hoàn thành&lt;/div&gt;
+        &lt;div class="o-so__gt"&gt;38&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="o-so o-so--nhac"&gt;
+        &lt;div class="o-so__nhan"&gt;Máy đang bảo hành&lt;/div&gt;
+        &lt;div class="o-so__gt"&gt;5&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Thông báo</h2>
+                    </div>
+                    <p class="tl-ghi">Hiện ngay dưới tiêu đề trang sau khi lưu, xoá hoặc gặp lỗi.</p>
+                    <div class="tl-xem tl-xem--cot">
+<p class="thong-bao" role="status">
+    <svg class="ic" aria-hidden="true"><use href="#ic-bao-hanh"></use></svg>
+    <span>Đã lưu phiếu nhập PN-0013.</span>
+</p>
+<p class="thong-bao thong-bao--loi" role="alert">
+    <svg class="ic" aria-hidden="true"><use href="#ic-tn-canh-bao"></use></svg>
+    <span>Số serial này đã có trong kho.</span>
+</p>
+                    </div>
+                    <pre class="tl-ma"><code>&lt;p class="thong-bao" role="status"&gt;
+    &lt;svg class="ic" aria-hidden="true"&gt;&lt;use href="#ic-bao-hanh"&gt;&lt;/use&gt;&lt;/svg&gt;
+    &lt;span&gt;Đã lưu phiếu nhập PN-0013.&lt;/span&gt;
+&lt;/p&gt;
+&lt;p class="thong-bao thong-bao--loi" role="alert"&gt;
+    &lt;svg class="ic" aria-hidden="true"&gt;&lt;use href="#ic-tn-canh-bao"&gt;&lt;/use&gt;&lt;/svg&gt;
+    &lt;span&gt;Số serial này đã có trong kho.&lt;/span&gt;
+&lt;/p&gt;</code></pre>
+                </div>
+
+                <div class="khoi">
+                    <div class="khoi__dau">
+                        <h2>Bộ icon</h2>
+                        <span class="the-nhan">44 icon</span>
+                    </div>
+                    <p class="tl-ghi">Gọi bằng <code>&lt;svg class="ic"&gt;&lt;use href="#ten-icon"&gt;&lt;/use&gt;&lt;/svg&gt;</code>. Icon tự theo màu chữ của phần tử cha. Không tải thêm bộ icon khác.</p>
+                    <ul class="tl-icon">
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-hut-mui"></use></svg>ic-hut-mui</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-bep-dien-tu"></use></svg>ic-bep-dien-tu</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-bep-hong-ngoai"></use></svg>ic-bep-hong-ngoai</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-lo-nuong"></use></svg>ic-lo-nuong</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-lo-vi-song"></use></svg>ic-lo-vi-song</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-rua-chen"></use></svg>ic-rua-chen</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-bao-hanh"></use></svg>ic-bao-hanh</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-lap-dat"></use></svg>ic-lap-dat</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-giao-hang"></use></svg>ic-giao-hang</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tu-van"></use></svg>ic-tu-van</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tim-kiem"></use></svg>ic-tim-kiem</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-gio-hang"></use></svg>ic-gio-hang</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-nguoi-dung"></use></svg>ic-nguoi-dung</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-menu"></use></svg>ic-menu</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-dong"></use></svg>ic-dong</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-mui-ten-phai"></use></svg>ic-mui-ten-phai</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-bo-loc"></use></svg>ic-bo-loc</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-chevron"></use></svg>ic-chevron</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-dien-thoai"></use></svg>ic-dien-thoai</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-thu"></use></svg>ic-thu</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-dia-diem"></use></svg>ic-dia-diem</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-dong-ho"></use></svg>ic-dong-ho</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-nhanh"></use></svg>ic-tn-nhanh</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-chao"></use></svg>ic-tn-chao</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-noi"></use></svg>ic-tn-noi</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-am"></use></svg>ic-tn-am</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-tu-nhan"></use></svg>ic-tn-tu-nhan</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-khoa"></use></svg>ic-tn-khoa</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-canh-bao"></use></svg>ic-tn-canh-bao</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-la"></use></svg>ic-tn-la</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-nuoc"></use></svg>ic-tn-nuoc</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-nua"></use></svg>ic-tn-nua</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-say"></use></svg>ic-tn-say</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-muc"></use></svg>ic-tn-muc</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-den"></use></svg>ic-tn-den</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-loc"></use></svg>ic-tn-loc</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-cam-ung"></use></svg>ic-tn-cam-ung</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-quat"></use></svg>ic-tn-quat</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-tuyet"></use></svg>ic-tn-tuyet</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-tia"></use></svg>ic-tn-tia</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-song"></use></svg>ic-tn-song</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-nhiet-tren"></use></svg>ic-tn-nhiet-tren</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-nhiet-duoi"></use></svg>ic-tn-nhiet-duoi</li>
+                        <li><svg class="ic" aria-hidden="true"><use href="#ic-tn-ket-hop"></use></svg>ic-tn-ket-hop</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div data-khung="chan-trang"></div>
+
+    <script src="assets/js/khung.js"></script>
+    <script src="assets/js/site.js"></script>
+</body>
+</html>

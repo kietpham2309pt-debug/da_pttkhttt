@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đặt hàng - Bep Nè</title>
+    <script src="../assets/js/khoi-dau.js"></script>
+    <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="../assets/img/icon-180.png">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <link rel="stylesheet" href="../assets/css/ung-dung.css">
+</head>
+<body>
+    <div data-khung="dau-trang"></div>
+
+    <main>
+        
+
+<section class="hero-sp hero-sp--dm" id="banner">
+
+    <img class="hero-sp__anh" src="../assets/img/banner-gio-hang.jpg" alt="" />
+
+    <span class="hero-sp__phu" aria-hidden="true"></span>
+
+    <div class="hero-sp__chu">
+        <div class="khung">
+            <h1>Đặt hàng</h1>
+                <p>Điền địa chỉ nhận hàng, nhân viên sẽ gọi xác nhận trước khi giao.</p>
+        </div>
+    </div>
+
+        <div class="hero-sp__duoi">
+            <div class="khung">
+                <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                            <a href="trang-chu.html">Trang chủ</a>
+                            <span aria-hidden="true">&middot;</span>
+                            <a href="gio-hang.html">Giỏ hàng</a>
+                            <span aria-hidden="true">&middot;</span>
+                            <span aria-current="page">Đặt hàng</span>
+                </nav>
+            </div>
+        </div>
+</section>
+
+<section class="muc muc--sat-banner">
+    <div class="khung">
+
+<form action="hoan-tat.html" method="get"><div class="gio__bo-cuc">
+
+                <div class="gio__ds hien-dan">
+
+                    <h2 class="dat__nhom">Thông tin nhận hàng</h2>
+
+                    <div class="o-doi">
+                        <div class="o-nhap">
+                            <label for="HoTen">Họ và tên người nhận</label>
+                            <input autocomplete="name" data-val="true" data-val-length="Họ tên cần từ 2 tới 60 ký tự." data-val-length-max="60" data-val-length-min="2" data-val-required="Bạn chưa nhập họ tên người nhận." id="HoTen" name="HoTen" type="text" value="" />
+                            <span class="field-validation-valid" data-valmsg-for="HoTen" data-valmsg-replace="true"></span>
+                        </div>
+
+                        <div class="o-nhap">
+                            <label for="SoDienThoai">Số điện thoại</label>
+                            <input autocomplete="tel" data-val="true" data-val-regex="Số điện thoại gồm 10 chữ số và bắt đầu bằng số 0." data-val-regex-pattern="^0\d{9}$" data-val-required="Bạn chưa nhập số điện thoại." id="SoDienThoai" inputmode="numeric" name="SoDienThoai" type="tel" value="" />
+                            <span class="field-validation-valid" data-valmsg-for="SoDienThoai" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="o-nhap">
+                        <label for="Email">Email</label>
+                        <input autocomplete="email" data-val="true" data-val-email="Email không đúng dạng, ví dụ đúng: Huit@edu.com.vn" id="Email" name="Email" type="email" value="" />
+                        <span class="o-nhap__goi">Không bắt buộc. Điền thì chúng tôi gửi xác nhận đơn qua email.</span>
+                        <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="o-doi">
+                        <div class="o-nhap">
+                            <label for="TinhThanh">Tỉnh / Thành phố</label>
+                            <input autocomplete="address-level1" data-val="true" data-val-required="Bạn chưa nhập tỉnh hoặc thành phố." id="TinhThanh" name="TinhThanh" type="text" value="" />
+                            <span class="field-validation-valid" data-valmsg-for="TinhThanh" data-valmsg-replace="true"></span>
+                        </div>
+
+                        <div class="o-nhap">
+                            <label for="QuanHuyen">Quận / Huyện</label>
+                            <input autocomplete="address-level2" data-val="true" data-val-required="Bạn chưa nhập quận hoặc huyện." id="QuanHuyen" name="QuanHuyen" type="text" value="" />
+                            <span class="field-validation-valid" data-valmsg-for="QuanHuyen" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="o-nhap">
+                        <label for="DiaChi">Địa chỉ cụ thể</label>
+                        <input autocomplete="street-address" data-val="true" data-val-length="Địa chỉ dài quá 160 ký tự." data-val-length-max="160" data-val-required="Bạn chưa nhập địa chỉ." id="DiaChi" name="DiaChi" type="text" value="" />
+                        <span class="o-nhap__goi">Số nhà, tên đường, phường xã.</span>
+                        <span class="field-validation-valid" data-valmsg-for="DiaChi" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="o-nhap">
+                        <label for="GhiChu">Ghi chú cho người giao</label>
+                        <textarea cols="20" data-val="true" data-val-length="Ghi chú dài quá 300 ký tự." data-val-length-max="300" id="GhiChu" name="GhiChu" rows="3">
+</textarea>
+                        <span class="field-validation-valid" data-valmsg-for="GhiChu" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <h2 class="dat__nhom">Cách thanh toán</h2>
+
+                    <div class="o-chon__ds">
+                            <label class="o-chon">
+                                <input checked="checked" data-val="true" data-val-required="Bạn chưa chọn cách thanh toán." id="tt-nhan-hang" name="ThanhToan" type="radio" value="nhan-hang" />
+                                <span class="o-chon__o" aria-hidden="true"></span>
+                                <span class="o-chon__chu">
+                                    <b>Thanh toán khi nhận hàng</b>
+                                    <span>Trả tiền mặt cho nhân viên giao, sau khi đã kiểm hàng.</span>
+                                </span>
+                            </label>
+                            <label class="o-chon">
+                                <input id="tt-chuyen-khoan" name="ThanhToan" type="radio" value="chuyen-khoan" />
+                                <span class="o-chon__o" aria-hidden="true"></span>
+                                <span class="o-chon__chu">
+                                    <b>Chuyển khoản ngân hàng</b>
+                                    <span>Nhân viên gọi xác nhận rồi gửi số tài khoản cho bạn.</span>
+                                </span>
+                            </label>
+                    </div>
+                    <span class="field-validation-valid" data-valmsg-for="ThanhToan" data-valmsg-replace="true"></span>
+                </div>
+
+                <aside class="tong hien-dan" aria-label="Tóm tắt đơn hàng">
+                    <h2>Đơn hàng</h2>
+
+                    <ul class="dat__ds">
+                            <li>
+                                <span class="dat__ten">Máy hút mùi KAFF KF-8798</span>
+                                <span class="dat__sl">&times;1</span>
+                                <span class="dat__tien">7.290.000 ₫</span>
+                            </li>
+                            <li>
+                                <span class="dat__ten">Bếp điện từ Bosch PID675DC1E</span>
+                                <span class="dat__sl">&times;2</span>
+                                <span class="dat__tien">37.800.000 ₫</span>
+                            </li>
+                    </ul>
+
+                    <dl class="tong__ds">
+                        <div>
+                            <dt>Tạm tính (3 món)</dt>
+                            <dd>45.090.000 ₫</dd>
+                        </div>
+                        <div>
+                            <dt>Phí giao hàng</dt>
+                            <dd><span class="tong__mien">Miễn phí</span></dd>
+                        </div>
+                        <div>
+                            <dt>Lắp đặt</dt>
+                            <dd><span class="tong__mien">Miễn phí</span></dd>
+                        </div>
+                    </dl>
+
+                    <p class="tong__cong">
+                        <span>Tổng cộng</span>
+                        <b>45.090.000 ₫</b>
+                    </p>
+
+                    <button type="submit" class="nut nut--dac tong__dat">Đặt hàng</button>
+
+                    <p class="tong__ghi">
+                        Bấm Đặt hàng nghĩa là bạn đồng ý với
+                        <a href="dieu-khoan.html">Điều khoản sử dụng</a>
+                        của Bep Nè.
+                    </p>
+                </aside>
+            </div>
+</form>    </div>
+</section>
+
+    
+    </main>
+
+    <div data-khung="chan-trang"></div>
+
+    <script src="../assets/js/khung.js"></script>
+    <script src="../assets/js/site.js"></script>
+</body>
+</html>

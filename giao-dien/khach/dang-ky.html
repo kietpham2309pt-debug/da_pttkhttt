@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Đăng ký tài khoản - Bep Nè</title>
+    <script src="../assets/js/khoi-dau.js"></script>
+    <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="../assets/img/icon-180.png">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <link rel="stylesheet" href="../assets/css/ung-dung.css">
+</head>
+<body>
+    <div data-khung="dau-trang"></div>
+
+    <main>
+        
+
+<section class="hero-sp hero-sp--dm" id="banner">
+
+    <img class="hero-sp__anh" src="../assets/img/banner-tai-khoan.jpg" alt="" />
+
+    <span class="hero-sp__phu" aria-hidden="true"></span>
+
+    <div class="hero-sp__chu">
+        <div class="khung">
+            <h1>Đăng ký</h1>
+                <p>Tạo tài khoản để đặt hàng nhanh hơn ở những lần sau.</p>
+        </div>
+    </div>
+
+        <div class="hero-sp__duoi">
+            <div class="khung">
+                <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                            <a href="trang-chu.html">Trang chủ</a>
+                            <span aria-hidden="true">&middot;</span>
+                            <span aria-current="page">Đăng ký</span>
+                </nav>
+            </div>
+        </div>
+</section>
+
+<section class="muc muc--sat-banner">
+    <div class="khung khung--hep">
+
+        <div class="the-tk hien-dan">
+
+<form action="dang-nhap.html" method="get"><div class="o-nhap">
+                    <label for="HoTen">Họ và tên</label>
+                    <input autocomplete="name" data-val="true" data-val-length="Họ tên cần từ 2 tới 60 ký tự." data-val-length-max="60" data-val-length-min="2" data-val-required="Bạn chưa nhập họ tên." id="HoTen" name="HoTen" type="text" value="" />
+                    <span class="field-validation-valid" data-valmsg-for="HoTen" data-valmsg-replace="true"></span>
+                </div>
+                <div class="o-doi">
+                    <div class="o-nhap">
+                        <label for="Email">Email</label>
+                        <input autocomplete="email" data-val="true" data-val-email="Email không đúng dạng, ví dụ đúng: Huit@edu.com.vn" data-val-required="Bạn chưa nhập email." id="Email" name="Email" placeholder="Huit@edu.com.vn" type="email" value="" />
+                        <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="o-nhap">
+                        <label for="SoDienThoai">Số điện thoại</label>
+                        <input autocomplete="tel" data-val="true" data-val-regex="Số điện thoại gồm 10 chữ số và bắt đầu bằng số 0." data-val-regex-pattern="^0\d{9}$" data-val-required="Bạn chưa nhập số điện thoại." id="SoDienThoai" inputmode="numeric" name="SoDienThoai" type="tel" value="" />
+                        <span class="field-validation-valid" data-valmsg-for="SoDienThoai" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <div class="o-doi">
+                    <div class="o-nhap">
+                        <label for="MatKhau">Mật khẩu</label>
+                        <input autocomplete="new-password" data-val="true" data-val-length="Mật khẩu cần ít nhất 6 ký tự." data-val-length-max="50" data-val-length-min="6" data-val-required="Bạn chưa nhập mật khẩu." id="MatKhau" name="MatKhau" type="password" />
+                        <span class="o-nhap__goi">Ít nhất 6 ký tự</span>
+                        <span class="field-validation-valid" data-valmsg-for="MatKhau" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="o-nhap">
+                        <label for="XacNhanMatKhau">Nhập lại mật khẩu</label>
+                        <input autocomplete="new-password" data-val="true" data-val-equalto="Hai lần nhập mật khẩu chưa khớp nhau." data-val-equalto-other="*.MatKhau" data-val-required="Bạn chưa nhập lại mật khẩu." id="XacNhanMatKhau" name="XacNhanMatKhau" type="password" />
+                        <span class="field-validation-valid" data-valmsg-for="XacNhanMatKhau" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+                <label class="o-tich o-tich--dieu-khoan">
+                    <input data-val="true" data-val-range="Bạn cần đồng ý với Điều khoản sử dụng và Chính sách bảo mật." data-val-range-max="True" data-val-range-min="True" data-val-required="The Đồng ý điều khoản field is required." id="DongY" name="DongY" type="checkbox" value="true" /><input name="DongY" type="hidden" value="false" />
+                    <span class="o-tich__o" aria-hidden="true"></span>
+                    <span>
+                        Tôi đã đọc và đồng ý với
+                        <a href="dieu-khoan.html">Điều khoản sử dụng</a>
+                        và
+                        <a href="bao-mat.html">Chính sách bảo mật</a>
+                        của Bep Nè.
+                    </span>
+                </label>
+<span class="field-validation-valid" data-valmsg-for="DongY" data-valmsg-replace="true"></span>                <button type="submit" class="nut nut--dac the-tk__gui">Tạo tài khoản</button>
+</form>
+            <p class="the-tk__doi">
+                Đã có tài khoản?
+                <a href="dang-nhap.html">Đăng nhập</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+    
+    </main>
+
+    <div data-khung="chan-trang"></div>
+
+    <script src="../assets/js/khung.js"></script>
+    <script src="../assets/js/site.js"></script>
+</body>
+</html>

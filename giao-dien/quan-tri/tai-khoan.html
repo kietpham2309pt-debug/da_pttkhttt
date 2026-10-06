@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tài khoản - Bep Nè</title>
+    <script src="../assets/js/khoi-dau.js"></script>
+    <link rel="icon" href="../assets/img/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="../assets/img/icon-180.png">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <link rel="stylesheet" href="../assets/css/ung-dung.css">
+</head>
+<body>
+    <div data-khung="dau-trang"></div>
+
+    <main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="../khach/trang-chu.html">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="tong-quan.html">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Tài khoản</span>
+            </nav>
+
+            <div class="qt">
+                <nav class="qt-ben" aria-label="Menu quản trị" data-khung="menu-quan-tri" data-chon="tai-khoan"></nav>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Tài khoản</h1>
+                            <p>Khoá, mở khoá và đặt lại mật khẩu cho người dùng.</p>
+                        </div>
+                    </div>
+
+                    <div class="thanh-loc">
+                        <form action="tai-khoan.html" method="get">
+                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên hoặc tên đăng nhập"
+                                   aria-label="Từ khoá" value="">
+                            <button class="nut nut--nho" type="submit">Tìm</button>
+                        </form>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Họ tên</th>
+                                    <th>Vai trò</th>
+                                    <th class="canh-giua">Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>admin</td>
+                                    <td>Quản trị viên</td>
+                                    <td>
+                                        <span class="the-nhan the-nhan--vang">Quản trị</span>
+                                    </td>
+                                    <td class="canh-giua">
+                                        <span class="the-nhan the-nhan--ok">Đang hoạt động</span>
+                                    </td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <form action="tai-khoan.html" method="get"
+                                                  class="thanh-loc" style="margin:0">
+                                                <input type="password" name="matKhauMoi" placeholder="Mật khẩu mới"
+                                                       aria-label="Mật khẩu mới" required>
+                                                <button class="nut nut--nho" type="submit">Đặt lại</button>
+                                            </form>
+                                            <form action="tai-khoan.html" method="get">
+                                                <button class="nut nut--nho" type="submit">Khoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>khach1</td>
+                                    <td>Nguyễn Văn Khách</td>
+                                    <td>
+                                        <span class="the-nhan">Khách hàng</span>
+                                    </td>
+                                    <td class="canh-giua">
+                                        <span class="the-nhan the-nhan--ok">Đang hoạt động</span>
+                                    </td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <form action="tai-khoan.html" method="get"
+                                                  class="thanh-loc" style="margin:0">
+                                                <input type="password" name="matKhauMoi" placeholder="Mật khẩu mới"
+                                                       aria-label="Mật khẩu mới" required>
+                                                <button class="nut nut--nho" type="submit">Đặt lại</button>
+                                            </form>
+                                            <form action="tai-khoan.html" method="get">
+                                                <button class="nut nut--nho" type="submit">Khoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <div data-khung="chan-trang"></div>
+
+    <script src="../assets/js/menu-quan-tri.js"></script>
+    <script src="../assets/js/khung.js"></script>
+    <script src="../assets/js/site.js"></script>
+</body>
+</html>
