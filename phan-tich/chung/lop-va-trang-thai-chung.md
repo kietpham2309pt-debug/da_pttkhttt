@@ -1,6 +1,6 @@
 # Lớp dùng chung và trạng thái dùng chung
 
-Bản nháp 0.2 (đã soát chéo) · G1 giữ · việc t112 (làm sớm để 4 gói vẽ cùng một khung) · chốt chính thức ở buổi họp tuần 11
+Bản nháp 0.2 (đã soát chéo) · G1 giữ · việc t112 (làm sớm để 4 gói vẽ cùng một khung) · chốt chính thức ở buổi họp tuần 12 (04/11)
 
 ## 1. Sơ đồ lớp khung
 
