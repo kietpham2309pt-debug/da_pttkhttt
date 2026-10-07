@@ -1,0 +1,49 @@
+@startuml lop-chung-tai-khoan
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+hide circle
+hide empty methods
+
+package "G1" {
+  class TaiKhoan {
+    tenDangNhap
+    matKhau
+    trangThai
+    ngayTao
+    soLanSaiLienTiep
+    khoaDenLuc
+    phaiDoiMatKhau
+  }
+  class VaiTro {
+    maVaiTro
+    tenVaiTro
+  }
+  class NhanVien {
+    maNhanVien
+    hoTen
+    soDienThoai
+  }
+}
+package "G3" {
+  class KhachHang {
+    maKhachHang
+    hoTen
+    soDienThoai
+    email
+    ngayDangKy
+  }
+}
+
+NhanVien "0..1" -- "1" TaiKhoan
+KhachHang "0..1" -- "1" TaiKhoan
+TaiKhoan "*" -- "1..*" VaiTro
+
+note "{xor}: mỗi TaiKhoan thuộc\nhoặc một NhanVien\nhoặc một KhachHang" as N1
+N1 .. TaiKhoan
+@enduml

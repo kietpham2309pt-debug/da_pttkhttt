@@ -1,0 +1,47 @@
+@startuml uc-tong-quat-khach
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam packageStyle rectangle
+left to right direction
+
+actor "Khách vãng lai" as KVL
+actor "Khách hàng" as KH
+actor "Cổng thanh toán" as CTT
+
+KH -|> KVL
+
+rectangle "Website bán hàng điện gia dụng · phía khách" {
+  package "G2 · Sản phẩm" {
+    usecase "Tìm kiếm, xem,\nso sánh sản phẩm" as SP1
+    usecase "Đánh giá sản phẩm" as SP2
+  }
+  package "G3 · Mua hàng" {
+    usecase "Đăng ký tài khoản" as MH1
+    usecase "Quản lý hồ sơ,\nsổ địa chỉ" as MH2
+    usecase "Quản lý giỏ hàng" as MH3
+    usecase "Đặt hàng, áp mã\ngiảm giá, thanh toán" as MH4
+    usecase "Theo dõi, huỷ\nđơn hàng" as MH5
+  }
+  package "G5 · Bảo hành" {
+    usecase "Tra cứu bảo hành" as KB1
+  }
+  package "G1 · Quản trị" {
+    usecase "Đăng nhập,\nđổi mật khẩu" as HT1
+  }
+}
+
+KVL -- SP1
+KVL -- MH1
+KVL -- MH3
+KVL -- KB1
+KH -- SP2
+KH -- MH2
+KH -- MH4
+KH -- MH5
+KH -- HT1
+MH4 -- CTT
+@enduml

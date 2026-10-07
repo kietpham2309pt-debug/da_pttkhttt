@@ -1,0 +1,65 @@
+@startuml lop-chung-chiec-may
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+hide circle
+hide empty methods
+hide empty attributes
+
+package "G2" {
+  class SanPham
+}
+package "G3" {
+  class DonHang
+}
+package "G1" {
+  class NhanVien
+}
+package "G4" {
+  class YeuCauDoiTra {
+    maYeuCau
+    ngayYeuCau
+    lyDo
+    hinhThuc
+    trangThai
+  }
+}
+package "G5" {
+  class SanPhamSerial {
+    soSerial
+    ngayNhap
+    ngayBan
+    trangThai
+    tinhHanBaoHanh()
+  }
+  class PhieuNhap {
+    maPhieuNhap
+    ngayNhap
+  }
+  class PhieuXuat {
+    maPhieuXuat
+    ngayXuat
+  }
+  class PhieuBaoHanh {
+    maPhieu
+    ngayNhan
+    moTaLoi
+    ngayHenTra
+    trangThai
+  }
+}
+
+SanPham "1" -- "*" SanPhamSerial
+PhieuNhap "1" -- "1..*" SanPhamSerial : nhập
+DonHang "1" -- "*" PhieuXuat
+PhieuXuat "*" -- "1..*" SanPhamSerial : xuất
+NhanVien "1" -- "*" PhieuXuat : lập
+DonHang "1" -- "*" YeuCauDoiTra
+YeuCauDoiTra "*" -- "1..*" SanPhamSerial : đổi trả
+SanPhamSerial "1" -- "*" PhieuBaoHanh
+@enduml

@@ -1,0 +1,90 @@
+@startuml lop-chung-ban-hang
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+hide circle
+hide empty methods
+
+hide empty attributes
+
+package "G1" {
+  class NhanVien
+}
+package "G3" {
+  class KhachHang {
+    maKhachHang
+    hoTen
+    soDienThoai
+    email
+    ngayDangKy
+  }
+  class DonHang {
+    maDonHang
+    ngayDat
+    ngayHoanThanh
+    hoTenNguoiNhan
+    soDienThoaiNhan
+    diaChiGiao
+    /canLapDat
+    phuongThucThanhToan
+    trangThaiThanhToan
+    /tongTien
+    trangThai
+    ghiChu
+    doiTrangThai()
+  }
+  class ChiTietDonHang {
+    soLuong
+    donGia
+    /thanhTien
+  }
+}
+package "G2" {
+  class SanPham {
+    maSanPham
+    tenSanPham
+    model
+    giaBan
+    thoiHanBaoHanh
+    canLapDat
+    trangThai
+  }
+  class DanhMuc {
+    maDanhMuc
+    tenDanhMuc
+  }
+  class ThuongHieu {
+    maThuongHieu
+    tenThuongHieu
+    xuatXu
+  }
+  class KhuyenMai {
+    maKhuyenMai
+    tenKhuyenMai
+    mucGiam
+    ngayBatDau
+    ngayKetThuc
+  }
+}
+package "G4" {
+  class LichSuTrangThaiDon {
+    trangThai
+    thoiDiem
+  }
+}
+
+KhachHang "0..1" -- "*" DonHang : đặt
+NhanVien "0..1" -- "*" DonHang : duyệt
+DonHang "1" *-- "1..*" ChiTietDonHang
+ChiTietDonHang "*" -- "1" SanPham
+DanhMuc "1" -- "*" SanPham
+ThuongHieu "1" -- "*" SanPham
+KhuyenMai "0..1" -- "*" DonHang : áp dụng
+DonHang "1" *-- "1..*" LichSuTrangThaiDon
+NhanVien "0..1" -- "*" LichSuTrangThaiDon : đổi
+@enduml

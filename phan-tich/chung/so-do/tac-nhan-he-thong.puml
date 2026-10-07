@@ -1,0 +1,25 @@
+@startuml tac-nhan-he-thong
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+
+actor "Khách vãng lai" as KVL
+actor "Khách hàng" as KH
+actor "Nhân viên\n{abstract}" as NV
+actor "Nhân viên\nbán hàng" as NVBH
+actor "Thủ kho" as TK
+actor "Nhân viên giao hàng\n– kỹ thuật" as NVGH
+actor "Quản lý\ncửa hàng" as QL
+actor "Quản trị\nhệ thống" as QTHT
+actor "Cổng thanh toán" as CTT <<hệ thống ngoài>>
+
+KH -up-|> KVL
+NVBH -up-|> NV
+TK -up-|> NV
+NVGH -up-|> NV
+QL -up-|> NV
+QTHT -up-|> NV
+@enduml

@@ -21,6 +21,8 @@ Năm gói việc chia dọc theo phân hệ: **G1** Tổng quan, tích hợp, qu
 | Thư mục | Nội dung |
 |---|---|
 | `giao-dien/` | Bộ giao diện chung (HTML tĩnh) để thiết kế màn hình, chụp ảnh cho báo cáo và làm bản mẫu khi khảo sát |
+| `phan-tich/` | Phần phân tích thiết kế. `phan-tich/chung/` là phần dùng chung cả 5 gói phải theo: tác nhân, use case, lớp và trạng thái chung, mẫu đặc tả |
+| `bao-cao/` | Báo cáo tiến độ (Word và PDF) |
 | `khao-sat/` | Kịch bản phỏng vấn cửa hàng, bảng hỏi khách hàng, script tạo Google Form, kết quả chạy thử (thư mục `mo-phong/` là dữ liệu AI đóng vai, **không** dùng làm số liệu thật) |
 
 ## Mở bộ giao diện

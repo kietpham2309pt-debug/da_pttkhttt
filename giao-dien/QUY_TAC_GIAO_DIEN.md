@@ -67,7 +67,7 @@ Trang có banner dùng khối `hero-sp` như `mau/trang-khach.html`, khối nộ
 | Gói | Có sẵn | Còn phải làm |
 |---|---|---|
 | G1 Tổng quan, quản trị | `khach/dang-nhap` · `quan-tri/tong-quan` · `quan-tri/tai-khoan` | Phân quyền (UC-HT-03) · Báo cáo doanh thu (UC-HT-04) |
-| G2 Sản phẩm, khuyến mãi | `khach/trang-chu` · `khach/san-pham` · `khach/chi-tiet` · `quan-tri/danh-muc` · `quan-tri/danh-muc-form` | Quản lý sản phẩm và form thêm (UC-SP-02) · Khuyến mãi (UC-SP-04) |
+| G2 Sản phẩm, khuyến mãi | `khach/trang-chu` · `khach/san-pham` · `khach/danh-sach` · `khach/chi-tiet` · `quan-tri/danh-muc` · `quan-tri/danh-muc-form` | Quản lý sản phẩm và form thêm (UC-SP-02) · Khuyến mãi (UC-SP-04) |
 | G3 Mua hàng, thanh toán | `khach/gio-hang` · `khach/dat-hang` · `khach/hoan-tat` · `khach/dang-ky` | Theo dõi đơn (UC-MH-06) · Hồ sơ, sổ địa chỉ (UC-MH-02) · Thanh toán trực tuyến (UC-MH-05) |
 | G4 Đơn hàng, giao lắp, đổi trả | `quan-tri/don-hang` | Chi tiết và duyệt đơn (UC-DH-01) · Phân công giao lắp (UC-DH-02) · Phiếu đổi trả (UC-DH-06) |
 | G5 Kho, bảo hành | Chưa có | Phiếu nhập (UC-KB-03) · Tồn kho (UC-KB-05) · Tiếp nhận bảo hành (UC-KB-06) · Tra cứu bảo hành phía khách (UC-KB-07) |

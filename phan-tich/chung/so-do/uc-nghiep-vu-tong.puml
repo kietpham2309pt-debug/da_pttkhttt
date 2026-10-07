@@ -1,0 +1,35 @@
+@startuml uc-nghiep-vu-tong
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+left to right direction
+
+actor/ "Khách hàng" as KH
+actor/ "Nhà cung cấp" as NCC
+actor/ "Đơn vị\nvận chuyển" as VC
+actor/ "Trung tâm\nbảo hành hãng" as TTBH
+actor/ "Chủ cửa hàng" as CCH
+
+rectangle "Cửa hàng điện gia dụng" {
+  usecase/ "BUC-01\nGiới thiệu sản phẩm\nvà khuyến mãi" as B1
+  usecase/ "BUC-02\nBán hàng" as B2
+  usecase/ "BUC-03\nGiao hàng và lắp đặt" as B3
+  usecase/ "BUC-04\nĐổi trả hàng" as B4
+  usecase/ "BUC-05\nNhập hàng" as B5
+  usecase/ "BUC-06\nBảo hành" as B6
+  usecase/ "BUC-07\nBáo cáo kinh doanh" as B7
+}
+
+KH -- B1
+KH -- B2
+KH -- B3
+KH -- B4
+KH -- B6
+B3 -- VC
+B5 -- NCC
+B6 -- TTBH
+CCH -- B7
+@enduml

@@ -1,0 +1,35 @@
+@startuml hd-qt01-bao-cao
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 190
+
+|Kế toán|
+start
+:Gom hoá đơn bán hàng trong tháng;
+:Cộng doanh thu theo nhóm hàng;
+:Đối chiếu tiền thu khi giao với sổ nộp tiền;
+if (Tiền thu khớp sổ?) then ([khớp])
+else ([lệch])
+  :Tìm hoá đơn ngày lệch, hỏi người đi giao;
+  :Ghi chú khoản lệch;
+endif
+|Thủ kho|
+:Kiểm kê số máy còn trong kho;
+if (Số kiểm kê khớp sổ?) then ([khớp])
+else ([lệch])
+  :Kiểm lại theo phiếu nhập, phiếu xuất;
+endif
+:Báo số tồn theo từng mẫu;
+|Kế toán|
+:Gom phiếu nhập, cộng tiền nhập trong tháng;
+:Lập báo cáo kinh doanh;
+:Báo cáo kinh doanh; <<object>>
+|Quản lý cửa hàng|
+:Xem báo cáo, ghi đề xuất nhập hàng và khuyến mãi;
+|Chủ cửa hàng|
+:Duyệt đề xuất cho tháng sau;
+stop
+@enduml

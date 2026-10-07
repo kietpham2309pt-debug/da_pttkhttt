@@ -1,0 +1,60 @@
+@startuml uc-tong-quat-cua-hang
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam packageStyle rectangle
+left to right direction
+
+actor "Nhân viên\n{abstract}" as NV
+actor "Nhân viên\nbán hàng" as NVBH
+actor "Thủ kho" as TK
+actor "Nhân viên giao hàng\n– kỹ thuật" as NVGH
+actor "Quản lý\ncửa hàng" as QL
+actor "Quản trị\nhệ thống" as QTHT
+
+NVBH -|> NV
+TK -|> NV
+NVGH -|> NV
+QL -|> NV
+QTHT -|> NV
+
+rectangle "Website bán hàng điện gia dụng · phía cửa hàng" {
+  package "G1 · Quản trị" {
+    usecase "Đăng nhập,\nđổi mật khẩu" as HT1
+    usecase "Quản lý tài khoản,\nphân quyền" as HT2
+    usecase "Xem báo cáo" as HT3
+  }
+  package "G2 · Sản phẩm" {
+    usecase "Quản lý sản phẩm" as SP1
+    usecase "Quản lý danh mục,\ngiá, khuyến mãi" as SP2
+  }
+  package "G4 · Đơn hàng" {
+    usecase "Duyệt đơn hàng" as DH1
+    usecase "Phân công, giao hàng,\nlắp đặt" as DH2
+    usecase "Xác nhận tiền\nthu khi giao" as DH3
+    usecase "Xử lý đổi trả" as DH4
+  }
+  package "G5 · Kho, bảo hành" {
+    usecase "Nhập, xuất, nhận lại,\nkiểm kê kho" as KB1
+    usecase "Tiếp nhận bảo hành" as KB2
+  }
+}
+
+NV -- HT1
+QTHT -- HT2
+QL -- HT3
+NVBH -- SP1
+QL -- SP2
+NVBH -- DH1
+QL -- DH2
+NVGH -- DH2
+NVBH -- DH2
+QL -- DH3
+NVBH -- DH4
+QL -- DH4
+TK -- KB1
+NVBH -- KB2
+@enduml
