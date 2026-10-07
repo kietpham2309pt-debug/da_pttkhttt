@@ -3,6 +3,7 @@
 Phiên bản 1.1 (07/10/2026) · dùng cho việc **t81–t83** (tuần 8) · nhóm 4 · Phân tích thiết kế hệ thống thông tin
 
 Bản 1.1 đã sửa theo đợt phỏng vấn thử với 3 vai chủ cửa hàng mô phỏng, xem [`ket-qua-thu-nghiem.md`](ket-qua-thu-nghiem.md).
+Kế hoạch phỏng vấn tổng quan, bảng hướng dẫn buổi phỏng vấn và mẫu biên bản theo đúng chương 2 bài giảng: [`ke-hoach-phong-van.md`](ke-hoach-phong-van.md).
 
 ## Trước buổi phỏng vấn
 
@@ -38,7 +39,7 @@ Câu về chi phí (F4) thì nhờ chuyển cho chủ.
 
 **A2 ★** Cửa hàng có bao nhiêu người, mỗi người lo việc gì? Có ai kiêm nhiều việc không?
 - Hỏi thêm: ai bán hàng, ai giữ kho, ai đi giao và lắp, ai giữ sổ sách tiền bạc.
-- Dùng cho: sơ đồ cơ cấu tổ chức; danh sách nhân viên nghiệp vụ (business worker) và tác nhân hệ thống.
+- Dùng cho: sơ đồ cơ cấu tổ chức; danh sách thừa tác viên (business worker) và tác nhân hệ thống.
 
 **A3 ★** Hiện cửa hàng ghi chép bán hàng, nhập hàng bằng gì: sổ tay, Excel, phần mềm bán hàng, hay nhắn Zalo với nhau?
 - Hỏi thêm (câu riêng, đừng gộp): Trong đó ai được xem, ai được sửa? Có ai sửa được giá bán không?

@@ -5,22 +5,25 @@ skinparam defaultFontSize 16
 skinparam monochrome true
 skinparam shadowing false
 skinparam dpi 170
+skinparam stereotypeFontSize 14
 left to right direction
 
-actor/ "Khách hàng" as KH
-actor/ "Nhà cung cấp" as NCC
-actor/ "Đơn vị\nvận chuyển" as VC
-actor/ "Trung tâm\nbảo hành hãng" as TTBH
-actor/ "Chủ cửa hàng" as CCH
+actor/ "Khách hàng" as KH <<business actor>>
+actor/ "Đơn vị\nvận chuyển" as VC <<business actor>>
+actor/ "Nhà cung cấp" as NCC <<business actor>>
+actor/ "Trung tâm\nbảo hành hãng" as TTBH <<business actor>>
+actor/ "Chủ cửa hàng" as CCH <<business actor>>
 
-rectangle "Cửa hàng điện gia dụng" {
-  usecase/ "BUC-01\nGiới thiệu sản phẩm\nvà khuyến mãi" as B1
-  usecase/ "BUC-02\nBán hàng" as B2
-  usecase/ "BUC-03\nGiao hàng và lắp đặt" as B3
-  usecase/ "BUC-04\nĐổi trả hàng" as B4
-  usecase/ "BUC-05\nNhập hàng" as B5
-  usecase/ "BUC-06\nBảo hành" as B6
-  usecase/ "BUC-07\nBáo cáo kinh doanh" as B7
+rectangle "Hệ thống bán hàng điện gia dụng của cửa hàng" {
+  usecase/ "Giới thiệu sản phẩm\nvà khuyến mãi" as B1
+  usecase/ "Bán hàng" as B2
+  usecase/ "Giao hàng" as B3
+  usecase/ "Lắp đặt tận nơi" as B8
+  usecase/ "Đổi trả hàng" as B4
+  usecase/ "Bảo hành sản phẩm" as B6
+  usecase/ "Kiểm tra máy\ntheo số serial" as B9
+  usecase/ "Nhập hàng" as B5
+  usecase/ "Lập báo cáo\nkinh doanh" as B7
 }
 
 KH -- B1
@@ -28,8 +31,12 @@ KH -- B2
 KH -- B3
 KH -- B4
 KH -- B6
-B3 -- VC
-B5 -- NCC
-B6 -- TTBH
-CCH -- B7
+B3 --- VC
+B6 --- TTBH
+B5 --- NCC
+B7 --- CCH
+
+B8 .> B3 : <<extend>>
+B4 ..> B9 : <<include>>
+B6 ..> B9 : <<include>>
 @enduml

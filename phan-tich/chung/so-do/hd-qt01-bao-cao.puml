@@ -1,35 +1,48 @@
 @startuml hd-qt01-bao-cao
 skinparam defaultFontName "Times New Roman"
-skinparam defaultFontSize 16
+skinparam defaultFontSize 18
 skinparam monochrome true
 skinparam shadowing false
 skinparam dpi 170
-skinparam wrapWidth 190
+skinparam wrapWidth 175
 
-|Kế toán|
+|Quản lý cửa hàng|
 start
-:Gom hoá đơn bán hàng trong tháng;
-:Cộng doanh thu theo nhóm hàng;
-:Đối chiếu tiền thu khi giao với sổ nộp tiền;
-if (Tiền thu khớp sổ?) then ([khớp])
-else ([lệch])
-  :Tìm hoá đơn ngày lệch, hỏi người đi giao;
-  :Ghi chú khoản lệch;
-endif
-|Thủ kho|
-:Kiểm kê số máy còn trong kho;
-if (Số kiểm kê khớp sổ?) then ([khớp])
-else ([lệch])
-  :Kiểm lại theo phiếu nhập, phiếu xuất;
-endif
-:Báo số tồn theo từng mẫu;
+:Tiếp nhận yêu cầu báo cáo tháng;
+:Giao kế toán lập báo cáo, yêu cầu thủ kho kiểm kê;
+fork
+  |Kế toán|
+  :Gom hoá đơn bán hàng trong tháng;
+  :Cộng doanh thu theo nhóm hàng;
+  :Đối chiếu tiền thu khi giao với sổ nộp tiền;
+  if () then ([tiền thu lệch])
+    :Tìm hoá đơn ngày lệch, ghi lại khoản lệch;
+  else ([khớp])
+  endif
+fork again
+  |Thủ kho|
+  :Kiểm kê máy còn trong kho;
+  if () then ([số đếm lệch sổ])
+    :Kiểm lại theo phiếu nhập, phiếu xuất;
+  else ([khớp])
+  endif
+  :Báo số tồn theo từng mẫu;
+end fork
 |Kế toán|
-:Gom phiếu nhập, cộng tiền nhập trong tháng;
+:Gom phiếu nhập kho, phiếu tiếp nhận bảo hành;
 :Lập báo cáo kinh doanh;
+-[dashed]->
 :Báo cáo kinh doanh; <<object>>
+-[dashed]->
 |Quản lý cửa hàng|
 :Xem báo cáo, ghi đề xuất nhập hàng và khuyến mãi;
-|Chủ cửa hàng|
-:Duyệt đề xuất cho tháng sau;
+-[dashed]->
+:Báo cáo kinh doanh
+[đã có đề xuất]; <<object>>
+-[dashed]->
+repeat
+  :Trình chủ cửa hàng duyệt;
+  backward :Sửa đề xuất theo ý chủ;
+repeat while () is ([chủ chưa đồng ý]) not ([chủ đồng ý])
 stop
 @enduml

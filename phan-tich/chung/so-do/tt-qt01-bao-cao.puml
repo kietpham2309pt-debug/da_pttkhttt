@@ -1,0 +1,60 @@
+@startuml tt-qt01-bao-cao
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 19
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+skinparam participant {
+  BackgroundColor transparent
+  BorderColor transparent
+}
+hide footbox
+
+sprite $ttv <svg viewBox="0 0 64 64"><path d="M27 4 L33 8 L27 12" fill="none" stroke="black" stroke-width="2.5"/><circle cx="32" cy="34" r="24" fill="white" stroke="black" stroke-width="2.5"/><circle cx="32" cy="22" r="5" fill="none" stroke="black" stroke-width="2.5"/><path d="M32 27 L32 42 M23 32 L41 32 M32 42 L25 51 M32 42 L39 51" fill="none" stroke="black" stroke-width="2.5"/><path d="M42 54 L54 41" fill="none" stroke="black" stroke-width="2.5"/></svg>
+sprite $tt <svg viewBox="0 0 64 64"><circle cx="32" cy="30" r="24" fill="white" stroke="black" stroke-width="2.5"/><path d="M8 56 L56 56" fill="none" stroke="black" stroke-width="2.5"/><path d="M41 51 L53 37" fill="none" stroke="black" stroke-width="2.5"/></svg>
+
+actor "__: Chủ__\n__cửa hàng__" as CCH
+boundary "__: Quản lý__\n__cửa hàng__" as QL
+participant "<$ttv{scale=0.6}>\n__: Kế toán__" as KT
+boundary "__: Thủ kho__" as TK
+participant "<$tt{scale=0.6}>\n__: Chiếc__\n__máy__" as CM
+participant "<$tt{scale=0.6}>\n__: Hoá đơn__\n__bán hàng__" as HD
+participant "<$tt{scale=0.6}>\n__: Sổ nộp__\n__tiền__" as SNT
+participant "<$tt{scale=0.6}>\n__: Phiếu__\n__nhập kho__" as PN
+participant "<$tt{scale=0.6}>\n__: Phiếu__\n__tiếp nhận__\n__bảo hành__" as PBH
+participant "<$tt{scale=0.6}>\n__: Báo cáo__\n__kinh doanh__" as BC
+
+CCH -> QL : 1: Yêu cầu\nbáo cáo tháng
+activate QL
+QL -> KT : 2: Giao lập\nbáo cáo
+activate KT
+QL -> TK : 3: Yêu cầu\nkiểm kê
+activate TK
+KT -> HD ++ : 4: Gom hoá đơn\ntrong tháng()
+deactivate HD
+KT -> KT : 5: Cộng doanh thu\ntheo nhóm hàng()
+KT -> SNT ++ : 6: Đối chiếu tiền\nthu khi giao()
+deactivate SNT
+TK -> CM ++ : 7: Đếm máy\ntheo từng mẫu()
+deactivate CM
+TK -> KT : 8: Báo số tồn\ntheo mẫu
+deactivate TK
+KT -> PN ++ : 9: Gom phiếu nhập\ntrong tháng()
+deactivate PN
+KT -> PBH ++ : 10: Gom phiếu\ntiếp nhận\nbảo hành()
+deactivate PBH
+KT -> BC ++ : 11: Lập báo cáo()
+deactivate BC
+KT --> QL : 12: Báo cáo\nkinh doanh
+deactivate KT
+QL -> BC ++ : 13: Ghi đề xuất nhập\nhàng, khuyến mãi()
+deactivate BC
+QL -> CCH : 14: Trình báo cáo\nvà đề xuất
+CCH -> QL : 15: [chưa đồng ý]:\nYêu cầu sửa đề xuất
+QL -> BC ++ : 16: Sửa đề xuất()
+deactivate BC
+QL -> CCH : 17: Trình lại\nđề xuất
+CCH -> QL : 18: [đồng ý]:\nDuyệt đề xuất
+deactivate QL
+@enduml
