@@ -2,16 +2,17 @@
 
 Bài tập nhóm học phần **Phân tích thiết kế hệ thống thông tin** (mã 0101003615), Khoa Công nghệ thông tin,
 Trường Đại học Công Thương TP.HCM, học kỳ 1 năm học 2026-2027.
+Lớp 15DHTH06 (mã lớp học phần 010100361506) · Giảng viên hướng dẫn: Nguyễn Thị Thúy A.
 
 ## Thành viên nhóm 4
 
 | MSSV | Họ tên | Vai trò |
 |---|---|---|
 | 2001240237 | Phạm Tuấn Kiệt | Nhóm trưởng · G1 Tổng quan, tích hợp, quản trị |
-| 2001240244 | Huỳnh Văn Lân | Chưa chọn gói |
-| 2001240229 | Lê Đạt Tuấn Kiệt | Chưa chọn gói |
-| 2001240205 | Nguyễn Đăng Khoa | Chưa chọn gói |
-| 2001240486 | Võ Trí Thức | Chưa chọn gói |
+| 2001240244 | Huỳnh Văn Lân | G3 Mua hàng trực tuyến, thanh toán |
+| 2001240229 | Lê Đạt Tuấn Kiệt | G2 Sản phẩm, khuyến mãi |
+| 2001240205 | Nguyễn Đăng Khoa | G5 Kho, nhà cung cấp, bảo hành |
+| 2001240486 | Võ Trí Thức | G4 Xử lý đơn, giao hàng lắp đặt, đổi trả |
 
 Năm gói việc chia dọc theo phân hệ: **G1** Tổng quan, tích hợp, quản trị · **G2** Sản phẩm, khuyến mãi ·
 **G3** Mua hàng trực tuyến, thanh toán · **G4** Xử lý đơn, giao hàng lắp đặt, đổi trả · **G5** Kho, nhà cung cấp, bảo hành.
