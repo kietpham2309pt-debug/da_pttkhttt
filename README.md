@@ -24,7 +24,7 @@ Năm gói việc chia dọc theo phân hệ: **G1** Tổng quan, tích hợp, qu
 | `giao-dien/` | Bộ giao diện chung (HTML tĩnh) để thiết kế màn hình, chụp ảnh cho báo cáo và làm bản mẫu khi khảo sát |
 | `phan-tich/` | Phần phân tích thiết kế. `phan-tich/chung/` là phần dùng chung cả 5 gói phải theo: đối chiếu giáo trình, hiện trạng tổ chức, tác nhân và thừa tác viên, use case, lớp và trạng thái chung, mẫu đặc tả |
 | `bao-cao/` | Báo cáo tiến độ (Word và PDF), dàn ý báo cáo cuối kỳ |
-| `khao-sat/` | Kế hoạch và kịch bản phỏng vấn cửa hàng, bảng hỏi khách hàng, script tạo Google Form, kết quả chạy thử (thư mục `mo-phong/` là dữ liệu AI đóng vai, **không** dùng làm số liệu thật) |
+| `khao-sat/` | Phân tích tài liệu công khai (35 nguồn), kế hoạch và kịch bản phỏng vấn cửa hàng, bảng hỏi khách hàng, script tạo Google Form, script xử lý kết quả bảng hỏi ra biểu đồ, kết quả chạy thử (thư mục `mo-phong/` là dữ liệu AI đóng vai, **không** dùng làm số liệu thật) |
 
 **Đọc trước khi vẽ:** [`phan-tich/chung/doi-chieu-giao-trinh.md`](phan-tich/chung/doi-chieu-giao-trinh.md): bài giảng 4 chương yêu cầu gì, làm theo thứ tự nào, ký hiệu ra sao.
 

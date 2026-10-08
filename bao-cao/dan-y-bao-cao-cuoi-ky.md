@@ -1,6 +1,6 @@
 # Dàn ý báo cáo đồ án cuối kỳ
 
-Bản 0.1 (07/10/2026) · G1 giữ · việc t153
+Bản 0.2 (08/10/2026) · G1 giữ · việc t153 · từ 08/10 nhóm trưởng làm toàn bộ chương 2 (khảo sát) cho nhanh, các gói đọc lại phần mình
 
 Chương và mục đặt **theo đúng trình tự giáo trình**: chương 1–3 theo slide bài giảng (số slide ghi dạng `C3-53`), chương 4–7 theo đề cương học phần (chưa có slide).
 Hình thức theo mẫu báo cáo Khoa CNTT (bìa, mục lục tự động, "CHƯƠNG n." sang trang mới, hình và bảng đánh số theo chương).
@@ -27,23 +27,24 @@ Danh mục hình · Danh mục bảng · **Bảng phân công và mức độ ho
 | Mục | Nội dung | Theo giáo trình | Gói | Tiêu chí |
 |---|---|---|---|---|
 | 2.1 | Mục tiêu, nội dung, đối tượng khảo sát | C2-11 đến C2-17 | G1 | Thực tế |
-| 2.2 | Phỏng vấn: kế hoạch phỏng vấn tổng quan, bảng hướng dẫn buổi phỏng vấn, biên bản (đặt toàn văn ở phụ lục) | C2-19 đến C2-36 | G1 + cả nhóm | Thực tế |
-| 2.3 | Bảng câu hỏi khách hàng: thiết kế, cách phát, kết quả (biểu đồ) | C2-37 đến C2-40 | G3 phân tích, cả nhóm phát | Thực tế |
-| 2.4 | Quan sát, phân tích tài liệu và bản mẫu: biểu mẫu thu được (ảnh đã che thông tin); bộ giao diện chung đã cho cửa hàng xem và góp ý | C2-43 đến C2-47, C2-50 | Mỗi gói biểu mẫu của mình | Thực tế |
-| 2.5 | Hiện trạng từng nghiệp vụ và vấn đề | C2-14 | Mỗi gói | Nghiệp vụ |
-| 2.6 | Chiến lược phân tích yêu cầu được chọn và lý do; các cải tiến đề xuất cho từng nghiệp vụ (bước 2 trong 3 bước phân tích yêu cầu) | C2-7, C2-8 | G1, mỗi gói nêu cải tiến phần mình | Khả thi |
+| 2.2a | Phân tích tài liệu công khai: chính sách các chuỗi điện máy, văn bản pháp luật, mẫu chứng từ kho, tính năng website ([`../khao-sat/phan-tich-tai-lieu.md`](../khao-sat/phan-tich-tai-lieu.md)) | C2-45 đến C2-47 | G1 | Thực tế |
+| 2.2 | Phỏng vấn: kế hoạch phỏng vấn tổng quan, bảng hướng dẫn buổi phỏng vấn, biên bản (đặt toàn văn ở phụ lục) | C2-19 đến C2-36 | G1 | Thực tế |
+| 2.3 | Bảng câu hỏi khách hàng: thiết kế, cách phát, kết quả (biểu đồ từ `xu_ly_bang_hoi.py`) | C2-37 đến C2-40 | G1 xử lý, cả nhóm chuyển link | Thực tế |
+| 2.4 | Quan sát, biểu mẫu thu được tại cửa hàng (ảnh đã che thông tin), bản mẫu: bộ giao diện chung cho cửa hàng xem và ghi góp ý (nếu làm được trong buổi phỏng vấn) | C2-43, C2-44, C2-50 | G1 | Thực tế |
+| 2.5 | Hiện trạng từng nghiệp vụ và vấn đề | C2-14 | G1 | Nghiệp vụ |
+| 2.6 | Chiến lược phân tích yêu cầu được chọn và lý do; các cải tiến đề xuất cho từng nghiệp vụ (bước 2 trong 3 bước phân tích yêu cầu) | C2-7, C2-8 | G1 | Khả thi |
 | 2.7 | Phân loại yêu cầu: yêu cầu nghiệp vụ, yêu cầu của các bên liên quan, yêu cầu giải pháp (chức năng, phi chức năng), yêu cầu chuyển đổi (nhập dữ liệu cũ, tập huấn) | C2-6 | G1 | Khả thi |
-| 2.8 | Bảng yêu cầu chức năng theo phân hệ | C2-4 | Mỗi gói, G1 ghép | Chức năng |
+| 2.8 | Bảng yêu cầu chức năng theo phân hệ | C2-4 | G1 | Chức năng |
 | 2.9 | Bảng yêu cầu phi chức năng | C2-4 | G1 | Khả thi |
 
-Mẫu bảng yêu cầu dùng chung (mục 2.8, 2.9):
+Mẫu bảng yêu cầu dùng chung (mục 2.8, 2.9), giống [`../phan-tich/chung/hien-trang-va-yeu-cau.md`](../phan-tich/chung/hien-trang-va-yeu-cau.md):
 
-| STT | Mã | Yêu cầu | Loại | Nguồn | Gói | Ưu tiên |
-|---|---|---|---|---|---|---|
-| 1 | YC-KB-01 | Tra cứu được ngày bán và hạn bảo hành theo số serial | Chức năng | Phỏng vấn E4; phiếu bảo hành chụp được | G5 | Cao |
-| 2 | YC-PCN-01 | Trang danh sách sản phẩm mở xong trong 3 giây trên điện thoại 4G | Phi chức năng | Bảng hỏi K… | G1 | Trung bình |
+| STT | Mã | Yêu cầu | Nguồn | Use case | Ưu tiên |
+|---|---|---|---|---|---|
+| 42 | YC-KB-06 | Khách và nhân viên tra bảo hành theo số serial hoặc số điện thoại | PV E4; TL-04, TL-16, TL-18; K15 | UC-KB-07 | Cao |
+| 1 | YC-PCN-01 | Không xoá cứng đơn hàng; giữ dữ liệu hợp đồng theo Luật Thương mại điện tử | TL-20 Đ16 | | Cao |
 
-Cột **Nguồn** ghi mã câu phỏng vấn, mã câu bảng hỏi hoặc tên biểu mẫu: yêu cầu nào không có nguồn thì GV dễ hỏi "lấy ở đâu ra".
+Cột **Nguồn** ghi mã câu phỏng vấn, mã câu bảng hỏi, tên biểu mẫu hoặc mã tài liệu (TL-…) trong `phan-tich-tai-lieu.md`: yêu cầu nào không có nguồn thì GV dễ hỏi "lấy ở đâu ra".
 
 ## CHƯƠNG 3. MÔ HÌNH HOÁ NGHIỆP VỤ
 

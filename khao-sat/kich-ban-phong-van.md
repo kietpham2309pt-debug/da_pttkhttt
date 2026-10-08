@@ -1,15 +1,16 @@
 # Kịch bản phỏng vấn cửa hàng điện gia dụng
 
-Phiên bản 1.1 (07/10/2026) · dùng cho việc **t81–t83** (tuần 8) · nhóm 4 · Phân tích thiết kế hệ thống thông tin
+Phiên bản 1.2 (08/10/2026) · dùng cho việc **t81–t83** (tuần 8) · nhóm 4 · Phân tích thiết kế hệ thống thông tin
 
 Bản 1.1 đã sửa theo đợt phỏng vấn thử với 3 vai chủ cửa hàng mô phỏng, xem [`ket-qua-thu-nghiem.md`](ket-qua-thu-nghiem.md).
+Bản 1.2 (việc t81) thêm 3 câu B7, C7, E5 cho các use case chưa có câu hỏi nào, và bảng [câu hỏi ứng với use case](#câu-hỏi-ứng-với-use-case) ở cuối tệp.
 Kế hoạch phỏng vấn tổng quan, bảng hướng dẫn buổi phỏng vấn và mẫu biên bản theo đúng chương 2 bài giảng: [`ke-hoach-phong-van.md`](ke-hoach-phong-van.md).
 
 ## Trước buổi phỏng vấn
 
 | Mục | Nội dung |
 |---|---|
-| Thời lượng | Hỏi hết mất 55–65 phút. Chỉ hỏi 15 câu ★ thì khoảng 40 phút. Hết giờ thì dừng, phần còn lại hỏi qua Zalo |
+| Thời lượng | Hỏi hết mất khoảng 60–70 phút (ước lượng: đợt thử với AI đóng vai chủ cửa hàng mất 55–65 phút, bản 1.2 thêm 3 câu; thời gian thật sẽ ghi lại sau buổi phỏng vấn). Chỉ hỏi 15 câu ★ thì khoảng 40 phút. Hết giờ thì dừng, phần còn lại hỏi qua Zalo |
 | Người đi | Ít nhất 3 người: 1 người dẫn, 1 người ghi chép, 1 người chụp biểu mẫu và **bấm giờ** (nhắc chuyển phần khi người được hỏi kể lan man) |
 | Ai hỏi phần nào | Phần A, F: G1 · Phần B: G2 · Phần C: G3 · Phần D: G4 · Phần E: G5. Gói vắng mặt thì người dẫn hỏi thay |
 | Mang theo | Bản in kịch bản này, điện thoại sạc đầy để ghi âm, bộ giao diện chung mở sẵn (`giao-dien/index.html`) để hỏi "nếu website trông như vầy thì…" |
@@ -35,7 +36,7 @@ Câu về chi phí (F4) thì nhờ chuyển cho chủ.
 ## Phần A. Tổng quan cửa hàng · G1 · khoảng 7 phút
 
 **A1 ★** Cửa hàng mở được bao lâu rồi, bán những nhóm hàng nào, nhóm nào bán chạy nhất?
-- Dùng cho: mục 1.1 giới thiệu cửa hàng; danh mục sản phẩm của G2.
+- Dùng cho: mục 1.2 giới thiệu cửa hàng (dàn ý báo cáo); danh mục sản phẩm của G2.
 
 **A2 ★** Cửa hàng có bao nhiêu người, mỗi người lo việc gì? Có ai kiêm nhiều việc không?
 - Hỏi thêm: ai bán hàng, ai giữ kho, ai đi giao và lắp, ai giữ sổ sách tiền bạc.
@@ -43,7 +44,7 @@ Câu về chi phí (F4) thì nhờ chuyển cho chủ.
 
 **A3 ★** Hiện cửa hàng ghi chép bán hàng, nhập hàng bằng gì: sổ tay, Excel, phần mềm bán hàng, hay nhắn Zalo với nhau?
 - Hỏi thêm (câu riêng, đừng gộp): Trong đó ai được xem, ai được sửa? Có ai sửa được giá bán không?
-- Dùng cho: hiện trạng tin học hoá; chiến lược phân tích (mục 2.2); phân quyền UC-HT-03.
+- Dùng cho: hiện trạng tin học hoá; chiến lược phân tích (mục 2.6); phân quyền UC-HT-03.
 
 **A4** Cuối ngày hoặc cuối tháng, anh chị xem những gì để biết cửa hàng làm ăn ra sao? Ai làm ra các con số đó, mất bao lâu?
 - Dùng cho: quy trình QT-01 Lập báo cáo kinh doanh; UC-HT-04, UC-HT-05.
@@ -75,6 +76,9 @@ Câu về chi phí (F4) thì nhờ chuyển cho chủ.
 **B6** Nếu cửa hàng bán ở nhiều nơi (tại tiệm, Facebook, sàn thương mại điện tử), giá và số hàng còn lại ở các nơi có khớp nhau không? Ai cập nhật?
 - Dùng cho: yêu cầu đồng bộ tồn kho và giá; rủi ro khi thêm website.
 
+**B7** Sau khi mua, khách có hay gửi nhận xét hoặc ảnh máy đã lắp không? Cửa hàng có đăng lại ở đâu không, có khi nào gặp nhận xét không đúng sự thật chưa?
+- Dùng cho: UC-SP-07 Đánh giá sản phẩm; quy tắc "chỉ người đã mua mới được đánh giá".
+
 ## Phần C. Bán hàng, đặt hàng, thanh toán · G3 · khoảng 8 phút
 
 **C1 ★** Khách mua hàng qua những đường nào: tới cửa hàng, gọi điện, nhắn Zalo hay Facebook, livestream, sàn thương mại điện tử, qua kiến trúc sư hay công ty nội thất giới thiệu? Đường nào nhiều nhất?
@@ -95,6 +99,9 @@ Câu về chi phí (F4) thì nhờ chuyển cho chủ.
 **C6** Có khi nào khách đặt rồi tới lúc giao lại không nhận không? Lúc đó máy trả về xử lý ra sao, cửa hàng có cách gì để phòng (gọi xác nhận, xin cọc)?
 - Dùng cho: luồng thay thế của QT-03, QT-04; quy tắc đặt cọc.
 
+**C7** Sau khi đặt, khách có hay gọi hỏi "đơn của em tới đâu rồi" không? Anh chị tra lại đơn đó bằng gì, trả lời khách thế nào?
+- Dùng cho: UC-MH-06 Theo dõi đơn hàng; khách tra đơn bằng số điện thoại hay mã đơn.
+
 ## Phần D. Xử lý đơn, giao hàng, lắp đặt, đổi trả · G4 · khoảng 9 phút
 
 **D1 ★** Sau khi chốt đơn, ai xác nhận lại với khách, ai lấy hàng trong kho, ai đi giao? Có giấy tờ gì đi kèm chiếc máy khi giao?
@@ -106,7 +113,8 @@ Câu về chi phí (F4) thì nhờ chuyển cho chủ.
 - Dùng cho: UC-DH-02, UC-DH-05; lớp `PhieuLapDat`.
 
 **D3** Cửa hàng tự giao hay thuê đơn vị vận chuyển? Giao tỉnh xa thì ai lắp?
-- Dùng cho: tác nhân Đơn vị vận chuyển; phạm vi.
+- Hỏi thêm: giao xa có tính phí không, tính theo khoảng cách hay theo giá trị đơn?
+- Dùng cho: tác nhân Đơn vị vận chuyển; phạm vi; phí giao (YC-DH-03).
 
 **D4 ★** Lần gần nhất khách muốn đổi hoặc trả máy, chuyện diễn ra thế nào? Trong bao nhiêu ngày thì được đổi, ai quyết định cho đổi, có ghi lại ở đâu không?
 - Dùng cho: UC-DH-06; lớp `YeuCauDoiTra`, `HoanTien`; quy tắc đổi trả.
@@ -134,6 +142,9 @@ Câu về chi phí (F4) thì nhờ chuyển cho chủ.
 - Hỏi thêm: bảo hành bằng phiếu giấy hay điện tử; máy đang gửi hãng thì theo dõi thế nào, khách hỏi tiến độ thì trả lời ra sao; xin chụp phiếu bảo hành.
 - Dùng cho: quy trình QT-06; lớp `PhieuBaoHanh`; UC-KB-06, UC-KB-07.
 
+**E5** Khi lấy máy trong kho ra giao cho một đơn, có ghi lại chiếc máy số serial nào đi theo đơn của khách nào không? Ghi ở đâu, ai ghi?
+- Dùng cho: UC-KB-04 Lập phiếu xuất kho theo đơn; BUC-09 Kiểm tra máy theo số serial; lớp `PhieuXuat`, `SanPhamSerial`.
+
 ## Phần F. Khép lại · G1 · khoảng 6 phút
 
 **F1** Trong tất cả các việc vừa kể, việc nào mất thời gian hoặc hay sai nhất? (Bỏ qua nếu đã nói rõ ở A4.)
@@ -143,11 +154,11 @@ Câu về chi phí (F4) thì nhờ chuyển cho chủ.
 - Dùng cho: yêu cầu chức năng, phi chức năng.
 
 **F3** Nếu có website thì ai trong cửa hàng sẽ cập nhật hàng, xử lý đơn? Những người đó dùng điện thoại, máy tính có quen không?
-- Dùng cho: mục 1.5 khả thi vận hành; tác nhân sử dụng chính.
+- Dùng cho: mục 8.1 khả thi vận hành; tác nhân sử dụng chính.
 
 **F4** Ai là người quyết định có làm website hay không? Một năm chi khoảng bao nhiêu cho tên miền và chỗ đặt website thì anh chị thấy chấp nhận được?
 - Hỏi cuối cùng. Người trả lời không phải chủ thì xin gửi câu này cho chủ.
-- Dùng cho: mục 1.5 khả thi kinh tế.
+- Dùng cho: mục 8.1 khả thi kinh tế.
 
 **F5** Tụi em có thể nhắn Zalo hỏi thêm vài câu nếu thiếu không ạ? Giờ nào tiện cho anh chị?
 
@@ -173,4 +184,48 @@ Câu về chi phí (F4) thì nhờ chuyển cho chủ.
 | A1 | | | |
 | A2 | | | |
 
-Sau buổi phỏng vấn trong 24 giờ: người ghi chép chép lại bảng này vào thư mục `01_KhaoSat`, mỗi gói đọc phần của mình và bổ sung từ ghi âm.
+Sau buổi phỏng vấn trong 24 giờ: người ghi chép chép lại bảng này vào thư mục `01_KhaoSat` trên Google Drive của nhóm (việc t72), mỗi gói đọc phần của mình và bổ sung từ ghi âm.
+
+## Câu hỏi ứng với use case
+
+Mỗi use case nghiệp vụ và use case hệ thống phải có ít nhất một nguồn thông tin, để cột **Nguồn** trong bảng yêu cầu (dàn ý báo cáo, mục 2.8) không bị trống.
+Mã K… là câu trong [`bang-hoi-khach-hang.md`](bang-hoi-khach-hang.md); "Tài liệu" là phần phân tích tài liệu công khai.
+
+| Use case | Câu phỏng vấn | Câu bảng hỏi | Ghi chú |
+|---|---|---|---|
+| BUC-01 Giới thiệu sản phẩm và khuyến mãi | B1, B2, B3, B4 | K8, K9 | |
+| BUC-02 Bán hàng | C1, C2, C3 | K5, K6, K10, K11 | |
+| BUC-03 Giao hàng | D1, D3, D5, D6 | K13, K14 | |
+| BUC-04 Đổi trả hàng | D4 | K14 | |
+| BUC-05 Nhập hàng | E1, E2 | | |
+| BUC-06 Bảo hành sản phẩm | E4 | K14, K15 | |
+| BUC-07 Lập báo cáo kinh doanh | A4, F1 | | |
+| BUC-08 Lắp đặt tận nơi | D2, D6 | K8, K13 | |
+| BUC-09 Kiểm tra máy theo số serial | E2, E4, E5, D4 | K15 | |
+| UC-HT-01 Đăng nhập, UC-HT-06 Đổi mật khẩu | | K11 | Chức năng hệ thống, không cần hỏi cửa hàng |
+| UC-HT-02 Quản lý tài khoản nhân viên, UC-HT-03 Phân quyền | A2, A3, A5 | | Ai được xem, ai được sửa |
+| UC-HT-04, UC-HT-05 Báo cáo | A4 | | |
+| UC-SP-01 Danh mục, thương hiệu | A1, B1 | K9 | |
+| UC-SP-02 Sản phẩm, thông số | B1, B2, B5 | K8 | |
+| UC-SP-03 Cập nhật giá | B1, B3, B6 | | |
+| UC-SP-04 Khuyến mãi, mã giảm giá | B4 | K12 | |
+| UC-SP-05 Tìm kiếm, lọc; UC-SP-06 Chi tiết, so sánh | B2 | K8, K9 | |
+| UC-SP-07 Đánh giá sản phẩm | B7 | K8 | Thêm ở bản 1.2 |
+| UC-MH-01 Đăng ký, UC-MH-02 Hồ sơ, sổ địa chỉ | C5 | K11 | |
+| UC-MH-03 Giỏ hàng, UC-MH-04 Đặt hàng | C1, C2, D3 (phí giao) | K11, K12 | |
+| UC-MH-05 Thanh toán trực tuyến | C3 | K10 | |
+| UC-MH-06 Theo dõi đơn hàng | C7 | K11 | Thêm C7 ở bản 1.2 |
+| UC-MH-07 Huỷ đơn | C4, C6 | | |
+| UC-MH-08 Áp mã giảm giá | B4 | | |
+| UC-DH-01 Duyệt, xác nhận đơn | D1, C6 | | |
+| UC-DH-02 Phân công giao hàng, lắp đặt | D2, D6 | K13 | |
+| UC-DH-03 Cập nhật trạng thái giao | D1, D3 | K14 | |
+| UC-DH-04 Xác nhận tiền thu khi giao | D5 | | |
+| UC-DH-05 Biên bản lắp đặt | D2 | | |
+| UC-DH-06 Đổi trả, hoàn tiền | D4 | K14 | |
+| UC-KB-01 Nhà cung cấp, UC-KB-02 Đơn đặt hàng NCC | E1 | | |
+| UC-KB-03 Phiếu nhập, ghi serial | E2 | | |
+| UC-KB-04 Phiếu xuất theo đơn | D1, E5 | | Thêm E5 ở bản 1.2 |
+| UC-KB-05 Kiểm kê, tồn thấp | E1, E3 | | |
+| UC-KB-06 Tiếp nhận bảo hành, UC-KB-07 Tra cứu bảo hành | E4 | K15 | |
+| UC-KB-08 Nhận lại máy về kho | C6, D4 | | |
