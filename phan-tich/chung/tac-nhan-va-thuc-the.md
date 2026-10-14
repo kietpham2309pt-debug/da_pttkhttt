@@ -1,6 +1,6 @@
 # Tác nhân, thừa tác viên, thực thể và use case nghiệp vụ
 
-Bản nháp 0.3 (07/10/2026, chỉnh theo chương 3 bài giảng) · G1 giữ · việc t91, t93, t95 · **chỉnh lại sau khi phỏng vấn cửa hàng thật**
+Bản 0.4 (14/10/2026) · G1 giữ · việc t91, t93, t95 · **chốt theo cửa hàng giả định** ([`hien-trang-to-chuc.md`](hien-trang-to-chuc.md), [`../../khao-sat/tinh-huong-gia-dinh.md`](../../khao-sat/tinh-huong-gia-dinh.md))
 
 Tên gọi theo đúng bài giảng: **tác nhân nghiệp vụ** (business actor), **thừa tác viên** (business worker), **thực thể nghiệp vụ** (business entity),
 **use case nghiệp vụ** hay chức năng nghiệp vụ (business use case). Ký hiệu từng loại xem [`quy-uoc-ve.md`](quy-uoc-ve.md) mục 3.
@@ -8,7 +8,7 @@ Số slide ghi dạng `C3-22` nghĩa là chương 3, slide 22 của bài giảng
 
 ![Ký hiệu nghiệp vụ dùng trong nhóm](so-do/ky-hieu-nghiep-vu.png)
 
-Cửa hàng nhỏ thường một người kiêm nhiều việc (chủ kiêm kế toán, nhân viên bán hàng kiêm thủ kho). Theo slide 45, thừa tác viên là **vai trò, không phải chức vụ**,
+Cửa hàng giả định có người kiêm việc (thủ kho kiêm soạn hàng giao, một nhân viên bán hàng kiêm tiếp nhận bảo hành); cửa hàng nhỏ hơn thì thủ kho kiêm kế toán (`MP2 A2`). Theo slide 45, thừa tác viên là **vai trò, không phải chức vụ**,
 nên vẫn tách theo vai; ai kiêm vai nào thì ghi ở phần mô tả tổ chức ([`hien-trang-to-chuc.md`](hien-trang-to-chuc.md)).
 
 ## 1. Tác nhân nghiệp vụ (C3-22 đến C3-26)
@@ -20,13 +20,17 @@ Người **thực hiện** nghiệp vụ là thừa tác viên, không vẽ thà
 |---|---|---|---|
 | Khách hàng | Người mua máy về dùng trong gia đình hoặc cho quán, văn phòng | Kích hoạt, cung cấp thông tin, nhận kết quả | BUC-01, 02, 03, 04, 06 |
 | Nhà cung cấp | Hãng hoặc nhà phân phối bán hàng cho cửa hàng | Nhận đơn đặt hàng, giao hàng (đầu vào) | BUC-05 |
-| Đơn vị vận chuyển | Bên nhận chở hàng đi xa (cửa hàng không tự giao được) | Nhận hàng và chứng từ, báo kết quả giao | BUC-03 |
+| Đơn vị vận chuyển | Bên nhận chở hàng đi tỉnh (cửa hàng giả định chỉ tự giao nội thành, `MP2 D3`) | Nhận hàng và chứng từ, báo kết quả giao, đối soát tiền thu hộ | BUC-03 |
 | Trung tâm bảo hành hãng | Nơi sửa máy còn trong hạn bảo hành của hãng | Nhận máy lỗi, trả máy đã sửa | BUC-06 |
 | Chủ cửa hàng | Người đứng tên cửa hàng, ra quyết định kinh doanh | Kích hoạt, nhận kết quả | BUC-07 |
 
 Chủ cửa hàng ở trong tổ chức nhưng **nằm ngoài hệ thống nghiệp vụ đang xét** (slide 13): trong BUC-07 chủ không làm báo cáo mà chỉ yêu cầu và nhận báo cáo,
 giống Độc giả ở slide 26. Điểm cần hỏi GV: slide 22 nói tác nhân "không điều khiển hoạt động của hệ thống", trong khi chủ là người quyết định việc kinh doanh.
 Nếu GV chỉ chấp nhận tác nhân bên ngoài tổ chức thì bỏ BUC-07 khỏi sơ đồ tổng và trình bày QT-01 như quy trình hỗ trợ.
+
+Trong cửa hàng giả định, chủ còn **duyệt** giá bán, khuyến mãi, đơn đặt hàng nhà cung cấp và đổi trả ngoại lệ (`MP3 B1`, `B4`, `D4`, `E1`).
+Nhóm coi các lần duyệt này là **quyết định từ bên ngoài hệ thống nghiệp vụ**: quản lý trình, chủ trả lời. Trong đặc tả ghi thành quy tắc nghiệp vụ hoặc bước "Quản lý cửa hàng xin ý kiến chủ", không vẽ chủ thành luồng.
+Nếu GV chấp nhận chủ là tác nhân nghiệp vụ thì nối thêm Chủ cửa hàng với BUC-01, BUC-04, BUC-05.
 
 ## 2. Thừa tác viên (C3-45 đến C3-47)
 
@@ -35,7 +39,7 @@ và **làm việc bên trong** (vẽ hình tròn có người). Mỗi thừa tá
 
 | Thừa tác viên | Loại | Giao tiếp với tác nhân nào |
 |---|---|---|
-| Quản lý cửa hàng | Giao tiếp với môi trường | Nhà cung cấp (gửi đơn đặt hàng), Chủ cửa hàng (trình báo cáo, đề xuất) |
+| Quản lý cửa hàng | Giao tiếp với môi trường | Nhà cung cấp (gửi đơn đặt hàng do thủ kho lập, đã được chủ duyệt), Chủ cửa hàng (trình báo cáo, đề xuất) |
 | Nhân viên bán hàng | Giao tiếp với môi trường | Khách hàng |
 | Thủ kho | Giao tiếp với môi trường | Nhà cung cấp (nhận hàng), Trung tâm bảo hành hãng (gửi và nhận máy) |
 | Nhân viên giao hàng – kỹ thuật | Giao tiếp với môi trường | Khách hàng, Đơn vị vận chuyển |
@@ -45,9 +49,9 @@ và **làm việc bên trong** (vẽ hình tròn có người). Mỗi thừa tá
 
 | Thừa tác viên | Trách nhiệm | Kỹ năng cần có | Tương tác với thừa tác viên | Tham gia luồng công việc | Trách nhiệm trong luồng |
 |---|---|---|---|---|---|
-| Quản lý cửa hàng | Duyệt giá bán, khuyến mãi, đơn đặt hàng nhà cung cấp, đổi trả; xếp lịch giao lắp | Nắm giá thị trường, đọc báo cáo | Cả bốn vai còn lại | BUC-01, 03, 04, 05, 07 | Duyệt, phân công, đề xuất |
-| Nhân viên bán hàng | Tư vấn, chốt đơn, gọi xác nhận đơn, tiếp nhận đổi trả và bảo hành | Hiểu tính năng máy, giao tiếp khách | Quản lý, Thủ kho, Kế toán | BUC-01, 02, 03, 04, 06, 09 | Tiếp nhận yêu cầu, lập đơn, lập phiếu |
-| Thủ kho | Nhận hàng, kiểm đếm, ghi số serial, xuất kho theo đơn, nhận lại máy, kiểm kê | Kiểm hàng, ghi chép sổ kho | Quản lý, Nhân viên bán hàng, Nhân viên giao hàng – kỹ thuật, Kế toán | BUC-01, 03, 04, 05, 06, 07 | Nhập, xuất, kiểm kê, giữ máy |
+| Quản lý cửa hàng | Đề xuất giá bán, xem đề xuất đặt hàng thủ kho lập rồi gửi nhà cung cấp, duyệt đổi trả thường, xếp lịch và phân công giao lắp; trình chủ duyệt giá, khuyến mãi, đơn đặt hàng | Nắm giá thị trường, đọc báo cáo | Cả bốn vai còn lại | BUC-01, 03, 04, 05, 07 | Duyệt, phân công, đề xuất |
+| Nhân viên bán hàng | Tư vấn, chốt đơn, gọi xác nhận đơn, hẹn giờ giao lắp với khách, trả lời khách hỏi đơn, tiếp nhận đổi trả và bảo hành | Hiểu tính năng máy, giao tiếp khách | Quản lý, Thủ kho, Kế toán | BUC-01, 02, 03, 04, 06, 09 | Tiếp nhận yêu cầu, lập đơn, lập phiếu |
+| Thủ kho | Báo hàng sắp hết, lập đề xuất đặt hàng, nhận hàng, kiểm đếm, ghi số serial, xuất kho theo đơn, nhận lại máy, kiểm kê | Kiểm hàng, ghi chép sổ kho | Quản lý, Nhân viên bán hàng, Nhân viên giao hàng – kỹ thuật, Kế toán | BUC-01, 03, 04, 05, 06, 07 | Nhập, xuất, kiểm kê, giữ máy |
 | Nhân viên giao hàng – kỹ thuật | Khảo sát chỗ lắp, giao hàng, lắp đặt, thu tiền khi giao | Lắp đặt điện nước, lái xe | Quản lý, Thủ kho, Kế toán | BUC-03, 08 | Giao, lắp, thu tiền, lấy chữ ký |
 | Kế toán | Thu chi, đối chiếu tiền thu khi giao, lập báo cáo cuối tháng | Sổ sách, bảng tính | Cả bốn vai còn lại | BUC-02, 04, 05, 07 | Ghi nhận tiền, đối chiếu, lập báo cáo |
 
@@ -74,7 +78,8 @@ và **thực thể vật thể** (hàng hoá, nguyên vật liệu). Cột "Dùn
 | Phiếu tiếp nhận bảo hành | Thông tin | BUC-06 | BUC-07 | `PhieuBaoHanh` |
 | Báo cáo kinh doanh | Thông tin | BUC-07 | BUC-07 | Không thành lớp, là kết quả truy vấn |
 
-Sau khi phỏng vấn: **chụp được biểu mẫu nào thì ghi tên thật của biểu mẫu đó** vào cột đầu (ví dụ cửa hàng gọi là "phiếu giao nhận" thì dùng đúng chữ đó).
+Tên giấy tờ theo cửa hàng giả định. Các ô trên từng giấy tờ (gợi ý thuộc tính lớp cho chương 5) ở mục 3 của [`../../khao-sat/tinh-huong-gia-dinh.md`](../../khao-sat/tinh-huong-gia-dinh.md).
+Cửa hàng giả định còn có **lịch giao lắp** ghi trên Google Sheets (`MP2 D2`, `D6`); không tách thành thực thể riêng mà là ngày giờ hẹn và người phụ trách trên `PhieuGiaoHang`, `PhieuLapDat` (G4 quyết).
 
 ## 4. Use case nghiệp vụ tổng (C3-20 đến C3-37)
 
@@ -82,7 +87,7 @@ Sau khi phỏng vấn: **chụp được biểu mẫu nào thì ghi tên thật 
 
 Tên use case nghiệp vụ là **động từ**, mỗi use case là **một chuỗi nhiều bước** tạo ra kết quả cho một tác nhân (slide 27, 28).
 Hai quan hệ giữa các use case nghiệp vụ làm theo ví dụ ở slide 33–36:
-- **«extend»**: "Lắp đặt tận nơi" chỉ chạy khi sản phẩm cần lắp đặt (máy lạnh, máy nước nóng, bếp âm), giống "Xử lý hành lý đặc biệt" mở rộng "Kiểm tra cá nhân".
+- **«extend»**: "Lắp đặt tận nơi" chỉ chạy khi sản phẩm cần lắp đặt (bếp từ âm, máy hút mùi, máy rửa chén, lò âm tủ, máy lọc nước), giống "Xử lý hành lý đặc biệt" mở rộng "Kiểm tra cá nhân".
 - **«include»**: cả "Đổi trả hàng" và "Bảo hành sản phẩm" đều phải kiểm tra chiếc máy theo số serial (đúng máy cửa hàng bán, ngày mua, còn hạn),
   nên tách thành một use case riêng, giống "Kiểm tra thẻ thư viện" được "Mượn sách" và "Trả sách" bao hàm.
 
@@ -98,13 +103,13 @@ Hai quan hệ giữa các use case nghiệp vụ làm theo ví dụ ở slide 33
 | BUC-08 | Lắp đặt tận nơi | Nhánh lắp đặt của QT-04 | G4 | | «extend» BUC-03 khi [sản phẩm cần lắp đặt] |
 | BUC-09 | Kiểm tra máy theo số serial | Chuỗi bước dùng chung cho QT-06, QT-07: tìm hoá đơn theo số serial, đối chiếu đúng máy cửa hàng bán, tính hạn bảo hành và hạn đổi trả | G5 | | Được BUC-04, BUC-06 «include» |
 
-G4 có hai quy trình. Nếu khảo sát cho thấy cửa hàng chỉ đổi trả ngay lúc giao thì G4 gộp QT-07 thành dòng thay thế của QT-04.
+G4 có hai quy trình. Cửa hàng giả định nhận đổi trả trong 7 ngày khi máy còn seal, lỗi do hãng trong 30 ngày (`MP2 D4`), không chỉ lúc giao, nên **giữ QT-07 riêng**.
 G5 đặc tả BUC-09 một lần, G4 dẫn lại ở bước tương ứng của QT-07 ("Thực hiện use case Kiểm tra máy theo số serial", như slide 41 ghi "Thực hiện use case kt thẻ thư viện").
 
 ## 5. Thừa tác viên và thực thể của từng use case nghiệp vụ
 
 Bảng này là nguồn cho **sơ đồ đối tượng nghiệp vụ** (slide 51) và **các luồng, nút đối tượng** của sơ đồ hoạt động (slide 57–59) của mỗi gói.
-Gói nào thấy thiếu vai hoặc thiếu giấy tờ sau khi phỏng vấn thì báo G1 để thêm vào mục 2, 3.
+Gói nào thấy thiếu vai hoặc thiếu giấy tờ khi đặc tả thì báo G1 để thêm vào mục 2, 3.
 
 | BUC | Thừa tác viên (luồng) | Thực thể nghiệp vụ |
 |---|---|---|
@@ -138,9 +143,12 @@ nên thừa tác viên ở mục 2 (người làm việc trong cửa hàng) tr�
 | Cổng thanh toán | | Hệ thống bên ngoài nhận tiền trực tuyến | G3 |
 
 **Kế toán và Chủ cửa hàng** không có tác nhân riêng trên website: họ dùng tài khoản có vai **Quản lý cửa hàng**
-(xác nhận tiền thu khi giao, xem báo cáo). Nếu khảo sát cho thấy kế toán là người riêng và làm nhiều việc trên hệ thống thì thêm tác nhân Kế toán kế thừa Nhân viên.
+(xác nhận tiền thu khi giao, xem báo cáo).
+**Đề xuất chốt ở họp t112:** cửa hàng giả định có kế toán riêng làm nhiều việc trên hệ thống (nhận tiền thu khi giao, đối soát, ghép báo cáo: `MP2 A4`, `D5`; `MP3 A2`, `D5`),
+trong khi YC-SP-09 chỉ cho Quản lý sửa giá. Nên thêm tác nhân **Kế toán** kế thừa Nhân viên, nối UC-DH-04 Xác nhận tiền thu khi giao và UC-HT-04 Xem báo cáo doanh thu, rồi vẽ lại sơ đồ tác nhân hệ thống.
+Cùng buổi chốt luôn chủ có cần tài khoản riêng để duyệt giá, đơn đặt hàng trên website không (hiện YC-SP-09 chỉ bắt ghi lý do và lưu vết).
 
-**Còn chờ kết quả khảo sát (G3 quyết):** khách vãng lai có được đặt hàng chỉ bằng số điện thoại hay không.
-Đợt thử bảng hỏi cho thấy nhiều người ngại tạo tài khoản; câu K11 của Google Form sẽ trả lời câu này.
+**G3 quyết khi vẽ sơ đồ use case phân hệ (t102):** khách vãng lai có được đặt hàng chỉ bằng số điện thoại hay không.
+Theo cửa hàng giả định nên **cho phép**: YC-MH-01 ưu tiên Cao, MediaMart không bắt tạo tài khoản (TL-18), 3/10 vai khách mô phỏng chỉ muốn nhập số điện thoại (`MK K11`).
 Nếu cho phép thì UC-MH-04, UC-MH-06, UC-MH-07 nối với Khách vãng lai, và `DonHang` thêm `hoTenNguoiDat`, `soDienThoaiNguoiDat`
 (bắt buộc khi đơn không gắn `KhachHang`), để vẫn tra được đơn và bảo hành theo số điện thoại người mua.

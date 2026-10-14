@@ -1,10 +1,10 @@
 # Phỏng vấn thử với 3 vai chủ cửa hàng (MÔ PHỎNG)
 
-> ⚠ **Đây không phải dữ liệu khảo sát thật.** Ba nhân vật và mọi câu trả lời dưới đây do AI đóng vai, dùng để **thử kịch bản phỏng vấn bản 1.0** trước khi đi phỏng vấn cửa hàng thật.
-> Không chép vào báo cáo như kết quả khảo sát, không trích làm "ý kiến chủ cửa hàng". Tiêu chí "Tính thực tế" (20% điểm bài nhóm) chấm đúng phần khảo sát thật.
-> Dùng để: biết trước kiểu câu trả lời sẽ gặp, luyện cách hỏi tiếp, đoán trước biểu mẫu có thể xin chụp.
+> ⚠ **Đây không phải dữ liệu khảo sát thật.** Ba nhân vật và mọi câu trả lời dưới đây do AI đóng vai.
+> Lúc đầu (07/10/2026) dùng để thử kịch bản phỏng vấn bản 1.0; từ 14/10/2026 là nguồn `MP1`–`MP3` để dựng **cửa hàng giả định** ([`../tinh-huong-gia-dinh.md`](../tinh-huong-gia-dinh.md)).
+> Không trình bày như kết quả khảo sát hay lời của cửa hàng có thật.
 
-Câu hỏi theo [`kich-ban-phong-van.md`](../kich-ban-phong-van.md) **bản 1.0** (bản 1.1 đã thêm B6, C6, D6 và đổi cách hỏi một số câu).
+Câu hỏi theo [`kich-ban-phong-van.md`](../kich-ban-phong-van.md) **bản 1.0**; 6 câu thêm ở bản 1.1–1.2 hỏi bổ sung ngày 14/10/2026 ở mục 4 (bản 1.1 đã thêm B6, C6, D6 và đổi cách hỏi một số câu).
 
 | Vai | Kiểu cửa hàng | Tính cách |
 |---|---|---|
@@ -191,3 +191,51 @@ Câu hỏi theo [`kich-ban-phong-van.md`](../kich-ban-phong-van.md) **bản 1.0*
 **F3** Chắc là tư vấn cập nhật nội dung, thủ kho xác nhận tồn, chăm sóc khách hàng xử lý yêu cầu. Còn chi phí tên miền và hosting là chị không quyết được, chị chỉ là quản lý, em hỏi chủ đại lý.
 
 **F4** Được em. Em nhắn Zalo chị vào giờ hành chính, câu nào về giá, chiết khấu thì chị sẽ nói là không trả lời được.
+
+---
+
+## 4. Bổ sung 14/10/2026: 6 câu thêm ở bản 1.1–1.2 (MÔ PHỎNG)
+
+> ⚠ Vẫn là AI đóng vai, cùng 3 nhân vật ở trên. Không phải lời cửa hàng thật.
+
+### Cô Hạnh
+
+**B6** Giá ở tiệm với trên Facebook thì cô để con Thy chụp hình đăng theo giá miếng giấy dán trên máy, nên cũng giống nhau. Mà có hôm cô bớt cho khách quen ngoài tiệm, quên nói con Thy, thì trên Facebook còn giá cũ. Số hàng còn thì không ai cập nhật đâu con, con Thy hỏi cô hoặc ra sau nhà coi, hết thì nó nhắn khách xin lỗi. Sàn thì cô không bán nên khỏi lo.
+
+**B7** Khách quen thì có đứa nhắn Zalo cho con Thy "lắp xong đẹp lắm cô ơi", có người gửi hình cái bếp từ lắp trong bếp nhà họ. Con Thy xin phép rồi đăng lên Facebook của tiệm, cũng không nhiều, chừng vài tấm. Nhận xét sai sự thật thì cô chưa gặp, cô nghe người ta nói xấu cái tiệm thì chắc cũng có mà cô không lên mạng nên cô không biết.
+
+**C6** Cũng có, mà ít, như cô nói hồi nãy huỷ đơn hiếm lắm. Khách đặt rồi đổi ý, chú chở tới thì nói không lấy nữa, thì chú chở máy về để lại chỗ cũ, còn nguyên hộp thì bán tiếp, có sao đâu. Món lớn thì cô lấy cọc năm trăm tới một triệu như cô kể, còn gọi xác nhận thì con Thy gọi lại trước khi giao cho chắc. Mà khách quen hầu hết, họ ít bỏ lắm.
+
+**C7** Có chứ, khách gọi hỏi "chú giao chưa cô" hoài. Cô lật cuốn sổ nhỏ coi ghi tên khách đó hẹn chiều hay hôm sau, rồi hỏi chú coi đi chưa. Có khi cô nhớ mặt nhớ tên là cô nói luôn, không cần lật. Cô trả lời khách là "chiều nay chú qua", nói chung vậy thôi, giờ giấc thì cô không dám chắc đâu.
+
+**D6** Chú nhà cô tự đi giao, nên chú là người xếp, cô với con Thy chỉ báo chiều nay có mấy chỗ. Ghi ở cuốn sổ nhỏ chung với đơn, hoặc nhắn Zalo cho chú, không có cái lịch riêng gì đâu. Trùng thì có, như hai nhà cùng hẹn chiều mà xa nhau, thì chú gọi một nhà xin dời qua sáng mai, khách quen thì họ thông cảm. Trễ hẹn một hai tiếng thì cũng hay, kẹt xe, hết cách.
+
+**E5** Không con, như cô nói hồi nãy lúc nhập cô không ghi serial. Lúc bán, con Thy hoặc cô mới chép số serial trên thân máy vô phiếu bảo hành giấy đưa khách. Còn máy nào đi với đơn của khách nào thì sổ nhỏ chỉ ghi tên khách với món hàng, không có số máy. Cô thấy vậy là đủ, tại tiệm nhỏ, hàng không nhiều.
+
+### Anh Duy
+
+**B6** Cái này đau đầu nha. Giá em chỉnh trên POS rồi bạn online lên sửa tay ở Facebook với từng gian hàng sàn, mà sàn đổi giá mỗi tuần theo chương trình như em nói, nên hay lệch, có hôm sàn bán giá cũ cả ngày mới biết. Số hàng thì bạn kho trừ trong POS, còn sàn với Facebook phải có người nhập tay, có lần sàn còn hiện hàng mà kho hết rồi, bạn online phải huỷ đơn xin lỗi khách. Em đang muốn nhập một chỗ rồi đẩy đi hết, mà chưa có công cụ.
+
+**B7** Có, khách review nhiều lắm, nhất là khách nhận mã giảm giá cho người review như em nói. Bạn online chụp lại ảnh khách gửi rồi đăng lên Facebook shop, TikTok, có khi gắn vào bài quảng cáo, em thấy hiệu quả lắm. Nhận xét không đúng thì có, tháng trước một khách chê hút mùi ồn trên sàn, mà thật ra là lỗi lắp đặt do khách tự lắp, không phải thợ shop. Hoặc mấy tài khoản lạ vô chê, em nghi là đối thủ, nhưng không chứng minh được.
+
+**C6** Chính là vụ bom hàng em kể ở C4 đó, tháng rồi 6 đơn tỉnh. Máy trả về thì bạn kho kiểm lại, còn nguyên seal thì nhập lại kho bán tiếp, hộp móp thì chuyển qua hàng giảm giá 5 đến 10% như em nói. Phòng thì em xin cọc cho máy trên 10 triệu, còn dưới mức đó chỉ gọi xác nhận trước khi ship, mà đơn COD tỉnh gọi rồi vẫn bị bom. Em muốn bắt cọc hết nhưng sợ khách bỏ qua shop khác.
+
+**C7** Hay lắm, ngày nào cũng có vài người nhắn "đơn em tới đâu rồi anh". Bạn online tra tên hoặc số điện thoại trong POS, xem đã xuất kho chưa, rồi tra mã vận đơn bên đơn vị vận chuyển nếu là đơn tỉnh. Đơn nội thành thì hỏi thợ hoặc xem lịch trên Google Sheets, rồi nhắn lại khách trong Zalo hay inbox. Bạn nào rảnh thì trả lời nhanh, mà lúc đông đơn thì khách phải chờ lâu.
+
+**D6** Em là người xếp lịch, hoặc giao bạn online xếp rồi em duyệt, ghi trên Google Sheets như em kể ở D2. Trùng lịch thì có chứ, vụ hai đơn 2 giờ chiều Gò Vấp với Quận 12 đó, khách chờ 2 tiếng rồi bị chê trên Facebook. Em phải gọi xin lỗi khách, tặng cái vòi rửa hoặc giảm tiền lắp, và nhờ thợ kia chạy qua giùm. Sheets thì chưa có cảnh báo khi hai đơn trùng giờ, phải nhìn bằng mắt.
+
+**E5** Có, vì máy rửa chén với bếp cao cấp em ghi serial lúc nhập như em nói. Lúc bạn kho soạn hàng theo đơn trên POS thì in phiếu xuất kho, trên phiếu có tên khách, tên hàng, số serial, người xuất, đúng như em kể ở D1. Bạn kho là người ghi, nhưng đồ rẻ thì không có serial. Như vụ hai máy hút mùi lệch hồi nãy là vì xuất mà chỉ báo trong nhóm Zalo, không vô POS.
+
+### Chị Trang
+
+**B6** Bên chị bán chủ yếu qua dự án và showroom, sàn thì gần như không, như chị nói lúc nãy. Nên giá và tồn kho chỉ có một nguồn là phần mềm, tư vấn tạo báo giá theo giá trên đó. Zalo với website của hãng thì không phải bên chị cập nhật. Giá thì chủ duyệt, tồn kho thì thủ kho xác nhận.
+
+**B7** Khách dự án đôi khi gửi ảnh căn bếp sau khi lắp, nhất là khi có kiến trúc sư hoặc công ty nội thất đi cùng. Bên chị có xin phép rồi mới dùng làm hình dự án giới thiệu, và phải che thông tin khách. Nhận xét sai sự thật thì chị chưa gặp trường hợp đáng kể, hàng cao cấp khách kỹ nên phản hồi thường cụ thể. Có góp ý thì chăm sóc khách hàng liên hệ trực tiếp.
+
+**C6** Hiếm, vì đơn dự án đã khảo sát và cọc 30 đến 50 phần trăm như chị nói. Nếu khách không nhận thì xử lý theo quy định hoàn cọc đã nói ở C4, tuỳ tình trạng đơn, chị không nêu mức cụ thể. Máy chưa lắp thì thủ kho kiểm lại tình trạng, đối chiếu serial rồi nhập lại kho. Phòng thì bên chị khảo sát, xác nhận lại với khách trước ngày giao và thu cọc.
+
+**C7** Có, chủ yếu khách hỏi lịch giao hoặc lịch kỹ thuật tới lắp. Tư vấn phụ trách đơn đó tra trên phần mềm theo tên khách hoặc mã đơn, xem trạng thái đã xuất kho chưa, kỹ thuật nào phụ trách. Rồi gọi hoặc nhắn Zalo trả lời khách, nếu cần thì hỏi thêm kỹ thuật viên. Với đơn đặt hàng từ hãng thì báo thời gian dự kiến, thường 2 đến 4 tuần như chị nói.
+
+**D6** Lịch giao và lắp do tư vấn phụ trách đơn phối hợp với kỹ thuật viên xếp, chị duyệt khi có đơn lớn. Hẹn giờ bằng điện thoại như chị nói, còn lịch hẹn giữa kỹ thuật với khách là chỗ dễ sai, chị đã nêu ở F1. Có khi trùng hoặc trễ do công trình chưa sẵn sàng, thì kỹ thuật gọi báo khách, đổi sang buổi khác. Chị chưa có công cụ riêng để cảnh báo trùng lịch.
+
+**E5** Có, đó là lý do bên chị quản lý theo serial. Lúc thủ kho soạn hàng theo phiếu xuất thì kiểm số serial từng máy và ghi vào phiếu xuất kho, rồi phần mềm lưu serial theo đơn và theo khách. Người ghi là thủ kho, kỹ thuật nhận hàng thì đối chiếu lại. Lần xuất nhầm serial hai máy cùng model chị kể ở A5 cũng nhờ vậy mà tra ra nhanh.

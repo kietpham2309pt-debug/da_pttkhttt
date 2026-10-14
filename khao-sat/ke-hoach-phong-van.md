@@ -4,6 +4,9 @@ Bản 0.2 (08/10/2026, thêm mục 6) · G1 giữ · việc t77, t82, t83 · là
 
 Tệp này là phần **thủ tục** của buổi phỏng vấn, đúng ba mẫu bảng trong bài giảng. Nội dung câu hỏi vẫn ở [`kich-ban-phong-van.md`](kich-ban-phong-van.md).
 
+> **14/10/2026: nhóm quyết định không phỏng vấn cửa hàng thật.** Tệp này giữ lại làm khuôn (ba mẫu bảng của chương 2) và để dùng nếu sau này vẫn khảo sát được.
+> Phần khảo sát hiện dùng cửa hàng giả định, xem [`tinh-huong-gia-dinh.md`](tinh-huong-gia-dinh.md).
+
 ## 1. Bảy bước phỏng vấn (C2-19) và nhóm đã làm tới đâu
 
 | Bước | Việc theo bài giảng | Của nhóm | Trạng thái |

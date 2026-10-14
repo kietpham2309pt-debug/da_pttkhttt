@@ -5,7 +5,7 @@ Bản 1.0 (08/10/2026) · G1 giữ · việc t79 · kỹ thuật **phân tích t
 Tệp này gom các tài liệu **có sẵn, công khai** về ngành bán lẻ điện gia dụng: chính sách của nhà bán lẻ thật, văn bản pháp luật, mẫu chứng từ kế toán, tính năng các website điện máy, số liệu thị trường.
 Mỗi nguồn có mã `TL-xx` để dẫn vào cột **Nguồn** của bảng yêu cầu ([`../phan-tich/chung/hien-trang-va-yeu-cau.md`](../phan-tich/chung/hien-trang-va-yeu-cau.md)).
 
-> Đây là thông tin **về ngành và về luật**, không phải về cửa hàng nhóm khảo sát. Cách cửa hàng đang làm thật vẫn phải lấy từ phỏng vấn (t83) và bảng hỏi (t86).
+> Đây là thông tin **về ngành và về luật**, không phải về một cửa hàng cụ thể. Cách cửa hàng đang làm lấy từ phỏng vấn mô phỏng (cửa hàng giả định), xem [`tinh-huong-gia-dinh.md`](tinh-huong-gia-dinh.md).
 > Mọi trang được đọc ngày **08/10/2026** bằng công cụ tải và trích văn bản: câu trích có thể lệch vài chữ so với bản gốc, nên **mở link đối chiếu lại trước khi trích vào báo cáo**.
 
 ## 1. Vì sao dùng phân tích tài liệu và dùng loại nào
@@ -66,7 +66,7 @@ Hạn chế đúng như C2-47 cảnh báo: tài liệu có thể **sai, trùng l
 ## 3. Chính sách của bốn nhà bán lẻ
 
 Ba chuỗi lớn (Điện Máy Xanh, Nguyễn Kim, Chợ Lớn) và một nhà bán lẻ chuyên thiết bị bếp có trụ sở ở TP.HCM (Kim Quốc Tiến: công ty TNHH, có showroom ở TP.HCM, Hà Tĩnh, Hải Phòng).
-Kim Quốc Tiến nhỏ hơn hẳn ba chuỗi và cùng nhóm hàng bếp, nên gần đề tài hơn, nhưng vẫn **không phải** một cửa hàng nhỏ như cửa hàng nhóm sẽ khảo sát.
+Kim Quốc Tiến nhỏ hơn hẳn ba chuỗi và cùng nhóm hàng bếp, nên gần đề tài hơn, nhưng vẫn **không phải** một cửa hàng nhỏ như cửa hàng giả định của đề tài.
 
 | Mục | Điện Máy Xanh | Nguyễn Kim | Chợ Lớn | Kim Quốc Tiến |
 |---|---|---|---|---|
@@ -88,7 +88,7 @@ Kim Quốc Tiến nhỏ hơn hẳn ba chuỗi và cùng nhóm hàng bếp, nên 
 4. Đổi trả phân biệt **lỗi nhà sản xuất** và **không lỗi**; phí khấu trừ tính theo % và tăng theo thời gian; cần biên bản hoặc xác nhận lỗi (TL-03, TL-12, TL-15).
 5. Bảo hành gốc là **của hãng**; chuỗi lớn nhận hộ hoặc cam kết thêm (TL-04, TL-12, TL-16).
 6. Định danh máy bảo hành bằng **số điện thoại, số serial hoặc IMEI và chứng từ mua** (TL-04, TL-16, TL-18). Đề tài quản lý từng chiếc máy theo serial là sát thực tế.
-7. Thanh toán nhiều kênh: tiền mặt khi nhận, chuyển khoản hoặc QR, thẻ, trả góp qua công ty tài chính (TL-05, TL-13, TL-17). Đặt cọc chỉ thấy ở **một** nơi (TL-17, với đơn trả tiền khi nhận), nên không tính là điểm chung; cửa hàng khảo sát có bắt cọc không thì hỏi PV C3, C6.
+7. Thanh toán nhiều kênh: tiền mặt khi nhận, chuyển khoản hoặc QR, thẻ, trả góp qua công ty tài chính (TL-05, TL-13, TL-17). Đặt cọc chỉ thấy ở **một** nơi (TL-17, với đơn trả tiền khi nhận), nên không tính là điểm chung; cửa hàng giả định xin cọc máy trên 10 triệu (`MP2 C3`, `C6`).
 8. Nhà bán **giữ quyền huỷ đơn** và hoàn đủ tiền đã thu; giá niêm yết đã gồm VAT (TL-10, TL-11, TL-13, TL-17).
 
 ## 4. Văn bản pháp luật cửa hàng phải theo khi mở website
@@ -157,7 +157,7 @@ Nguồn từng ô: TL-04, TL-10, TL-18, TL-19 và các trang hướng dẫn tron
 
 Nhận xét dùng cho đề tài:
 - Trên các trang đọc được, **không thấy website nào cho nhập số serial để tra bảo hành** (hai nơi có tra cứu dùng số điện thoại, IMEI, mã phiếu) và không thấy nơi nào cho khách chọn khung giờ lắp tại nhà. Trang thanh toán chưa đọc được, nên khi đưa vào báo cáo chỉ viết "nhóm không thấy", không viết "không có". Hai chức năng này (UC-KB-07 của G5, UC-DH-02 của G4) hợp với cửa hàng nhỏ tự đi lắp và có thể là điểm khác so với chuỗi lớn.
-- Đặt hàng không cần tài khoản: MediaMart ghi rõ (TL-18), ba nơi kia chỉ thấy đòi họ tên, số điện thoại, địa chỉ. Cách này hợp với cửa hàng nhỏ hơn bắt khách tạo tài khoản (G3); câu K11 của bảng hỏi sẽ kiểm lại.
+- Đặt hàng không cần tài khoản: MediaMart ghi rõ (TL-18), ba nơi kia chỉ thấy đòi họ tên, số điện thoại, địa chỉ. Cách này hợp với cửa hàng nhỏ hơn bắt khách tạo tài khoản (G3); 3/10 vai khách mô phỏng chỉ muốn nhập số điện thoại (`MK K11`).
 - Tra cứu đơn bằng số điện thoại kèm mã đơn đủ dùng cho cửa hàng nhỏ, đỡ tốn phí gửi OTP (đề xuất của nhóm, không thấy trên các website).
 
 ## 7. Số liệu thị trường
@@ -189,12 +189,12 @@ Thông tư 91/2026/TT-BTC hướng dẫn hoá đơn; nghị định mới về n
 
 ## 9. Đề xuất chỉnh mô hình, chờ nhóm chốt
 
-Các điểm dưới đây **chưa sửa** vào phần dùng chung. G1 đưa ra họp chốt từ điển lớp (t112), sau khi có kết quả phỏng vấn.
+Các điểm dưới đây **chưa sửa** vào phần dùng chung. G1 đưa ra họp chốt từ điển lớp (t112). Phần yêu cầu tương ứng đã có trong bảng yêu cầu (`hien-trang-va-yeu-cau.md`), còn chờ chốt phần lớp.
 
 | Gói | Đề xuất | Căn cứ |
 |---|---|---|
 | G2 | `SanPham` thêm thuộc tính nhãn năng lượng; `ChiTietDonHang` lưu tên, giá, mô tả lúc bán; thêm hỏi đáp trên trang sản phẩm | TL-31; TL-20 Đ16; mục 6 |
-| G3 | Đặt hàng chỉ bằng số điện thoại; bước xác nhận đơn đủ thông tin và ô đồng ý không tích sẵn; thanh toán có loại **đặt cọc** nếu cửa hàng khảo sát có cọc (PV C3, C6) | TL-20 Đ12; TL-24, TL-25; TL-17 |
+| G3 | Đặt hàng chỉ bằng số điện thoại; bước xác nhận đơn đủ thông tin và ô đồng ý không tích sẵn; thanh toán có loại **đặt cọc** vì cửa hàng giả định có xin cọc (`MP2 C3`, `C6`) | TL-20 Đ12; TL-24, TL-25; TL-17 |
 | G4 | `PhieuLapDat` tách công lắp và vật tư phát sinh; `YeuCauDoiTra` có loại lý do (lỗi nhà sản xuất, không đúng mô tả, đổi ý) và phí khấu trừ; hoá đơn lập khi đơn "đã giao" | TL-01, TL-08; TL-03, TL-12, TL-15, TL-20 Đ16; TL-26 |
 | G5 | `PhieuNhap`, `PhieuXuat` theo mẫu 01-VT, 02-VT (số theo chứng từ và thực nhập, lý do xuất); phiếu tiếp nhận bảo hành có ngày hẹn trả; **đếm số lần bảo hành** từng chiếc máy | TL-28, TL-29; TL-22 Đ30 |
 | G1 | Trang thông tin cửa hàng và chính sách; nhật ký đồng ý xử lý dữ liệu; có thể thêm use case **Gửi khiếu nại** | TL-20 Đ11, TL-21; TL-24, TL-25; TL-22 Đ31 |

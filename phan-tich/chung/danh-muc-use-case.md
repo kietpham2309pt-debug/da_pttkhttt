@@ -15,7 +15,7 @@ Mỗi gói vẽ sơ đồ phân rã của phân hệ mình (việc t102) với c
 
 ## 2. Use case theo phân hệ (35 use case)
 
-Cột **Tác nhân** là đề xuất ban đầu; gói nào thấy sau khảo sát cần đổi thì đổi trong phần của mình và báo G1 cập nhật bảng này.
+Cột **Tác nhân** là đề xuất ban đầu; gói nào thấy khi đặc tả cần đổi thì đổi trong phần của mình và báo G1 cập nhật bảng này.
 Cột **Đặc tả**: ✓ là use case nên đặc tả (việc t103); ★ là use case vừa đặc tả vừa thiết kế sơ đồ tuần tự (việc t142, t143).
 
 ### G1 · Quản trị hệ thống và báo cáo
@@ -45,7 +45,7 @@ Cột **Đặc tả**: ✓ là use case nên đặc tả (việc t103); ★ là 
 | UC-MH-01 | Đăng ký tài khoản khách hàng | Khách vãng lai | |
 | UC-MH-02 | Quản lý hồ sơ, sổ địa chỉ | Khách hàng | |
 | UC-MH-03 | Quản lý giỏ hàng | Khách vãng lai | |
-| UC-MH-04 | Đặt hàng | Khách hàng (hoặc Khách vãng lai, chờ khảo sát) | ★ |
+| UC-MH-04 | Đặt hàng | Khách hàng (đề xuất thêm Khách vãng lai, G3 chốt ở t102) | ★ |
 | UC-MH-05 | Thanh toán trực tuyến | Khách hàng, Cổng thanh toán | ★ |
 | UC-MH-06 | Theo dõi đơn hàng | Khách hàng | ✓ |
 | UC-MH-07 | Huỷ đơn hàng | Khách hàng | |

@@ -45,7 +45,7 @@ mỗi dòng thay thế là một nhánh có điều kiện `[...]`; mỗi giấy
 
 ### Ví dụ (G1): BUC-07 Lập báo cáo kinh doanh
 
-> Ví dụ để xem **cách viết và cách vẽ**. Các bước là giả định thường gặp; G1 viết lại theo đúng lời cửa hàng sau khi phỏng vấn.
+> Ví dụ để xem **cách viết và cách vẽ**. Các bước khớp với cửa hàng giả định (`MP2 A4`, `D5`; `MP3 A4`): kế toán xuất số liệu, đối chiếu tiền thu khi giao và số kho rồi lập báo cáo.
 
 **1. Đặc tả bằng văn bản**
 

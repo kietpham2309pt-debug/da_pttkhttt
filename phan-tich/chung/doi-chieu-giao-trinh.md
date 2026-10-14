@@ -23,8 +23,8 @@ Các bước theo thứ tự bài giảng; số việc (t…) trên trang tiến
 | Tuần | Bước theo giáo trình | Ai | Sản phẩm |
 |---|---|---|---|
 | 8 (đến 11/10) | Phỏng vấn bước 1–4: chọn người, mục tiêu, câu hỏi, chuẩn bị (C2-19) | G1 dẫn, cả nhóm bổ sung câu | Kịch bản 1.1, kế hoạch phỏng vấn tổng quan, bảng hướng dẫn buổi phỏng vấn (t81, t82, t77) |
-| 9 (12–18/10) | Phỏng vấn bước 5–7, quan sát, phân tích tài liệu, phát bảng hỏi (C2-19 đến C2-47) | Ít nhất 3 người đi | Biên bản đã gửi cửa hàng xác nhận, ảnh biểu mẫu, kết quả Google Form (t83, t86) |
-| 9 | Đánh giá hiện trạng tổ chức: sơ đồ tổ chức, đối tượng liên quan, giới hạn hệ thống, bảng vấn đề (C3-8 đến C3-15) | G1 | `hien-trang-to-chuc.md` viết lại theo cửa hàng thật (t85) |
+| 9 (12–18/10) | Phân tích tài liệu (C2-45 đến C2-47); **thay phỏng vấn bước 5–7 và bảng hỏi bằng mô phỏng** (quyết định 14/10) | G1 | `khao-sat/tinh-huong-gia-dinh.md`, phỏng vấn mô phỏng 3 vai, 10 phiếu mô phỏng (t88) |
+| 9 | Đánh giá hiện trạng tổ chức: sơ đồ tổ chức, đối tượng liên quan, giới hạn hệ thống, bảng vấn đề (C3-8 đến C3-15) | G1 | `hien-trang-to-chuc.md` viết theo cửa hàng giả định (t85) |
 | 9 | Hiện trạng và yêu cầu: bảng yêu cầu chức năng, phi chức năng; chọn chiến lược (C2-4, C2-8) | Mỗi gói phần mình | Bảng yêu cầu của gói (t84) |
 | 10 | Xác định thuật ngữ; xác định tác nhân và use case nghiệp vụ (C3-17 đến C3-30) | G1 chốt, các gói gửi danh sách | `hien-trang-to-chuc.md` mục 5, `tac-nhan-va-thuc-the.md` mục 1, 4 (t91) |
 | 10 | Lập mô hình use case nghiệp vụ tổng (C3-31 đến C3-37) | G1 | `uc-nghiep-vu-tong` (t95) |
@@ -70,7 +70,7 @@ khung nhìn xử lý được thể hiện cùng các sơ đồ đó (C1.2-13).
 | Tác nhân ghi `«business actor»`, ranh giới có tên ở đỉnh (C3-21) | Không ghi; ô use case có mã | Vẽ lại sơ đồ use case nghiệp vụ tổng; mã để trong bảng |
 | Use case nghiệp vụ tên là **động từ** (C3-27) | "Báo cáo kinh doanh", "Bảo hành" | "Lập báo cáo kinh doanh", "Bảo hành sản phẩm" |
 | Mô hình use case nghiệp vụ có **«include», «extend»** (C3-33 đến C3-37) | Không có | Thêm BUC-08 Lắp đặt tận nơi «extend» Giao hàng; BUC-09 Kiểm tra máy theo số serial được Đổi trả, Bảo hành «include» |
-| **Đánh giá hiện trạng tổ chức** và **thuật ngữ** là 2 bước đầu (C3-7 đến C3-17) | Chưa có | Thêm `hien-trang-to-chuc.md` (bản giả định, viết lại sau khảo sát) và sơ đồ tổ chức |
+| **Đánh giá hiện trạng tổ chức** và **thuật ngữ** là 2 bước đầu (C3-7 đến C3-17) | Chưa có | Thêm `hien-trang-to-chuc.md` (theo cửa hàng giả định từ 14/10) và sơ đồ tổ chức |
 | Đặc tả use case nghiệp vụ theo **Mẫu 1**: giới thiệu, các dòng cơ bản, các dòng thay thế (C3-40, C3-41) | Bảng tự đặt "Mục / Nội dung", bước dạng bảng | Viết lại ví dụ BUC-07 đúng Mẫu 1, giữ bảng phụ (tác nhân, ràng buộc, quy tắc) |
 | **Sơ đồ đối tượng nghiệp vụ** có bản số (C3-51) | Chưa có | Thêm ví dụ BUC-07 |
 | Mỗi bước trong dòng cơ bản bắt đầu bằng **thừa tác viên** (C3-41, C3-58); sơ đồ hoạt động ví dụ chỉ có **luồng thừa tác viên** (C3-59) | Bước đầu, bước cuối lấy chủ cửa hàng làm chủ ngữ; có luồng Chủ cửa hàng | Quản lý cửa hàng tiếp nhận yêu cầu và trình duyệt; bỏ luồng tác nhân |

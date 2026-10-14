@@ -16,7 +16,7 @@ Danh mục hình · Danh mục bảng · **Bảng phân công và mức độ ho
 | Mục | Nội dung | Theo giáo trình | Gói | Tiêu chí |
 |---|---|---|---|---|
 | 1.1 | Giới thiệu đề tài, lý do chọn, mục tiêu, phạm vi | | G1 | Thực tế, khả thi |
-| 1.2 | Giới thiệu cửa hàng khảo sát: loại tổ chức kinh tế, mặt hàng, quy mô | C1-7 | G1 | Thực tế |
+| 1.2 | Giới thiệu cửa hàng giả định (dựng từ tài liệu và mô phỏng, xem 2.1): loại tổ chức kinh tế, mặt hàng, quy mô | C1-7 | G1 | Thực tế |
 | 1.3 | Cửa hàng nhìn như một hệ thống: hình đầu vào (hàng từ nhà cung cấp, tiền), đầu ra (máy đã bán, hoá đơn, phiếu bảo hành), ranh giới, môi trường kinh tế và xã hội | C1-4, C1-5, C1-9 | G1 | Nghiệp vụ |
 | 1.4 | Hệ thống quản lý: hệ quyết định (chủ, quản lý), hệ tác nghiệp (bán hàng, kho, giao lắp), hệ thông tin (ghi chép, báo cáo) | C1-10 | G1 | Nghiệp vụ |
 | 1.5 | Thành phần HTTT của đề tài: dữ liệu tĩnh (sản phẩm, nhân viên, nhà cung cấp) và động (đơn hàng, hoá đơn, phiếu nhập, phiếu bảo hành); xử lý; con người | C1-13 đến C1-16 | G1 | Cấu trúc |
@@ -26,12 +26,12 @@ Danh mục hình · Danh mục bảng · **Bảng phân công và mức độ ho
 
 | Mục | Nội dung | Theo giáo trình | Gói | Tiêu chí |
 |---|---|---|---|---|
-| 2.1 | Mục tiêu, nội dung, đối tượng khảo sát | C2-11 đến C2-17 | G1 | Thực tế |
+| 2.1 | Mục tiêu, nội dung, đối tượng khảo sát; **phương pháp: nhóm không phỏng vấn cửa hàng thật, dùng phân tích tài liệu và phỏng vấn mô phỏng, đối tượng là cửa hàng giả định** (đoạn văn lấy nguyên ở mục 6 của [`../khao-sat/tinh-huong-gia-dinh.md`](../khao-sat/tinh-huong-gia-dinh.md)) | C2-11 đến C2-17 | G1 | Thực tế |
 | 2.2a | Phân tích tài liệu công khai: chính sách các chuỗi điện máy, văn bản pháp luật, mẫu chứng từ kho, tính năng website ([`../khao-sat/phan-tich-tai-lieu.md`](../khao-sat/phan-tich-tai-lieu.md)) | C2-45 đến C2-47 | G1 | Thực tế |
-| 2.2 | Phỏng vấn: kế hoạch phỏng vấn tổng quan, bảng hướng dẫn buổi phỏng vấn, biên bản (đặt toàn văn ở phụ lục) | C2-19 đến C2-36 | G1 | Thực tế |
-| 2.3 | Bảng câu hỏi khách hàng: thiết kế, cách phát, kết quả (biểu đồ từ `xu_ly_bang_hoi.py`) | C2-37 đến C2-40 | G1 xử lý, cả nhóm chuyển link | Thực tế |
-| 2.4 | Quan sát, biểu mẫu thu được tại cửa hàng (ảnh đã che thông tin), bản mẫu: bộ giao diện chung cho cửa hàng xem và ghi góp ý (nếu làm được trong buổi phỏng vấn) | C2-43, C2-44, C2-50 | G1 | Thực tế |
-| 2.5 | Hiện trạng từng nghiệp vụ và vấn đề | C2-14 | G1 | Nghiệp vụ |
+| 2.2 | Phỏng vấn mô phỏng: kịch bản 1.0 và 6 câu bổ sung của bản 1.2, ba vai người bán (`MP1`–`MP3`), tóm tắt điều rút ra; ghi rõ là AI đóng vai, toàn văn ở phụ lục | C2-19 đến C2-36 | G1 | Thực tế |
+| 2.3 | Bảng câu hỏi khách hàng: thiết kế (17 câu) và 10 vai khách mô phỏng điền thử (`MK`); chỉ ghi số phiếu trên 10, không vẽ biểu đồ phần trăm | C2-37 đến C2-40 | G1 | Thực tế |
+| 2.4 | Giấy tờ của cửa hàng giả định (bảng các ô trên từng phiếu, mục 3 của `tinh-huong-gia-dinh.md`) đối chiếu mẫu 01-VT, 02-VT thật; bản mẫu: bộ giao diện chung | C2-43, C2-44, C2-50 | G1 | Thực tế |
+| 2.5 | Hiện trạng từng nghiệp vụ và vấn đề: cột ngành (TL) và cột cửa hàng giả định (MP, MK) | C2-14 | G1 | Nghiệp vụ |
 | 2.6 | Chiến lược phân tích yêu cầu được chọn và lý do; các cải tiến đề xuất cho từng nghiệp vụ (bước 2 trong 3 bước phân tích yêu cầu) | C2-7, C2-8 | G1 | Khả thi |
 | 2.7 | Phân loại yêu cầu: yêu cầu nghiệp vụ, yêu cầu của các bên liên quan, yêu cầu giải pháp (chức năng, phi chức năng), yêu cầu chuyển đổi (nhập dữ liệu cũ, tập huấn) | C2-6 | G1 | Khả thi |
 | 2.8 | Bảng yêu cầu chức năng theo phân hệ | C2-4 | G1 | Chức năng |
@@ -41,10 +41,10 @@ Mẫu bảng yêu cầu dùng chung (mục 2.8, 2.9), giống [`../phan-tich/chu
 
 | STT | Mã | Yêu cầu | Nguồn | Use case | Ưu tiên |
 |---|---|---|---|---|---|
-| 42 | YC-KB-06 | Khách và nhân viên tra bảo hành theo số serial hoặc số điện thoại | PV E4; TL-04, TL-16, TL-18; K15 | UC-KB-07 | Cao |
+| 43 | YC-KB-06 | Khách và nhân viên tra bảo hành theo số serial, số điện thoại hoặc mã đơn | MP2 E4, F2; TL-04, TL-16, TL-18; MK K15 | UC-KB-07 | Cao |
 | 1 | YC-PCN-01 | Không xoá cứng đơn hàng; giữ dữ liệu hợp đồng theo Luật Thương mại điện tử | TL-20 Đ16 | | Cao |
 
-Cột **Nguồn** ghi mã câu phỏng vấn, mã câu bảng hỏi, tên biểu mẫu hoặc mã tài liệu (TL-…) trong `phan-tich-tai-lieu.md`: yêu cầu nào không có nguồn thì GV dễ hỏi "lấy ở đâu ra".
+Cột **Nguồn** ghi mã tài liệu (TL-…) trong `phan-tich-tai-lieu.md`, mã vai mô phỏng kèm câu (MP2 E4) hoặc mã câu bảng hỏi mô phỏng (MK K15): yêu cầu nào không có nguồn thì GV dễ hỏi "lấy ở đâu ra". Đầu bảng ghi chú thích ba loại mã, nói rõ MP, MK là mô phỏng.
 
 ## CHƯƠNG 3. MÔ HÌNH HOÁ NGHIỆP VỤ
 
@@ -105,5 +105,5 @@ BUC-06 và BUC-09 (G5) · BUC-07 (G1). Danh sách thừa tác viên, thực th�
 
 ## Phần cuối
 
-Tài liệu tham khảo · Phụ lục A: kế hoạch và biên bản phỏng vấn đã được cửa hàng xác nhận · Phụ lục B: bảng câu hỏi khách hàng ·
-Phụ lục C: biểu mẫu thu được · Phụ lục D: biên bản họp nhóm.
+Tài liệu tham khảo · Phụ lục A: danh sách 35 tài liệu đã phân tích · Phụ lục B: kịch bản phỏng vấn và toàn văn phỏng vấn mô phỏng (ghi rõ AI đóng vai) ·
+Phụ lục C: bảng câu hỏi khách hàng và phiếu mô phỏng · Phụ lục D: biên bản họp nhóm.

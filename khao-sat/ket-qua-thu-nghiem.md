@@ -2,6 +2,8 @@
 
 07/10/2026 · việc **t81, t82** · nhóm 4
 
+> Tài liệu của **đợt thử 07/10**, viết khi nhóm còn định khảo sát thật. Từ 14/10 nhóm không khảo sát thật; cách dùng dữ liệu mô phỏng hiện nay ở [`tinh-huong-gia-dinh.md`](tinh-huong-gia-dinh.md).
+
 > ⚠ Mọi câu trả lời trong đợt thử này do **AI đóng vai**, không phải người thật. Mục đích duy nhất là tìm chỗ hỏi chưa tốt **trước khi** đi khảo sát thật.
 > Không đưa số liệu hay câu trích trong tệp này vào báo cáo. Dữ liệu gốc ở [`mo-phong/`](mo-phong/README.md).
 

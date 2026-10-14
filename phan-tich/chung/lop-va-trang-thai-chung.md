@@ -57,7 +57,7 @@ Thuộc tính ghi ở mức phân tích; cột **Kiểu gợi ý** để dùng l
 | `PhieuXuat` | maPhieuXuat, ngayXuat | Ghi **chính xác những chiếc máy** giao cho đơn |
 | `PhieuBaoHanh` | maPhieu, ngayNhan, moTaLoi, ngayHenTra, trangThai | Phiếu tiếp nhận bảo hành; G5 quyết có tách phiếu bảo hành lúc bán hay không |
 
-`HoaDon` (hoá đơn bán hàng): G3 quyết sau khảo sát có tách khỏi `DonHang` hay không.
+`HoaDon` (hoá đơn bán hàng): G3 quyết khi vẽ sơ đồ lớp (t113) có tách khỏi `DonHang` hay không.
 
 ## 3. Mối kết hợp
 
@@ -118,6 +118,6 @@ Quy tắc chung:
 | Đang bảo hành | Đã bán | Nhân viên bán hàng | UC-KB-06 | Trả máy đã sửa cho khách; **giữ nguyên `ngayBan`** |
 | Đã bán | Trả về kho | Nhân viên bán hàng | UC-DH-06 | Yêu cầu đổi trả đã được duyệt |
 | Trả về kho | Trong kho | Thủ kho | UC-KB-08 | Kiểm tra máy còn tốt, bán lại được |
-| Trả về kho | Lỗi chờ gửi hãng | Thủ kho | UC-KB-08 | Máy lỗi; việc gửi hãng hoặc đổi với nhà cung cấp G5 bổ sung sau khảo sát |
+| Trả về kho | Lỗi chờ gửi hãng | Thủ kho | UC-KB-08 | Máy lỗi; việc gửi hãng hoặc đổi với nhà cung cấp G5 bổ sung khi đặc tả (cửa hàng giả định gửi máy về hãng 7–15 ngày, `MP2 E4`) |
 
 UC-KB-07 Tra cứu bảo hành tìm theo số serial hoặc số điện thoại người mua.

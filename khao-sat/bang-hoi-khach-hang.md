@@ -4,6 +4,9 @@ Phiên bản 1.1 (07/10/2026) · dùng cho việc **t82** (tuần 8) · mục ti
 
 Bản 1.1 đã sửa theo đợt điền thử với 10 vai khách hàng mô phỏng, xem [`ket-qua-thu-nghiem.md`](ket-qua-thu-nghiem.md).
 
+> **14/10/2026: nhóm quyết định không phát bảng hỏi.** Tệp này giữ lại làm thiết kế bảng hỏi cho mục 2.3 của báo cáo và để dùng nếu sau này vẫn khảo sát được;
+> mục tiêu 30 phiếu và mục "Phát phiếu" chỉ áp dụng khi đó. Hiện dùng 10 phiếu mô phỏng (`MK`), xem [`tinh-huong-gia-dinh.md`](tinh-huong-gia-dinh.md) mục 5.
+
 **Tạo form tự động:** mở [script.google.com](https://script.google.com) bằng tài khoản Google của nhóm, bấm **Dự án mới**,
 xoá hết chữ có sẵn, dán toàn bộ nội dung [`tao-google-form.gs`](tao-google-form.gs), bấm **Lưu**, chọn hàm `taoBangHoi`, bấm **Chạy**,
 cấp quyền khi được hỏi. Xong thì mở **Nhật ký thực thi**: có link điền form, link sửa form và link bảng tính nhận kết quả.

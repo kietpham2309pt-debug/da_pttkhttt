@@ -1,7 +1,7 @@
 # Phân tích và thiết kế
 
-Bản nháp 0.2 (07/10/2026, chỉnh theo bài giảng chương 1, 1.2, 2, 3). Mọi thứ trong thư mục này là **bản nháp trước khảo sát**: dựng từ đề tài và các tài liệu công khai,
-sẽ chỉnh lại sau khi phỏng vấn cửa hàng thật (tuần 9).
+Bản 0.3 (14/10/2026). Từ 14/10 nhóm không phỏng vấn cửa hàng thật: mọi thứ trong thư mục này phân tích **cửa hàng giả định** dựng từ tài liệu công khai và phỏng vấn mô phỏng,
+xem [`../khao-sat/tinh-huong-gia-dinh.md`](../khao-sat/tinh-huong-gia-dinh.md).
 
 ## Phần dùng chung (thư mục `chung/`, G1 giữ)
 
