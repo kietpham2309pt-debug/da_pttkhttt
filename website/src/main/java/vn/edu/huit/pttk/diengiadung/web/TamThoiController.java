@@ -10,9 +10,4 @@ public class TamThoiController {
     public String trangChu() {
         return "mau-khach";
     }
-
-    @GetMapping("/quan-tri")
-    public String tongQuan() {
-        return "quan-tri/mau";
-    }
 }

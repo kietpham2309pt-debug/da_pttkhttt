@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau(${bm.maNhanVien == null} ? 'Thêm nhân viên' : 'Sửa nhân viên')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="/quan-tri">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="/quan-tri/tai-khoan">Tài khoản nhân viên</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${bm.maNhanVien == null} ? 'Thêm mới' : 'Sửa'">Thêm mới</span>
+            </nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('tai-khoan')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${bm.maNhanVien == null} ? 'Thêm nhân viên' : 'Sửa nhân viên'">Thêm nhân viên</h1>
+                            <p th:if="${bm.maNhanVien == null}">Hệ thống sinh mật khẩu tạm và bắt nhân viên đổi ở lần đăng nhập đầu.</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="khoi khoi--hep">
+                        <form method="post" th:action="@{/quan-tri/tai-khoan/luu}">
+                            <input type="hidden" name="maNhanVien" th:value="${bm.maNhanVien}">
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="hoTen">Họ tên</label>
+                                    <input type="text" id="hoTen" name="hoTen" maxlength="100" th:value="${bm.hoTen}" required>
+                                    <span class="loi-nhap" th:if="${loiO['hoTen']}" th:text="${loiO['hoTen']}"></span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="soDienThoai">Số điện thoại</label>
+                                    <input type="tel" id="soDienThoai" name="soDienThoai" maxlength="15" th:value="${bm.soDienThoai}" required>
+                                    <span class="loi-nhap" th:if="${loiO['soDienThoai']}" th:text="${loiO['soDienThoai']}"></span>
+                                </div>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="tenDangNhap">Tên đăng nhập</label>
+                                <input type="text" id="tenDangNhap" name="tenDangNhap" maxlength="50" th:value="${bm.tenDangNhap}"
+                                       th:readonly="${bm.maNhanVien != null}" required>
+                                <span class="goi-y" th:if="${bm.maNhanVien != null}">Tên đăng nhập không đổi được.</span>
+                                <span class="loi-nhap" th:if="${loiO['tenDangNhap']}" th:text="${loiO['tenDangNhap']}"></span>
+                            </div>
+                            <div class="o-nhap">
+                                <label>Vai (chọn một hoặc nhiều)</label>
+                                <div class="ds-tich">
+                                    <label class="o-tich" th:each="v : ${dsVai}">
+                                        <input type="checkbox" name="vaiTro" th:value="${v.maVaiTro}" th:checked="${#lists.contains(bm.vaiTro, v.maVaiTro)}">
+                                        <span class="o-tich__o"></span>
+                                        <span th:text="${v.tenVaiTro}">Vai</span>
+                                    </label>
+                                </div>
+                                <span class="loi-nhap" th:if="${loiO['vaiTro']}" th:text="${loiO['vaiTro']}"></span>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu</button>
+                                <a class="nut" href="/quan-tri/tai-khoan">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

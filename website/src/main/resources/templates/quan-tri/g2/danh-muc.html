@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Danh mục, thương hiệu')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Danh mục, thương hiệu')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('danh-muc')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Danh mục, thương hiệu</h1>
+                            <p>Nhóm hàng hiện trên menu, trang chủ và các thương hiệu cửa hàng bán.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac nut--nho" href="/quan-tri/danh-muc/them">Thêm danh mục</a>
+                            <a class="nut nut--nho" href="/quan-tri/thuong-hieu/them">Thêm thương hiệu</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2>Danh mục</h2>
+                        </div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th class="canh-giua">Thứ tự</th>
+                                    <th>Tên danh mục</th>
+                                    <th>Mã danh mục</th>
+                                    <th class="canh-giua">Số sản phẩm</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="dm : ${dsDanhMuc}" th:with="so=${soSpDanhMuc[dm.maDanhMuc] ?: 0}">
+                                    <td class="canh-giua" th:text="${dm.thuTu}">1</td>
+                                    <td th:text="${dm.tenDanhMuc}">Bếp điện từ</td>
+                                    <td><span class="the-nhan" th:text="${dm.maDanhMuc}">bep-dien-tu</span></td>
+                                    <td class="canh-giua" th:text="${so}">0</td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" th:href="@{/quan-tri/danh-muc/{ma}/sua(ma=${dm.maDanhMuc})}">Sửa</a>
+                                            <form method="post" th:action="@{/quan-tri/danh-muc/{ma}/xoa(ma=${dm.maDanhMuc})}"
+                                                  th:data-xac-nhan="|Xoá danh mục ${dm.tenDanhMuc}?|" onsubmit="return confirm(this.dataset.xacNhan);">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2>Thương hiệu</h2>
+                        </div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Tên thương hiệu</th>
+                                    <th>Xuất xứ</th>
+                                    <th class="canh-giua">Số sản phẩm</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="h : ${dsThuongHieu}" th:with="so=${soSpThuongHieu[h.maThuongHieu] ?: 0}">
+                                    <td th:text="${h.tenThuongHieu}">Bosch</td>
+                                    <td th:text="${h.xuatXu}">Đức</td>
+                                    <td class="canh-giua" th:text="${so}">0</td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" th:href="@{/quan-tri/thuong-hieu/{ma}/sua(ma=${h.maThuongHieu})}">Sửa</a>
+                                            <form method="post" th:action="@{/quan-tri/thuong-hieu/{ma}/xoa(ma=${h.maThuongHieu})}"
+                                                  th:data-xac-nhan="|Xoá thương hiệu ${h.tenThuongHieu}?|" onsubmit="return confirm(this.dataset.xacNhan);">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

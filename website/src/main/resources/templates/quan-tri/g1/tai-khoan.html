@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Tài khoản nhân viên')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Tài khoản nhân viên')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('tai-khoan')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Tài khoản nhân viên</h1>
+                            <p>Thêm nhân viên, gán vai, khoá, mở khoá và đặt lại mật khẩu.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac nut--nho" href="/quan-tri/tai-khoan/them">Thêm nhân viên</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="mat-khau-tam" th:if="${matKhauTam != null}" role="status">
+                        Mật khẩu tạm của <strong th:text="${tenMatKhauTam}">ten</strong>: <b th:text="${matKhauTam}">abc</b><br>
+                        <span class="chu-phu">Mật khẩu chỉ hiện một lần. Báo cho nhân viên; lần đăng nhập đầu tiên hệ thống bắt đổi mật khẩu.</span>
+                    </div>
+
+                    <div class="thanh-loc">
+                        <form action="/quan-tri/tai-khoan" method="get">
+                            <input type="search" name="tuKhoa" placeholder="Tìm theo họ tên, tên đăng nhập, số điện thoại" aria-label="Từ khoá" th:value="${tuKhoa}">
+                            <button class="nut nut--nho" type="submit">Tìm</button>
+                        </form>
+                    </div>
+
+                    <div class="khoi">
+                        <p th:if="${#lists.isEmpty(dsNhanVien)}" class="chu-phu">Không có nhân viên phù hợp.</p>
+                        <div class="cuon-ngang" th:if="${!#lists.isEmpty(dsNhanVien)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Họ tên</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Vai</th>
+                                    <th class="canh-giua">Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="nv : ${dsNhanVien}" th:with="tk=${nv.taiKhoan}">
+                                    <td th:text="${nv.hoTen}">Họ tên</td>
+                                    <td th:text="${nv.soDienThoai}">0901</td>
+                                    <td>
+                                        <span th:text="${tk.tenDangNhap}">ten</span>
+                                        <span class="chu-phu" th:if="${tk.tenDangNhap == toi}">(bạn)</span>
+                                        <span class="chu-phu" th:if="${tk.phaiDoiMatKhau}"><br>chưa đổi mật khẩu tạm</span>
+                                    </td>
+                                    <td>
+                                        <span class="the-nhan" th:each="v : ${tk.vaiTro}" th:text="${v.tenVaiTro}"
+                                              th:classappend="${v.maVaiTro == 'QUAN_TRI'} ? 'the-nhan--vang'">Vai</span>
+                                    </td>
+                                    <td class="canh-giua">
+                                        <span class="the-nhan" th:text="${tk.trangThai.nhan}"
+                                              th:classappend="${tk.trangThai.name() == 'DANG_DUNG'} ? 'the-nhan--ok' : 'the-nhan--do'">Đang dùng</span>
+                                    </td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" th:href="@{/quan-tri/tai-khoan/{ma}/sua(ma=${nv.maNhanVien})}">Sửa</a>
+                                            <form method="post" th:action="@{/quan-tri/tai-khoan/{ma}/dat-lai-mat-khau(ma=${nv.maNhanVien})}"
+                                                  th:data-xac-nhan="|Đặt lại mật khẩu cho ${tk.tenDangNhap}?|" onsubmit="return confirm(this.dataset.xacNhan);">
+                                                <button class="nut nut--nho" type="submit">Đặt lại mật khẩu</button>
+                                            </form>
+                                            <form method="post" th:if="${tk.trangThai.name() == 'DANG_DUNG' and tk.tenDangNhap != toi}"
+                                                  th:action="@{/quan-tri/tai-khoan/{ma}/khoa(ma=${nv.maNhanVien})}"
+                                                  th:data-xac-nhan="|Khoá tài khoản ${tk.tenDangNhap}? Nhân viên này sẽ không đăng nhập được nữa.|" onsubmit="return confirm(this.dataset.xacNhan);">
+                                                <button class="nut nut--nho nut--do" type="submit">Khoá</button>
+                                            </form>
+                                            <form method="post" th:if="${tk.trangThai.name() == 'DA_KHOA'}"
+                                                  th:action="@{/quan-tri/tai-khoan/{ma}/mo-khoa(ma=${nv.maNhanVien})}">
+                                                <button class="nut nut--nho" type="submit">Mở khoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

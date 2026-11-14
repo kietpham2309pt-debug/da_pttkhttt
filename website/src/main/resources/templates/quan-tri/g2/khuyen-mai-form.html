@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau(${bm.maKhuyenMai == null} ? 'Thêm khuyến mãi' : 'Sửa khuyến mãi')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main th:with="ketThuc=${giaiDoan == 'Đã kết thúc'}, khoaKhac=${chiSuaHan or giaiDoan == 'Đã kết thúc'}">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="/quan-tri">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="/quan-tri/khuyen-mai">Khuyến mãi</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${bm.maKhuyenMai == null} ? 'Thêm mới' : 'Sửa'">Thêm mới</span>
+            </nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('khuyen-mai')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${bm.maKhuyenMai == null} ? 'Thêm chương trình khuyến mãi' : 'Sửa chương trình khuyến mãi'">Thêm chương trình</h1>
+                            <p th:if="${bm.maKhuyenMai != null}" th:text="'Trạng thái theo ngày: ' + ${giaiDoan}">Sắp chạy</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div class="canh-bao" th:if="${chiSuaHan}">Chương trình đang chạy: chỉ sửa được tên và ngày kết thúc. Đơn đã áp giữ nguyên mức giảm lúc đặt.</div>
+                    <div class="canh-bao" th:if="${ketThuc}">Chương trình đã kết thúc, chỉ xem được.</div>
+
+                    <div class="khoi khoi--hep">
+                        <form method="post" th:action="@{/quan-tri/khuyen-mai/luu}">
+                            <input type="hidden" name="maKhuyenMai" th:value="${bm.maKhuyenMai}">
+                            <div class="o-nhap">
+                                <label for="tenKhuyenMai">Tên chương trình</label>
+                                <input type="text" id="tenKhuyenMai" name="tenKhuyenMai" maxlength="150" th:value="${bm.tenKhuyenMai}" th:disabled="${ketThuc}" required>
+                                <span class="loi-nhap" th:if="${loiO['tenKhuyenMai']}" th:text="${loiO['tenKhuyenMai']}"></span>
+                            </div>
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="loai">Loại</label>
+                                    <select id="loai" name="loai" th:disabled="${khoaKhac}">
+                                        <option value="GIAM_THEO_SAN_PHAM" th:selected="${bm.loai == 'GIAM_THEO_SAN_PHAM'}">Giảm theo sản phẩm</option>
+                                        <option value="MA_GIAM_GIA" th:selected="${bm.loai == 'MA_GIAM_GIA'}">Mã giảm giá</option>
+                                    </select>
+                                    <span class="loi-nhap" th:if="${loiO['loai']}" th:text="${loiO['loai']}"></span>
+                                </div>
+                                <div class="o-nhap" id="oMaCode">
+                                    <label for="maCode">Mã giảm giá</label>
+                                    <input type="text" id="maCode" name="maCode" maxlength="30" placeholder="GIAM500K" th:value="${bm.maCode}"
+                                           th:disabled="${khoaKhac}" style="text-transform:uppercase">
+                                    <span class="goi-y">Tự chuyển thành chữ hoa; không trùng mã khác.</span>
+                                    <span class="loi-nhap" th:if="${loiO['maCode']}" th:text="${loiO['maCode']}"></span>
+                                </div>
+                            </div>
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="kieuGiam">Kiểu giảm</label>
+                                    <select id="kieuGiam" name="kieuGiam" th:disabled="${khoaKhac}">
+                                        <option value="PHAN_TRAM" th:selected="${bm.kieuGiam == 'PHAN_TRAM'}">Phần trăm (%)</option>
+                                        <option value="SO_TIEN" th:selected="${bm.kieuGiam == 'SO_TIEN'}">Số tiền (đ)</option>
+                                    </select>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="mucGiam">Mức giảm</label>
+                                    <input type="number" id="mucGiam" name="mucGiam" min="1" th:value="${bm.mucGiam}" th:disabled="${khoaKhac}" required>
+                                    <span class="loi-nhap" th:if="${loiO['mucGiam']}" th:text="${loiO['mucGiam']}"></span>
+                                </div>
+                            </div>
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="giamToiDa">Giảm tối đa (đ, không bắt buộc)</label>
+                                    <input type="number" id="giamToiDa" name="giamToiDa" min="1" th:value="${bm.giamToiDa}" th:disabled="${khoaKhac}">
+                                    <span class="loi-nhap" th:if="${loiO['giamToiDa']}" th:text="${loiO['giamToiDa']}"></span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="donToiThieu">Đơn tối thiểu (đ)</label>
+                                    <input type="number" id="donToiThieu" name="donToiThieu" min="0" th:value="${bm.donToiThieu}" th:disabled="${khoaKhac}">
+                                    <span class="loi-nhap" th:if="${loiO['donToiThieu']}" th:text="${loiO['donToiThieu']}"></span>
+                                </div>
+                            </div>
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="quaTang">Quà tặng (không bắt buộc)</label>
+                                    <input type="text" id="quaTang" name="quaTang" maxlength="150" th:value="${bm.quaTang}" th:disabled="${khoaKhac}">
+                                    <span class="loi-nhap" th:if="${loiO['quaTang']}" th:text="${loiO['quaTang']}"></span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="soLuotToiDa">Số lượt tối đa (không bắt buộc)</label>
+                                    <input type="number" id="soLuotToiDa" name="soLuotToiDa" min="1" th:value="${bm.soLuotToiDa}" th:disabled="${khoaKhac}">
+                                    <span class="loi-nhap" th:if="${loiO['soLuotToiDa']}" th:text="${loiO['soLuotToiDa']}"></span>
+                                </div>
+                            </div>
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="ngayBatDau">Ngày bắt đầu</label>
+                                    <input type="date" id="ngayBatDau" name="ngayBatDau" th:value="${bm.ngayBatDau}" th:disabled="${khoaKhac}" required>
+                                    <span class="loi-nhap" th:if="${loiO['ngayBatDau']}" th:text="${loiO['ngayBatDau']}"></span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="ngayKetThuc">Ngày kết thúc</label>
+                                    <input type="date" id="ngayKetThuc" name="ngayKetThuc" th:value="${bm.ngayKetThuc}" th:disabled="${ketThuc}" required>
+                                    <span class="loi-nhap" th:if="${loiO['ngayKetThuc']}" th:text="${loiO['ngayKetThuc']}"></span>
+                                </div>
+                            </div>
+                            <div class="o-nhap" id="oSanPham">
+                                <label>Sản phẩm áp dụng</label>
+                                <div class="ds-tich ds-tich--cuon">
+                                    <label class="o-tich" th:each="sp : ${dsSanPham}">
+                                        <input type="checkbox" name="sanPham" th:value="${sp.maSanPham}"
+                                               th:checked="${#lists.contains(bm.sanPham, sp.maSanPham)}" th:disabled="${khoaKhac}">
+                                        <span class="o-tich__o"></span>
+                                        <span>
+                                            <span th:text="${sp.tenSanPham}">Tên</span><br>
+                                            <span class="chu-phu" th:text="${sp.danhMuc.tenDanhMuc} + ' · ' + ${@dd.tien(sp.giaBan)}"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <span class="loi-nhap" th:if="${loiO['sanPham']}" th:text="${loiO['sanPham']}"></span>
+                            </div>
+                            <div class="o-nhap" th:if="${loiO['lyDoDuoiGiaNhap'] != null or bm.lyDoDuoiGiaNhap != null}">
+                                <label for="lyDoDuoiGiaNhap">Lý do bán dưới giá nhập</label>
+                                <input type="text" id="lyDoDuoiGiaNhap" name="lyDoDuoiGiaNhap" maxlength="100" th:value="${bm.lyDoDuoiGiaNhap}">
+                                <span class="loi-nhap" th:if="${loiO['lyDoDuoiGiaNhap']}" th:text="${loiO['lyDoDuoiGiaNhap']}"></span>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit" th:if="${!ketThuc}">Lưu</button>
+                                <a class="nut" href="/quan-tri/khuyen-mai">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+<script>
+    (function () {
+        const loai = document.getElementById('loai');
+        function capNhat() {
+            const laMa = loai.value === 'MA_GIAM_GIA';
+            document.getElementById('oMaCode').style.display = laMa ? '' : 'none';
+            document.getElementById('oSanPham').style.display = laMa ? 'none' : '';
+        }
+        loai.addEventListener('change', capNhat);
+        capNhat();
+    })();
+</script>
+</body>
+</html>

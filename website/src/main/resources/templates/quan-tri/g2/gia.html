@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Giá bán')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="/quan-tri">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="/quan-tri/san-pham">Sản phẩm, giá</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Giá bán</span>
+            </nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('san-pham')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${sp.tenSanPham}">Tên mẫu máy</h1>
+                            <p>
+                                Model <span th:text="${sp.model}">M</span> ·
+                                <span th:text="${sp.trangThai.nhan}">Đang bán</span> ·
+                                Giá bán hiện tại <strong th:text="${@dd.tien(sp.giaBan)}">0</strong>
+                                <th:block th:if="${sp.giaNiemYet != null}"> · niêm yết <span th:text="${@dd.tien(sp.giaNiemYet)}">0</span></th:block>
+                            </p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="khoi khoi--hep" sec:authorize="hasRole('QUAN_LY')">
+                        <div class="khoi__dau">
+                            <h2>Cập nhật giá bán</h2>
+                            <span class="the-nhan" th:text="${giaNhap != null} ? 'Giá nhập gần nhất ' + ${@dd.tien(giaNhap)} : 'Chưa có phiếu nhập'">Giá nhập</span>
+                        </div>
+                        <form method="post" th:action="@{/quan-tri/san-pham/{ma}/gia(ma=${sp.maSanPham})}">
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="giaMoi">Giá bán mới (đ, đã gồm VAT)</label>
+                                    <input type="text" inputmode="numeric" id="giaMoi" name="giaMoi" th:value="${giaMoi}" placeholder="15240000" required>
+                                    <span class="loi-nhap" th:if="${loiO['giaMoi']}" th:text="${loiO['giaMoi']}"></span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="giaNiemYet">Giá niêm yết gạch ngang (đ, không bắt buộc)</label>
+                                    <input type="text" inputmode="numeric" id="giaNiemYet" name="giaNiemYet" th:value="${giaNiemYet}">
+                                    <span class="loi-nhap" th:if="${loiO['giaNiemYet']}" th:text="${loiO['giaNiemYet']}"></span>
+                                </div>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="lyDo">Lý do đổi giá</label>
+                                <input type="text" id="lyDo" name="lyDo" maxlength="255" th:value="${lyDo}">
+                                <span class="goi-y">Bắt buộc khi giá mới thấp hơn giá nhập gần nhất.</span>
+                                <span class="loi-nhap" th:if="${loiO['lyDo']}" th:text="${loiO['lyDo']}"></span>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu giá</button>
+                                <a class="nut" href="/quan-tri/san-pham">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2>Lịch sử giá</h2>
+                            <span class="chu-phu">Đơn đã đặt giữ đơn giá lúc đặt, không đổi theo giá mới.</span>
+                        </div>
+                        <p th:if="${#lists.isEmpty(lichSu)}" class="chu-phu">Chưa có lần đổi giá nào.</p>
+                        <div class="cuon-ngang" th:if="${!#lists.isEmpty(lichSu)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Thời điểm</th>
+                                    <th class="canh-phai">Giá cũ</th>
+                                    <th class="canh-phai">Giá mới</th>
+                                    <th>Người sửa</th>
+                                    <th>Lý do</th>
+                                    <th class="canh-giua">Dưới giá nhập</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="l : ${lichSu}">
+                                    <td th:text="${@dd.ngayGio(l.thoiDiem)}">01/11/2026 08:00</td>
+                                    <td class="canh-phai" th:text="${@dd.tien(l.giaCu)}">0</td>
+                                    <td class="canh-phai" th:text="${@dd.tien(l.giaMoi)}">0</td>
+                                    <td th:text="${l.nhanVien.hoTen}">Người sửa</td>
+                                    <td class="o-dai" th:text="${l.lyDo}"></td>
+                                    <td class="canh-giua">
+                                        <span class="the-nhan the-nhan--do" th:if="${l.duoiGiaNhap}">Có</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

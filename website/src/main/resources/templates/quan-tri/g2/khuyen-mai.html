@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Khuyến mãi')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Khuyến mãi')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('khuyen-mai')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Khuyến mãi, mã giảm giá</h1>
+                            <p>Chương trình chủ cửa hàng đã duyệt: giảm theo sản phẩm hoặc mã giảm giá, kèm quà tặng.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac nut--nho" href="/quan-tri/khuyen-mai/them">Thêm chương trình</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="khoi">
+                        <p th:if="${#lists.isEmpty(dsKhuyenMai)}" class="chu-phu">Chưa có chương trình nào.</p>
+                        <div class="cuon-ngang" th:if="${!#lists.isEmpty(dsKhuyenMai)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Chương trình</th>
+                                    <th>Loại</th>
+                                    <th>Mức giảm, quà</th>
+                                    <th>Điều kiện</th>
+                                    <th>Thời gian</th>
+                                    <th class="canh-giua">Lượt dùng</th>
+                                    <th class="canh-giua">Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="d : ${dsKhuyenMai}" th:with="km=${d.km()}">
+                                    <td class="o-dai">
+                                        <span th:text="${km.tenKhuyenMai}">Tên</span><br>
+                                        <span class="chu-phu" th:text="'Người lập: ' + ${d.nguoiTao()}"></span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${km.loai.nhan}">Loại</span>
+                                        <br th:if="${km.maCode != null}"><span class="the-nhan the-nhan--vang" th:if="${km.maCode != null}" th:text="${km.maCode}">MA</span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${km.kieuGiam.name() == 'PHAN_TRAM'} ? ${km.mucGiam} + '%' : ${@dd.tien(km.mucGiam)}">5%</span>
+                                        <span class="chu-phu" th:if="${km.giamToiDa != null}" th:text="'tối đa ' + ${@dd.tien(km.giamToiDa)}"></span>
+                                        <br th:if="${km.quaTang != null}"><span class="chu-phu" th:if="${km.quaTang != null}" th:text="'Quà: ' + ${km.quaTang}"></span>
+                                    </td>
+                                    <td th:text="${km.donToiThieu != null and km.donToiThieu > 0} ? 'Đơn từ ' + ${@dd.tien(km.donToiThieu)} : 'Không'">Không</td>
+                                    <td th:text="${@dd.ngay(km.ngayBatDau)} + ' – ' + ${@dd.ngay(km.ngayKetThuc)}">01/11 – 30/11</td>
+                                    <td class="canh-giua" th:text="${km.soLuotDaDung} + (${km.soLuotToiDa != null} ? ' / ' + ${km.soLuotToiDa} : '')">0</td>
+                                    <td class="canh-giua">
+                                        <span class="the-nhan" th:text="${d.trangThai()}"
+                                              th:classappend="${d.trangThai() == 'Đang chạy'} ? 'the-nhan--ok' : (${d.trangThai() == 'Sắp chạy'} ? 'the-nhan--vang' : (${d.trangThai() == 'Tạm dừng'} ? 'the-nhan--do' : 'the-nhan--tat'))">Đang chạy</span>
+                                    </td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" th:href="@{/quan-tri/khuyen-mai/{ma}/sua(ma=${km.maKhuyenMai})}"
+                                               th:text="${d.giaiDoan() == 'Đã kết thúc'} ? 'Xem' : 'Sửa'">Sửa</a>
+                                            <form method="post" th:if="${km.trangThai.name() == 'DANG_CHAY' and d.giaiDoan() != 'Đã kết thúc'}"
+                                                  th:action="@{/quan-tri/khuyen-mai/{ma}/tam-dung(ma=${km.maKhuyenMai})}"
+                                                  th:data-xac-nhan="|Tạm dừng chương trình ${km.tenKhuyenMai}?|" onsubmit="return confirm(this.dataset.xacNhan);">
+                                                <button class="nut nut--nho nut--do" type="submit">Tạm dừng</button>
+                                            </form>
+                                            <form method="post" th:if="${km.trangThai.name() == 'TAM_DUNG' and d.giaiDoan() != 'Đã kết thúc'}"
+                                                  th:action="@{/quan-tri/khuyen-mai/{ma}/chay-lai(ma=${km.maKhuyenMai})}">
+                                                <button class="nut nut--nho" type="submit">Chạy lại</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau(${maThuongHieu == null} ? 'Thêm thương hiệu' : 'Sửa thương hiệu')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="/quan-tri">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="/quan-tri/danh-muc">Danh mục, thương hiệu</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${maThuongHieu == null} ? 'Thêm thương hiệu' : 'Sửa thương hiệu'">Thêm thương hiệu</span>
+            </nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('danh-muc')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${maThuongHieu == null} ? 'Thêm thương hiệu' : 'Sửa thương hiệu'">Thêm thương hiệu</h1>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div class="khoi khoi--hep">
+                        <form method="post" th:action="@{/quan-tri/thuong-hieu/luu}">
+                            <input type="hidden" name="maThuongHieu" th:value="${maThuongHieu}">
+                            <div class="o-nhap">
+                                <label for="tenThuongHieu">Tên thương hiệu</label>
+                                <input type="text" id="tenThuongHieu" name="tenThuongHieu" maxlength="60" th:value="${tenThuongHieu}" required>
+                                <span class="loi-nhap" th:if="${loiO['tenThuongHieu']}" th:text="${loiO['tenThuongHieu']}"></span>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="xuatXu">Xuất xứ</label>
+                                <input type="text" id="xuatXu" name="xuatXu" maxlength="60" placeholder="Đức" th:value="${xuatXu}">
+                                <span class="loi-nhap" th:if="${loiO['xuatXu']}" th:text="${loiO['xuatXu']}"></span>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu</button>
+                                <a class="nut" href="/quan-tri/danh-muc">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

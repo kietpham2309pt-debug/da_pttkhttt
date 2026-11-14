@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Báo cáo tồn kho, bảo hành')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Báo cáo tồn kho, bảo hành')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('bc-ton-kho')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Báo cáo tồn kho, bảo hành</h1>
+                            <p>Số chiếc máy theo từng mẫu, đếm theo số serial và trạng thái; máy đang bảo hành, đang gửi hãng.</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2>Mẫu máy dưới mức tồn tối thiểu</h2>
+                            <span class="the-nhan the-nhan--vang" th:text="'Còn từ ' + ${mucToiThieu} + ' máy trở xuống trong kho'">≤ 2</span>
+                        </div>
+                        <p th:if="${#lists.isEmpty(sapHet)}" class="chu-phu">Không có mẫu máy nào dưới mức tồn tối thiểu.</p>
+                        <div class="cuon-ngang" th:if="${!#lists.isEmpty(sapHet)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Tên mẫu máy</th>
+                                    <th>Danh mục</th>
+                                    <th class="canh-giua">Trong kho</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="t : ${sapHet}">
+                                    <td class="ma-mo" th:text="${t.model()}">MODEL</td>
+                                    <td th:text="${t.tenSanPham()}">Tên</td>
+                                    <td th:text="${t.danhMuc()}">Danh mục</td>
+                                    <td class="canh-giua"><span class="the-nhan the-nhan--do" th:text="${t.trongKho()}">0</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2>Tồn theo mẫu máy</h2>
+                            <span class="chu-phu" th:text="${#lists.size(dsTon)} + ' mẫu máy'"></span>
+                        </div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Tên mẫu máy</th>
+                                    <th>Danh mục</th>
+                                    <th>Trạng thái bán</th>
+                                    <th class="canh-phai">Đã nhập</th>
+                                    <th class="canh-phai">Trong kho</th>
+                                    <th class="canh-phai">Đã xuất</th>
+                                    <th class="canh-phai">Đã bán</th>
+                                    <th class="canh-phai">Đang bảo hành</th>
+                                    <th class="canh-phai">Trả về kho</th>
+                                    <th class="canh-phai">Lỗi chờ gửi hãng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="t : ${dsTon}" th:classappend="${t.sapHet()} ? 'dong-nhac'">
+                                    <td class="ma-mo" th:text="${t.model()}">MODEL</td>
+                                    <td th:text="${t.tenSanPham()}">Tên</td>
+                                    <td th:text="${t.danhMuc()}">Danh mục</td>
+                                    <td th:text="${t.trangThai()}">Đang bán</td>
+                                    <td class="canh-phai" th:text="${t.tongNhap()}">0</td>
+                                    <td class="canh-phai" th:text="${t.trongKho()}">0</td>
+                                    <td class="canh-phai" th:text="${t.daXuat()}">0</td>
+                                    <td class="canh-phai" th:text="${t.daBan()}">0</td>
+                                    <td class="canh-phai" th:text="${t.dangBaoHanh()}">0</td>
+                                    <td class="canh-phai" th:text="${t.traVeKho()}">0</td>
+                                    <td class="canh-phai" th:text="${t.loiChoGuiHang()}">0</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2>Máy đang bảo hành, đang gửi hãng</h2>
+                            <span class="chu-phu" th:text="${#lists.size(baoHanh)} + ' phiếu đang mở'"></span>
+                        </div>
+                        <p th:if="${#lists.isEmpty(baoHanh)}" class="chu-phu">Không có phiếu bảo hành nào đang mở.</p>
+                        <div class="cuon-ngang" th:if="${!#lists.isEmpty(baoHanh)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Phiếu</th>
+                                    <th>Số serial</th>
+                                    <th>Mẫu máy</th>
+                                    <th>Khách</th>
+                                    <th>Ngày nhận</th>
+                                    <th>Hẹn trả</th>
+                                    <th>Ngày gửi hãng</th>
+                                    <th class="canh-giua">Trạng thái</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="p : ${baoHanh}">
+                                    <td th:text="'#' + ${p.maPhieu}">#1</td>
+                                    <td class="ma-mo" th:text="${p.serial != null} ? ${p.serial.soSerial} : ''">SERIAL</td>
+                                    <td th:text="${p.serial != null} ? ${p.serial.sanPham.tenSanPham} : ''">Tên</td>
+                                    <td th:text="${p.hoTenKhach}">Khách</td>
+                                    <td th:text="${@dd.ngay(p.ngayNhan)}">01/11/2026</td>
+                                    <td th:text="${@dd.ngay(p.ngayHenTra)}">05/11/2026</td>
+                                    <td th:text="${@dd.ngay(p.ngayGuiHang)}"></td>
+                                    <td class="canh-giua"><span class="the-nhan" th:text="${p.trangThai.nhan}"
+                                                                th:classappend="${p.trangThai.name() == 'DA_GUI_HANG'} ? 'the-nhan--vang'">Đã tiếp nhận</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

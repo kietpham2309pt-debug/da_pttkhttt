@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau(${themMoi} ? 'Thêm danh mục' : 'Sửa danh mục')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="/quan-tri">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="/quan-tri/danh-muc">Danh mục, thương hiệu</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${themMoi} ? 'Thêm danh mục' : 'Sửa danh mục'">Thêm danh mục</span>
+            </nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('danh-muc')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${themMoi} ? 'Thêm danh mục' : 'Sửa danh mục'">Thêm danh mục</h1>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div class="khoi khoi--hep">
+                        <form method="post" th:action="@{/quan-tri/danh-muc/luu}">
+                            <input type="hidden" name="themMoi" th:value="${themMoi}">
+                            <div class="o-nhap">
+                                <label for="tenDanhMuc">Tên danh mục</label>
+                                <input type="text" id="tenDanhMuc" name="tenDanhMuc" maxlength="100" placeholder="Bếp điện từ" th:value="${tenDanhMuc}" required>
+                                <span class="loi-nhap" th:if="${loiO['tenDanhMuc']}" th:text="${loiO['tenDanhMuc']}"></span>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="maDanhMuc">Mã danh mục</label>
+                                <input type="text" id="maDanhMuc" name="maDanhMuc" maxlength="30" placeholder="bep-dien-tu" th:value="${maDanhMuc}"
+                                       th:readonly="${!themMoi}" required>
+                                <span class="goi-y" th:if="${themMoi}">Chữ thường không dấu, nối bằng dấu gạch ngang. Mã dùng chọn ảnh danh mục /assets/img/sp-&lt;mã&gt;.jpg.</span>
+                                <span class="goi-y" th:if="${!themMoi}">Mã danh mục không đổi được.</span>
+                                <span class="loi-nhap" th:if="${loiO['maDanhMuc']}" th:text="${loiO['maDanhMuc']}"></span>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="thuTu">Thứ tự hiển thị</label>
+                                <input type="number" id="thuTu" name="thuTu" min="0" th:value="${thuTu}" required>
+                                <span class="loi-nhap" th:if="${loiO['thuTu']}" th:text="${loiO['thuTu']}"></span>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu</button>
+                                <a class="nut" href="/quan-tri/danh-muc">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Tổng quan')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="/">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Quản trị</span>
+            </nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('tong-quan')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Tổng quan</h1>
+                            <p th:text="${hoTen != null} ? 'Xin chào ' + ${hoTen} + '. Việc cần làm theo vai của bạn.' : 'Việc cần làm theo vai của bạn.'">Việc cần làm theo vai của bạn.</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="o-so-ds" th:if="${!#lists.isEmpty(oSo)}">
+                        <a class="o-so" th:each="o : ${oSo}" th:href="${o.lienKet()}" th:classappend="${o.nhac()} ? 'o-so--nhac'">
+                            <div class="o-so__nhan" th:text="${o.nhan()}">Đơn chờ xác nhận</div>
+                            <div class="o-so__gt" th:text="${o.laTien()} ? ${@dd.tien(o.giaTri())} : ${o.giaTri()}">0</div>
+                            <div class="o-so__xem">Xem chi tiết</div>
+                        </a>
+                    </div>
+
+                    <div class="khoi" th:if="${khuyenMai != null}">
+                        <div class="khoi__dau">
+                            <h2>Khuyến mãi đang chạy</h2>
+                            <a sec:authorize="hasRole('QUAN_LY')" class="nut nut--nho" href="/quan-tri/khuyen-mai">Quản lý khuyến mãi</a>
+                        </div>
+                        <p th:if="${#lists.isEmpty(khuyenMai)}" class="chu-phu">Hiện không có chương trình nào đang chạy.</p>
+                        <div class="cuon-ngang" th:if="${!#lists.isEmpty(khuyenMai)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Chương trình</th>
+                                    <th>Loại</th>
+                                    <th>Mức giảm, quà</th>
+                                    <th>Thời gian</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="d : ${khuyenMai}" th:with="km=${d.km()}">
+                                    <td th:text="${km.tenKhuyenMai}">Tên</td>
+                                    <td>
+                                        <span th:text="${km.loai.nhan}">Loại</span>
+                                        <span class="the-nhan" th:if="${km.maCode != null}" th:text="${km.maCode}">MA</span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${km.kieuGiam.name() == 'PHAN_TRAM'} ? ${km.mucGiam} + '%' : ${@dd.tien(km.mucGiam)}">5%</span>
+                                        <span class="chu-phu" th:if="${km.quaTang != null}" th:text="' · Quà: ' + ${km.quaTang}"></span>
+                                    </td>
+                                    <td th:text="${@dd.ngay(km.ngayBatDau)} + ' – ' + ${@dd.ngay(km.ngayKetThuc)}">01/11 – 30/11</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi" th:if="${sapHet != null}">
+                        <div class="khoi__dau">
+                            <h2>Mẫu máy sắp hết hàng</h2>
+                            <span class="the-nhan the-nhan--vang">Còn từ 2 máy trở xuống trong kho</span>
+                        </div>
+                        <p th:if="${#lists.isEmpty(sapHet)}" class="chu-phu">Không có mẫu máy nào dưới mức tồn tối thiểu.</p>
+                        <div class="cuon-ngang" th:if="${!#lists.isEmpty(sapHet)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Tên mẫu máy</th>
+                                    <th>Danh mục</th>
+                                    <th class="canh-giua">Trong kho</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="t : ${sapHet}">
+                                    <td class="ma-mo" th:text="${t.model()}">MODEL</td>
+                                    <td th:text="${t.tenSanPham()}">Tên</td>
+                                    <td th:text="${t.danhMuc()}">Danh mục</td>
+                                    <td class="canh-giua"><span class="the-nhan the-nhan--do" th:text="${t.trongKho()}">0</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau(${bm.maSanPham == null} ? 'Thêm mẫu máy' : 'Sửa mẫu máy')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="/quan-tri">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="/quan-tri/san-pham">Sản phẩm, giá</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${bm.maSanPham == null} ? 'Thêm mới' : 'Sửa'">Thêm mới</span>
+            </nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('san-pham')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${bm.maSanPham == null} ? 'Thêm mẫu máy' : 'Sửa mẫu máy'">Thêm mẫu máy</h1>
+                            <p th:if="${bm.maSanPham == null}">Mẫu máy mới ở trạng thái Chưa mở bán, chờ Quản lý cửa hàng đặt giá.</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="khoi khoi--hep">
+                        <form method="post" th:action="@{/quan-tri/san-pham/luu}" id="bieuMauSanPham">
+                            <input type="hidden" name="maSanPham" th:value="${bm.maSanPham}">
+                            <div class="o-nhap">
+                                <label for="tenSanPham">Tên mẫu máy</label>
+                                <input type="text" id="tenSanPham" name="tenSanPham" maxlength="200" th:value="${bm.tenSanPham}" required>
+                                <span class="loi-nhap" th:if="${loiO['tenSanPham']}" th:text="${loiO['tenSanPham']}"></span>
+                            </div>
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="model">Model</label>
+                                    <input type="text" id="model" name="model" maxlength="60" th:value="${bm.model}" required>
+                                    <span class="loi-nhap" th:if="${loiO['model']}">
+                                        <span th:text="${loiO['model']}"></span>
+                                        <a th:if="${loiO['modelTrung']}" th:href="@{/quan-tri/san-pham/{ma}/sua(ma=${loiO['modelTrung']})}">Mở mẫu máy đã có để sửa</a>
+                                    </span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label>Giá bán</label>
+                                    <input type="text" th:value="${sp != null} ? ${@dd.tien(sp.giaBan)} : 'Chưa có giá'" readonly>
+                                    <span class="goi-y">Chỉ để xem; giá do Quản lý cửa hàng đặt.</span>
+                                </div>
+                            </div>
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="maDanhMuc">Danh mục</label>
+                                    <select id="maDanhMuc" name="maDanhMuc" required>
+                                        <option value="">Chọn danh mục</option>
+                                        <option th:each="dm : ${dsDanhMuc}" th:value="${dm.maDanhMuc}" th:text="${dm.tenDanhMuc}"
+                                                th:selected="${dm.maDanhMuc == bm.maDanhMuc}">Danh mục</option>
+                                    </select>
+                                    <span class="loi-nhap" th:if="${loiO['maDanhMuc']}" th:text="${loiO['maDanhMuc']}"></span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="maThuongHieu">Thương hiệu</label>
+                                    <select id="maThuongHieu" name="maThuongHieu" required>
+                                        <option value="">Chọn thương hiệu</option>
+                                        <option th:each="h : ${dsThuongHieu}" th:value="${h.maThuongHieu}" th:text="${h.tenThuongHieu}"
+                                                th:selected="${h.maThuongHieu == bm.maThuongHieu}">Hãng</option>
+                                    </select>
+                                    <span class="loi-nhap" th:if="${loiO['maThuongHieu']}" th:text="${loiO['maThuongHieu']}"></span>
+                                </div>
+                            </div>
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="thoiHanBaoHanh">Thời hạn bảo hành (tháng)</label>
+                                    <input type="number" id="thoiHanBaoHanh" name="thoiHanBaoHanh" min="0" max="120" th:value="${bm.thoiHanBaoHanh}" required>
+                                    <span class="loi-nhap" th:if="${loiO['thoiHanBaoHanh']}" th:text="${loiO['thoiHanBaoHanh']}"></span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label>Lắp đặt</label>
+                                    <label class="o-tich" style="margin-top:12px">
+                                        <input type="checkbox" name="canLapDat" value="true" th:checked="${bm.canLapDat}">
+                                        <span class="o-tich__o"></span>
+                                        <span>Cần lắp đặt</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="anh">Đường dẫn ảnh</label>
+                                <input type="text" id="anh" name="anh" maxlength="255" placeholder="/img/sp/bdt-bos-001/1.jpg" th:value="${bm.anh}">
+                                <span class="goi-y">Để trống thì dùng ảnh chung của danh mục.</span>
+                                <span class="loi-nhap" th:if="${loiO['anh']}" th:text="${loiO['anh']}"></span>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="moTa">Mô tả</label>
+                                <textarea id="moTa" name="moTa" rows="5" th:text="${bm.moTa}"></textarea>
+                            </div>
+                            <div class="o-nhap">
+                                <label>Thông số kỹ thuật</label>
+                                <span class="goi-y">Mỗi dòng một thông số. Thông số đo được (tên có (W), (lít), (mm), (dB)) chỉ nhập số. Bếp lắp âm phải có kích thước khoét đá.</span>
+                                <div id="dsThongSo">
+                                    <div class="dong-thong-so" th:each="d, i : ${bm.thongSo}">
+                                        <input type="text" th:name="|thongSo[${i.index}].ten|" th:value="${d.ten}" placeholder="Tên thông số" aria-label="Tên thông số" maxlength="80">
+                                        <input type="text" th:name="|thongSo[${i.index}].giaTri|" th:value="${d.giaTri}" placeholder="Giá trị" aria-label="Giá trị" maxlength="120">
+                                        <button type="button" class="nut nut--nho nut--do" data-xoa-dong>Xoá</button>
+                                    </div>
+                                </div>
+                                <span class="loi-nhap" th:if="${loiO['thongSo']}" th:text="${loiO['thongSo']}"></span>
+                                <div class="hang-nut" style="margin-top:12px">
+                                    <button type="button" class="nut nut--nho" id="themDong">Thêm dòng thông số</button>
+                                </div>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu</button>
+                                <a class="nut" href="/quan-tri/san-pham">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+<script th:inline="javascript">
+    (function () {
+        const goiY = [[${goiY}]];
+        const themMoi = [[${bm.maSanPham == null}]];
+        const ds = document.getElementById('dsThongSo');
+        let chiSo = ds.children.length;
+
+        function taoDong(ten) {
+            const d = document.createElement('div');
+            d.className = 'dong-thong-so';
+            d.innerHTML = '<input type="text" placeholder="Tên thông số" aria-label="Tên thông số" maxlength="80">'
+                + '<input type="text" placeholder="Giá trị" aria-label="Giá trị" maxlength="120">'
+                + '<button type="button" class="nut nut--nho nut--do" data-xoa-dong>Xoá</button>';
+            const o = d.querySelectorAll('input');
+            o[0].name = 'thongSo[' + chiSo + '].ten';
+            o[1].name = 'thongSo[' + chiSo + '].giaTri';
+            o[0].value = ten || '';
+            chiSo++;
+            ds.appendChild(d);
+        }
+
+        document.getElementById('themDong').addEventListener('click', function () {
+            taoDong('');
+        });
+        ds.addEventListener('click', function (e) {
+            if (e.target.matches('[data-xoa-dong]')) {
+                e.target.closest('.dong-thong-so').remove();
+            }
+        });
+        document.getElementById('maDanhMuc').addEventListener('change', function () {
+            if (!themMoi) {
+                return;
+            }
+            const conTrong = Array.from(ds.querySelectorAll('input')).every(function (i) {
+                return i.value.trim() === '';
+            });
+            if (!conTrong) {
+                return;
+            }
+            ds.innerHTML = '';
+            (goiY[this.value] || ['', '', '']).forEach(function (t) {
+                taoDong(t);
+            });
+        });
+    })();
+</script>
+</body>
+</html>

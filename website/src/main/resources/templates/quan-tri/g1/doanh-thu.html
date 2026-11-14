@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Báo cáo doanh thu')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Báo cáo doanh thu')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('doanh-thu')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Báo cáo doanh thu</h1>
+                            <p>Doanh thu tính theo ngày hoàn thành đơn (đơn Hoàn thành, không gồm đơn Đã trả hàng), giá theo đơn giá lúc đặt.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--nho" th:href="@{/quan-tri/bao-cao/doanh-thu/xuat(tuNgay=${bc.tuNgay()},denNgay=${bc.denNgay()},nhom=${bc.nhom()})}">Xuất tệp CSV</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="thanh-loc">
+                        <form action="/quan-tri/bao-cao/doanh-thu" method="get">
+                            <label for="tuNgay">Từ ngày</label>
+                            <input type="date" id="tuNgay" name="tuNgay" th:value="${tuNgay}" required>
+                            <label for="denNgay">Đến ngày</label>
+                            <input type="date" id="denNgay" name="denNgay" th:value="${denNgay}" required>
+                            <select name="nhom" aria-label="Cách nhóm">
+                                <option value="ngay" th:selected="${nhom == 'ngay'}">Theo ngày</option>
+                                <option value="thang" th:selected="${nhom == 'thang'}">Theo tháng</option>
+                                <option value="danh-muc" th:selected="${nhom == 'danh-muc'}">Theo nhóm hàng</option>
+                            </select>
+                            <button class="nut nut--nho nut--dac" type="submit">Xem</button>
+                        </form>
+                    </div>
+
+                    <div class="canh-bao" th:if="${bc.ghiChu() != null}" th:text="${bc.ghiChu()}"></div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2 th:text="'Từ ' + ${@dd.ngay(bc.tuNgay())} + ' đến ' + ${@dd.ngay(bc.denNgay())} + ' · ' + ${bc.tenNhom()}">Khoảng ngày</h2>
+                            <span class="chu-phu" th:text="'Lập lúc ' + ${@dd.ngayGio(bc.thoiDiemLap())}"></span>
+                        </div>
+                        <p th:if="${!bc.coDuLieu()}">Không có doanh thu trong khoảng đã chọn.</p>
+                        <th:block th:if="${bc.coDuLieu()}">
+                            <div class="bieu-do" role="img" aria-label="Biểu đồ cột doanh thu">
+                                <div class="bieu-do__cot" th:each="d : ${bc.dong()}">
+                                    <span class="bieu-do__so" th:text="${#numbers.formatDecimal(d.doanhThu() / 1000000.0, 1, 1)} + ' tr'">10 tr</span>
+                                    <div class="bieu-do__than" th:style="'height:' + ${d.phanTram()} + '%'" th:title="${d.nhan()} + ': ' + ${@dd.tien(d.doanhThu())}"></div>
+                                </div>
+                            </div>
+                            <div class="bieu-do__nhan">
+                                <span th:each="d : ${bc.dong()}" th:text="${d.nhan()}">01/11</span>
+                            </div>
+                            <div class="cuon-ngang" style="margin-top:22px">
+                                <table class="bang-dl">
+                                    <thead>
+                                    <tr>
+                                        <th th:text="${bc.nhom() == 'danh-muc'} ? 'Nhóm hàng' : (${bc.nhom() == 'thang'} ? 'Tháng' : 'Ngày')">Ngày</th>
+                                        <th class="canh-phai">Số đơn</th>
+                                        <th class="canh-phai">Tiền hàng</th>
+                                        <th class="canh-phai">Tiền giảm giá</th>
+                                        <th class="canh-phai">Doanh thu</th>
+                                        <th class="canh-phai">Tiền đã thu</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="d : ${bc.dong()}">
+                                        <td th:text="${d.nhan()}">01/11/2026</td>
+                                        <td class="canh-phai" th:text="${d.soDon()}">1</td>
+                                        <td class="canh-phai" th:text="${@dd.tien(d.tienHang())}">0</td>
+                                        <td class="canh-phai" th:text="${@dd.tien(d.tienGiam())}">0</td>
+                                        <td class="canh-phai" th:text="${@dd.tien(d.doanhThu())}">0</td>
+                                        <td class="canh-phai" th:text="${@dd.tien(d.daThu())}">0</td>
+                                    </tr>
+                                    <tr class="dong-tong">
+                                        <td>Tổng cộng</td>
+                                        <td class="canh-phai" th:text="${bc.tong().soDon()}">0</td>
+                                        <td class="canh-phai" th:text="${@dd.tien(bc.tong().tienHang())}">0</td>
+                                        <td class="canh-phai" th:text="${@dd.tien(bc.tong().tienGiam())}">0</td>
+                                        <td class="canh-phai" th:text="${@dd.tien(bc.tong().doanhThu())}">0</td>
+                                        <td class="canh-phai">
+                                            <span th:text="${@dd.tien(bc.tong().daThu())}">0</span>
+                                            <span class="the-nhan the-nhan--vang" th:if="${bc.tienChuaXacNhan() > 0}"
+                                                  th:text="'+ ' + ${@dd.tien(bc.tienChuaXacNhan())} + ' chưa xác nhận'"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="goi-y">Doanh thu = tổng tiền đơn (đã trừ giảm giá, gồm phí giao, lắp) trừ khoản đã hoàn tiền. Theo nhóm hàng, tiền giảm và phí của đơn chia theo tỉ lệ tiền hàng của từng nhóm.</p>
+                        </th:block>
+                    </div>
+
+                    <div class="khoi" th:if="${!#lists.isEmpty(bc.chuaXacNhan())}">
+                        <div class="khoi__dau">
+                            <h2>Tiền thu khi giao chưa được kế toán xác nhận</h2>
+                            <span class="the-nhan the-nhan--vang" th:text="${@dd.tien(bc.tienChuaXacNhan())}">0</span>
+                        </div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Phiếu giao</th>
+                                    <th>Ngày giao</th>
+                                    <th class="canh-phai">Tiền thu khi giao</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="d : ${bc.chuaXacNhan()}">
+                                    <td th:text="${@dd.maDon(d.maDonHang())}">DH000001</td>
+                                    <td th:text="'#' + ${d.maPhieuGiao()}">#1</td>
+                                    <td th:text="${@dd.ngay(d.ngayGiao())}">01/11/2026</td>
+                                    <td class="canh-phai" th:text="${@dd.tien(d.tienThuKhiGiao())}">0</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="goi-y" sec:authorize="hasRole('KE_TOAN')">Xác nhận các khoản này ở mục <a href="/quan-tri/tien-thu">Tiền thu khi giao</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

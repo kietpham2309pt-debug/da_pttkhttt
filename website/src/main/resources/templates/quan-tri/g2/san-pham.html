@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Sản phẩm, giá')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<link rel="stylesheet" href="/css/quan-tri-g12.css">
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Sản phẩm, giá')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('san-pham')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Sản phẩm, giá</h1>
+                            <p>Mẫu máy, thông số kỹ thuật; Quản lý cửa hàng đặt giá, mở bán, ngừng bán.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac nut--nho" href="/quan-tri/san-pham/them">Thêm mẫu máy</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="thanh-loc">
+                        <form action="/quan-tri/san-pham" method="get">
+                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên hoặc model" aria-label="Từ khoá" th:value="${tuKhoa}">
+                            <select name="danhMuc" aria-label="Danh mục">
+                                <option value="">Mọi danh mục</option>
+                                <option th:each="dm : ${dsDanhMuc}" th:value="${dm.maDanhMuc}" th:text="${dm.tenDanhMuc}"
+                                        th:selected="${dm.maDanhMuc == danhMuc}">Danh mục</option>
+                            </select>
+                            <select name="thuongHieu" aria-label="Thương hiệu">
+                                <option value="">Mọi thương hiệu</option>
+                                <option th:each="h : ${dsThuongHieu}" th:value="${h.maThuongHieu}" th:text="${h.tenThuongHieu}"
+                                        th:selected="${h.maThuongHieu == thuongHieu}">Hãng</option>
+                            </select>
+                            <select name="trangThai" aria-label="Trạng thái">
+                                <option value="">Mọi trạng thái</option>
+                                <option th:each="tt : ${dsTrangThai}" th:value="${tt.name()}" th:text="${tt.nhan}"
+                                        th:selected="${tt.name() == trangThai}">Trạng thái</option>
+                            </select>
+                            <button class="nut nut--nho" type="submit">Lọc</button>
+                            <a class="nut nut--nho" href="/quan-tri/san-pham">Bỏ lọc</a>
+                        </form>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2 th:text="${#lists.size(dsSanPham)} + ' mẫu máy'">0 mẫu máy</h2>
+                        </div>
+                        <p th:if="${#lists.isEmpty(dsSanPham)}" class="chu-phu">Không có mẫu máy phù hợp.</p>
+                        <div class="cuon-ngang" th:if="${!#lists.isEmpty(dsSanPham)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Ảnh</th>
+                                    <th>Tên mẫu máy</th>
+                                    <th>Model</th>
+                                    <th>Danh mục</th>
+                                    <th>Thương hiệu</th>
+                                    <th class="canh-phai">Giá bán</th>
+                                    <th class="canh-giua">Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="sp : ${dsSanPham}">
+                                    <td class="ma-mo" th:text="'SP' + ${sp.maSanPham}">SP1</td>
+                                    <td><img class="anh-nho" alt="" loading="lazy"
+                                             th:src="${sp.anh != null} ? ${sp.anh} : '/assets/img/sp-' + ${sp.danhMuc.maDanhMuc} + '.jpg'"></td>
+                                    <td class="o-dai" th:text="${sp.tenSanPham}">Tên</td>
+                                    <td class="ma-mo" th:text="${sp.model}">MODEL</td>
+                                    <td th:text="${sp.danhMuc.tenDanhMuc}">Danh mục</td>
+                                    <td th:text="${sp.thuongHieu.tenThuongHieu}">Hãng</td>
+                                    <td class="canh-phai" th:text="${@dd.tien(sp.giaBan)}">0</td>
+                                    <td class="canh-giua">
+                                        <span class="the-nhan" th:text="${sp.trangThai.nhan}"
+                                              th:classappend="${sp.trangThai.name() == 'DANG_BAN'} ? 'the-nhan--ok' : (${sp.trangThai.name() == 'CHUA_MO_BAN'} ? 'the-nhan--vang' : 'the-nhan--tat')">Đang bán</span>
+                                    </td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" th:href="@{/quan-tri/san-pham/{ma}/sua(ma=${sp.maSanPham})}">Sửa</a>
+                                            <a class="nut nut--nho" th:href="@{/quan-tri/san-pham/{ma}/gia(ma=${sp.maSanPham})}"
+                                               sec:authorize="hasRole('QUAN_LY')">Đặt giá</a>
+                                            <a class="nut nut--nho" th:href="@{/quan-tri/san-pham/{ma}/gia(ma=${sp.maSanPham})}"
+                                               sec:authorize="!hasRole('QUAN_LY')">Lịch sử giá</a>
+                                            <th:block sec:authorize="hasRole('QUAN_LY')">
+                                                <form method="post" th:if="${sp.trangThai.name() != 'DANG_BAN'}"
+                                                      th:action="@{/quan-tri/san-pham/{ma}/mo-ban(ma=${sp.maSanPham})}">
+                                                    <button class="nut nut--nho" type="submit">Mở bán</button>
+                                                </form>
+                                                <form method="post" th:if="${sp.trangThai.name() != 'NGUNG_BAN'}"
+                                                      th:action="@{/quan-tri/san-pham/{ma}/ngung-ban(ma=${sp.maSanPham})}"
+                                                      th:data-xac-nhan="|Ngừng bán ${sp.tenSanPham}? Mẫu máy sẽ ẩn khỏi trang khách.|"
+                                                      onsubmit="return confirm(this.dataset.xacNhan);">
+                                                    <button class="nut nut--nho nut--do" type="submit">Ngừng bán</button>
+                                                </form>
+                                            </th:block>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>
