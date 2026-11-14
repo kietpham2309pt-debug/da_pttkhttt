@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Phiếu nhập #' + ${x.phieu().maPhieuNhap})}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main th:with="p=${x.phieu()}">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Phiếu nhập #' + ${x.phieu().maPhieuNhap})}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('phieu-nhap')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="'Phiếu nhập kho PN' + ${#numbers.formatInteger(p.maPhieuNhap, 5)}">Phiếu nhập kho</h1>
+                            <p>Mẫu 01-VT · <span class="the-nhan the-nhan--tat">Đã khoá</span></p>
+                        </div>
+                        <div class="qt-dau__nut khong-in">
+                            <button class="nut" type="button" onclick="window.print()">In phiếu (2 liên)</button>
+                            <a class="nut" href="/quan-tri/kho/phieu-nhap">Danh sách phiếu nhập</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div class="khoi">
+                        <dl class="thong-tin-luoi">
+                            <div><dt>Nhà cung cấp</dt><dd th:text="${p.nhaCungCap.tenNhaCungCap}">NCC</dd></div>
+                            <div><dt>Số hoá đơn NCC</dt><dd th:text="${p.soHoaDonNCC}">HD</dd></div>
+                            <div><dt>Đơn đặt hàng</dt><dd th:text="${p.donDat != null} ? '#' + ${p.donDat.maDonDat} : 'Không có (nhập đầu kỳ)'">#1</dd></div>
+                            <div><dt>Ngày nhập</dt><dd th:text="${@dd.ngayGio(p.ngayNhap)}">01/09</dd></div>
+                            <div><dt>Thủ kho lập phiếu</dt><dd th:text="${p.thuKho.hoTen}">Thủ kho</dd></div>
+                            <div><dt>Ghi chú, tình trạng hàng</dt><dd th:text="${p.ghiChu}">ghi chú</dd></div>
+                        </dl>
+                    </div>
+                    <div class="khoi">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Tên hàng</th>
+                                    <th>Model</th>
+                                    <th class="canh-phai">SL chứng từ</th>
+                                    <th class="canh-phai">SL thực nhập</th>
+                                    <th class="canh-phai">Đơn giá</th>
+                                    <th class="canh-phai">Thành tiền</th>
+                                    <th>Số serial</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="r : ${x.dong()}" th:with="c=${r.chiTiet()}">
+                                    <td th:text="${c.sanPham.tenSanPham}">Bếp</td>
+                                    <td class="ma-mo" th:text="${c.sanPham.model}">M</td>
+                                    <td class="canh-phai" th:text="${c.soLuongChungTu}">6</td>
+                                    <td class="canh-phai">
+                                        <span th:text="${c.soLuongThucNhap}">6</span>
+                                        <span th:if="${c.soLuongThucNhap < c.soLuongChungTu}" class="the-nhan the-nhan--vang"
+                                              th:text="'Thiếu/hư ' + ${c.soLuongChungTu - c.soLuongThucNhap}">Thiếu 1</span>
+                                    </td>
+                                    <td class="canh-phai" th:text="${@dd.tien(c.donGiaNhap)}">0</td>
+                                    <td class="canh-phai" th:text="${@dd.tien(r.thanhTien())}">0</td>
+                                    <td class="o-dai">
+                                        <span th:each="s, i : ${r.serial()}"><span class="serial-ma" th:text="${s.soSerial}">SN</span><span class="chu-phu" th:if="${s.donHangBan != null and s.trangThai.name() == 'TRONG_KHO'}" th:text="' (giữ cho ' + ${@dd.maDon(s.donHangBan.maDonHang)} + ')'"></span><span th:unless="${i.last}">, </span></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="5" class="canh-phai"><b>Tổng tiền theo số thực nhập (căn cứ ghi công nợ)</b></td>
+                                    <td class="canh-phai"><b th:text="${@dd.tien(x.tongTien())}">0</b></td>
+                                    <td></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="khoi khong-in">
+                        <p class="goi-y">Phiếu nhập đã lưu thì khoá, không sửa (Thông tư 99 Đ10). Phát hiện sai sau khi lưu: lập phiếu điều chỉnh ghi số phiếu gốc
+                            <b th:text="'PN' + ${#numbers.formatInteger(p.maPhieuNhap, 5)}">PN</b> và lý do; serial và số tồn được cập nhật theo phiếu điều chỉnh. Chức năng lập phiếu điều chỉnh chưa có trên bản chạy thử.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Đơn đặt hàng nhà cung cấp')}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Đơn đặt hàng nhà cung cấp')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('don-dat')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Đơn đặt hàng nhà cung cấp</h1>
+                            <p>Thủ kho lập đề xuất cho mẫu máy sắp hết; quản lý cửa hàng xin ý kiến chủ rồi gửi nhà cung cấp.</p>
+                        </div>
+                        <div class="qt-dau__nut" sec:authorize="hasRole('THU_KHO')">
+                            <a class="nut nut--dac" href="/quan-tri/kho/don-dat/lap">Lập đề xuất đặt hàng</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div class="thanh-loc">
+                        <form action="/quan-tri/kho/don-dat" method="get">
+                            <select name="trangThai">
+                                <option value="">Tất cả trạng thái</option>
+                                <option th:each="t : ${cacTrangThai}" th:value="${t}" th:text="${t.nhan}" th:selected="${t == trangThai}">Đề xuất</option>
+                            </select>
+                            <button class="nut nut--nho" type="submit">Lọc</button>
+                        </form>
+                    </div>
+                    <div class="khoi">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Ngày lập</th>
+                                    <th>Nhà cung cấp</th>
+                                    <th class="canh-phai">Số mẫu</th>
+                                    <th class="canh-phai">Tổng số máy</th>
+                                    <th>Người lập</th>
+                                    <th>Người gửi</th>
+                                    <th>Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:if="${#lists.isEmpty(ds)}">
+                                    <td colspan="9" class="canh-giua">Chưa có đơn đặt hàng nào.</td>
+                                </tr>
+                                <tr th:each="d : ${ds}">
+                                    <td class="ma-mo" th:text="'#' + ${d.maDonDat}">#1</td>
+                                    <td th:text="${@dd.ngayGio(d.ngayLap)}">01/11/2026</td>
+                                    <td th:text="${d.nhaCungCap.tenNhaCungCap}">NCC</td>
+                                    <td class="canh-phai" th:text="${d.chiTiet.size()}">2</td>
+                                    <td class="canh-phai" th:text="${#aggregates.sum(d.chiTiet.![soLuong])}">5</td>
+                                    <td th:text="${d.nguoiLap.hoTen}">Thủ kho</td>
+                                    <td th:text="${d.nguoiGui != null} ? ${d.nguoiGui.hoTen} : ''"></td>
+                                    <td><span class="the-nhan"
+                                              th:classappend="${d.trangThai.name() == 'DE_XUAT'} ? 'the-nhan--vang' : (${d.trangThai.name() == 'DA_NHAN'} ? 'the-nhan--ok' : (${d.trangThai.name() == 'DA_HUY'} ? 'the-nhan--do' : ''))"
+                                              th:text="${d.trangThai.nhan}">Đề xuất</span></td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" th:href="@{/quan-tri/kho/don-dat/{m}(m=${d.maDonDat})}">Chi tiết</a></div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

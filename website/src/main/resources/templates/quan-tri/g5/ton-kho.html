@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Tồn kho, kiểm kê')}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Tồn kho, kiểm kê')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('ton-kho')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Tồn kho, kiểm kê</h1>
+                            <p th:text="'Số chiếc máy theo trạng thái của từng mẫu. Mẫu còn ' + ${tonToiThieu} + ' máy Trong kho trở xuống được cảnh báo để lập đơn đặt hàng.'">Mô tả</p>
+                        </div>
+                        <div class="qt-dau__nut" sec:authorize="hasRole('THU_KHO')">
+                            <a class="nut nut--dac" href="/quan-tri/kho/don-dat/lap">Lập đơn đặt cho mẫu sắp hết</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="o-so-ds">
+                        <div class="o-so">
+                            <div class="o-so__nhan">Máy trong kho</div>
+                            <div class="o-so__gt" th:text="${tongTrongKho}">100</div>
+                        </div>
+                        <div class="o-so" th:classappend="${soDuoi > 0} ? 'o-so--nhac'">
+                            <div class="o-so__nhan">Mẫu dưới tồn tối thiểu</div>
+                            <div class="o-so__gt" th:text="${soDuoi}">3</div>
+                        </div>
+                        <div class="o-so">
+                            <div class="o-so__nhan">Số mẫu máy</div>
+                            <div class="o-so__gt" th:text="${ton.size()}">40</div>
+                        </div>
+                    </div>
+
+                    <div class="khoi" th:if="${kiemKe != null}">
+                        <div class="khoi__dau"><h2>Kết quả kiểm kê</h2></div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>Model</th>
+                                    <th class="canh-phai">Trong kho (hệ thống)</th>
+                                    <th class="canh-phai">Đếm thực tế</th>
+                                    <th class="canh-phai">Chênh lệch</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="k : ${kiemKe}" th:if="${k.thucTe() != null}"
+                                    th:classappend="${k.chenhLech() != 0} ? 'hang-qua-han'">
+                                    <td th:text="${k.tenSanPham()}">Bếp</td>
+                                    <td class="ma-mo" th:text="${k.model()}">M</td>
+                                    <td class="canh-phai" th:text="${k.heThong()}">5</td>
+                                    <td class="canh-phai" th:text="${k.thucTe()}">5</td>
+                                    <td class="canh-phai" th:text="${k.chenhLech() > 0} ? '+' + ${k.chenhLech()} : ${k.chenhLech()}">0</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="goi-y">Kết quả kiểm kê chỉ hiển thị và tải về, chưa lưu vào hệ thống; chênh lệch cần lập biên bản và phiếu điều chỉnh.</p>
+                    </div>
+
+                    <form method="post" th:action="@{/quan-tri/kho/ton-kho/kiem-ke}">
+                        <div class="khoi">
+                            <div class="khoi__dau">
+                                <h2>Tồn theo mẫu máy</h2>
+                                <span class="goi-y">Kiểm kê: nhập số đếm thực tế ở cột cuối rồi bấm "So với hệ thống".</span>
+                            </div>
+                            <div class="cuon-ngang">
+                                <table class="bang-dl bang-nhap">
+                                    <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Model</th>
+                                        <th th:each="t : ${cacTrangThai}" class="canh-phai" th:text="${t.nhan}">Trong kho</th>
+                                        <th>Cảnh báo</th>
+                                        <th>Đếm thực tế</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="d : ${ton}" th:classappend="${d.duoiToiThieu()} ? 'hang-canh-bao'">
+                                        <td th:text="${d.tenSanPham()}">Bếp</td>
+                                        <td class="ma-mo" th:text="${d.model()}">M</td>
+                                        <td th:each="t : ${cacTrangThai}" class="canh-phai" th:text="${d.so(t)}">0</td>
+                                        <td><span th:if="${d.duoiToiThieu()}" class="the-nhan the-nhan--vang">Dưới tồn tối thiểu</span></td>
+                                        <td><input class="o-so-nho" type="number" min="0" th:name="'dem_' + ${d.maSanPham()}" th:value="${soDem.get(d.maSanPham())}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">So với hệ thống</button>
+                                <button class="nut" type="submit" th:formaction="@{/quan-tri/kho/ton-kho/kiem-ke.csv}">Tải kết quả kiểm kê (CSV)</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Phiếu nhập kho')}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Phiếu nhập kho')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('phieu-nhap')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Phiếu nhập kho</h1>
+                            <p>Nhận hàng theo đơn đặt hàng đã gửi nhà cung cấp, ghi số theo chứng từ, số thực nhập và serial từng chiếc máy (mẫu 01-VT).</p>
+                        </div>
+                        <div class="qt-dau__nut" sec:authorize="hasRole('THU_KHO')">
+                            <a class="nut nut--dac" href="/quan-tri/kho/phieu-nhap/lap">Lập phiếu nhập</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="o-so-ds">
+                        <div class="o-so" th:classappend="${!#lists.isEmpty(choNhap)} ? 'o-so--nhac'">
+                            <div class="o-so__nhan">Đơn đặt chờ nhận hàng</div>
+                            <div class="o-so__gt" th:text="${choNhap.size()}">1</div>
+                        </div>
+                        <div class="o-so">
+                            <div class="o-so__nhan">Phiếu nhập đã lập</div>
+                            <div class="o-so__gt" th:text="${ds.size()}">3</div>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau"><h2>Danh sách phiếu nhập</h2></div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Số phiếu</th>
+                                    <th>Ngày nhập</th>
+                                    <th>Nhà cung cấp</th>
+                                    <th>Số hoá đơn</th>
+                                    <th>Đơn đặt</th>
+                                    <th class="canh-phai">Chứng từ / thực nhập</th>
+                                    <th class="canh-phai">Tiền hàng (thực nhập)</th>
+                                    <th>Thủ kho</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:if="${#lists.isEmpty(ds)}">
+                                    <td colspan="9" class="canh-giua">Chưa có phiếu nhập.</td>
+                                </tr>
+                                <tr th:each="r : ${ds}" th:with="p=${r.phieu()}">
+                                    <td class="ma-mo" th:text="'PN' + ${#numbers.formatInteger(p.maPhieuNhap, 5)}">PN00001</td>
+                                    <td th:text="${@dd.ngayGio(p.ngayNhap)}">01/09/2026</td>
+                                    <td th:text="${p.nhaCungCap.tenNhaCungCap}">NCC</td>
+                                    <td th:text="${p.soHoaDonNCC}">HD</td>
+                                    <td>
+                                        <a th:if="${p.donDat != null}" th:href="@{/quan-tri/kho/don-dat/{m}(m=${p.donDat.maDonDat})}" th:text="'#' + ${p.donDat.maDonDat}">#1</a>
+                                        <span th:if="${p.donDat == null}" class="chu-phu">Không có</span>
+                                    </td>
+                                    <td class="canh-phai">
+                                        <span th:text="${r.chungTu()} + ' / ' + ${r.thucNhap()}">6 / 6</span>
+                                        <span th:if="${r.thucNhap() < r.chungTu()}" class="the-nhan the-nhan--vang">Thiếu/hư</span>
+                                    </td>
+                                    <td class="canh-phai" th:text="${@dd.tien(r.tien())}">0 ₫</td>
+                                    <td th:text="${p.thuKho.hoTen}">Thủ kho</td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" th:href="@{/quan-tri/kho/phieu-nhap/{m}(m=${p.maPhieuNhap})}">Xem phiếu</a></div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

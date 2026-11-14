@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Nhà cung cấp')}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Nhà cung cấp')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('nha-cung-cap')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Nhà cung cấp</h1>
+                            <p>Danh mục hãng, nhà phân phối mà cửa hàng đặt hàng. Nhà cung cấp đã có đơn đặt hoặc phiếu nhập thì chỉ ngừng hợp tác, không xoá.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac" href="/quan-tri/kho/nha-cung-cap/them">Thêm nhà cung cấp</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div class="khoi">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Tên nhà cung cấp</th>
+                                    <th>Điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:if="${#lists.isEmpty(ds)}">
+                                    <td colspan="7" class="canh-giua">Chưa có nhà cung cấp nào.</td>
+                                </tr>
+                                <tr th:each="n : ${ds}">
+                                    <td class="ma-mo" th:text="'#' + ${n.maNhaCungCap}">#1</td>
+                                    <td th:text="${n.tenNhaCungCap}">Tên</td>
+                                    <td th:text="${n.soDienThoai}">028</td>
+                                    <td th:text="${n.email}">email</td>
+                                    <td class="o-dai" th:text="${n.diaChi}">địa chỉ</td>
+                                    <td>
+                                        <span th:if="${n.dangHopTac}" class="the-nhan the-nhan--ok">Đang hợp tác</span>
+                                        <span th:unless="${n.dangHopTac}" class="the-nhan the-nhan--tat">Ngừng hợp tác</span>
+                                    </td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" th:href="@{/quan-tri/kho/nha-cung-cap/{m}/sua(m=${n.maNhaCungCap})}">Sửa</a>
+                                            <form th:if="${n.dangHopTac}" th:action="@{/quan-tri/kho/nha-cung-cap/{m}/ngung(m=${n.maNhaCungCap})}" method="post">
+                                                <button class="nut nut--nho" type="submit">Ngừng hợp tác</button>
+                                            </form>
+                                            <form th:unless="${n.dangHopTac}" th:action="@{/quan-tri/kho/nha-cung-cap/{m}/hop-tac(m=${n.maNhaCungCap})}" method="post">
+                                                <button class="nut nut--nho" type="submit">Hợp tác lại</button>
+                                            </form>
+                                            <form th:action="@{/quan-tri/kho/nha-cung-cap/{m}/xoa(m=${n.maNhaCungCap})}" method="post"
+                                                  onsubmit="return confirm('Xoá nhà cung cấp này?')">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau(${ncc.maNhaCungCap == null} ? 'Thêm nhà cung cấp' : 'Sửa nhà cung cấp')}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan(${ncc.maNhaCungCap == null} ? 'Thêm nhà cung cấp' : 'Sửa nhà cung cấp')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('nha-cung-cap')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${ncc.maNhaCungCap == null} ? 'Thêm nhà cung cấp' : 'Sửa nhà cung cấp #' + ${ncc.maNhaCungCap}">Thêm nhà cung cấp</h1>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div class="khoi">
+                        <form th:action="@{/quan-tri/kho/nha-cung-cap/luu}" method="post">
+                            <input type="hidden" name="ma" th:value="${ncc.maNhaCungCap}">
+                            <div class="o-nhap">
+                                <label for="tenNhaCungCap">Tên nhà cung cấp</label>
+                                <input type="text" id="tenNhaCungCap" name="tenNhaCungCap" maxlength="150" required
+                                       placeholder="Công ty TNHH Thiết bị bếp …" th:value="${ncc.tenNhaCungCap}">
+                            </div>
+                            <div class="o-nhap">
+                                <label for="soDienThoai">Số điện thoại</label>
+                                <input type="tel" id="soDienThoai" name="soDienThoai" maxlength="15" required
+                                       placeholder="02838123456" th:value="${ncc.soDienThoai}">
+                            </div>
+                            <div class="o-nhap">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" maxlength="100" th:value="${ncc.email}">
+                            </div>
+                            <div class="o-nhap">
+                                <label for="diaChi">Địa chỉ</label>
+                                <input type="text" id="diaChi" name="diaChi" maxlength="255" th:value="${ncc.diaChi}">
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu</button>
+                                <a class="nut" href="/quan-tri/kho/nha-cung-cap">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

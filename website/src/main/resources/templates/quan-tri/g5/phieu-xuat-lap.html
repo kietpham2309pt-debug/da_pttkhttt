@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Lập phiếu xuất')}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Lập phiếu xuất')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('phieu-xuat')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Lập phiếu xuất kho</h1>
+                            <p th:text="'Lý do xuất: ' + ${f.lyDo()}">Lý do</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div class="khoi">
+                        <dl class="thong-tin-luoi">
+                            <div><dt>Đơn</dt><dd th:text="${@dd.maDon(f.don().maDonHang)}">DH</dd></div>
+                            <div><dt>Khách / người nhận</dt><dd th:text="${f.don().hoTenNguoiNhan} + ' · ' + ${f.don().soDienThoaiNhan}">Tên</dd></div>
+                            <div><dt>Địa chỉ giao</dt><dd th:text="${f.don().diaChiGiao}">địa chỉ</dd></div>
+                            <div><dt>Người nhận hàng từ kho</dt><dd th:text="${f.nguoiNhanHang() != null} ? ${f.nguoiNhanHang()} : 'Chưa phân công giao hàng'">NV</dd></div>
+                            <div th:if="${f.yeuCau() != null}"><dt>Yêu cầu đổi trả</dt><dd th:text="'#' + ${f.yeuCau().maYeuCau} + ' · ' + ${f.yeuCau().lyDo}">#1</dd></div>
+                        </dl>
+                        <p th:if="${f.yeuCau() != null}" class="goi-y">Xuất đổi máy: đơn giữ trạng thái Hoàn thành; máy mới chuyển Đã xuất rồi Đã bán ngay khi lưu (giao cho khách).</p>
+                    </div>
+                    <form th:action="@{/quan-tri/kho/phieu-xuat/lap}" method="post">
+                        <input type="hidden" name="loai" th:value="${f.loai()}">
+                        <input type="hidden" name="ma" th:value="${f.ma()}">
+                        <div class="khoi" th:each="d : ${f.dong()}">
+                            <div class="khoi__dau">
+                                <h2 th:text="${d.tenSanPham()} + ' · ' + ${d.model()}">Mẫu</h2>
+                                <span>
+                                    <span class="the-nhan" th:text="'Cần xuất ' + ${d.canXuat()} + ' · Trong kho ' + ${d.coSan().size()}">Cần 1</span>
+                                    <span th:if="${d.thieu()}" class="the-nhan the-nhan--do">Không đủ máy</span>
+                                    <span th:if="${d.chiMayGiuRieng()}" class="the-nhan the-nhan--vang">Chỉ máy đặt riêng cho đơn này</span>
+                                </span>
+                            </div>
+                            <p class="goi-y">Hệ thống đánh dấu sẵn các máy nhập sớm nhất. Đổi lựa chọn theo đúng máy lấy trên kệ.</p>
+                            <p th:if="${#lists.isEmpty(d.coSan())}" class="goi-y">Không còn máy nào Trong kho.</p>
+                            <div class="ds-serial">
+                                <label th:each="s : ${d.coSan()}">
+                                    <input type="checkbox" name="serial" th:value="${s.soSerial}" th:checked="${chon.contains(s.soSerial.toUpperCase())}">
+                                    <span th:text="${s.soSerial}">SN</span>
+                                    <span class="chu-phu" th:text="'nhập ' + ${@dd.ngay(s.ngayNhap)}">nhập</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="khoi">
+                            <div class="o-nhap">
+                                <label for="serialQuet">Quét thêm serial (tuỳ chọn, mỗi dòng một serial)</label>
+                                <textarea id="serialQuet" name="serialQuet" rows="2"></textarea>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit" th:disabled="${!f.duMay()}">Lưu phiếu xuất</button>
+                                <a class="nut" href="/quan-tri/kho/phieu-xuat">Quay lại</a>
+                            </div>
+                            <p class="goi-y">Phiếu đã lưu thì khoá; xuất nhầm serial thì lập phiếu điều chỉnh dẫn số phiếu gốc.</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

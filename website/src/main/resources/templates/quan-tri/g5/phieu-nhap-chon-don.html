@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Lập phiếu nhập')}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Lập phiếu nhập')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('phieu-nhap')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Lập phiếu nhập: chọn đơn đặt hàng</h1>
+                            <p>Chọn đơn đặt hàng của lô hàng vừa về. Hàng không có đơn đặt hàng đã gửi nhà cung cấp thì không nhận vào kho.</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div class="khoi">
+                        <p th:if="${#lists.isEmpty(choNhap)}" class="canh-bao">Không có đơn đặt hàng chờ nhập.</p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(choNhap)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Nhà cung cấp</th>
+                                    <th>Ngày lập</th>
+                                    <th class="canh-phai">Số mẫu</th>
+                                    <th>Ghi chú</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="d : ${choNhap}">
+                                    <td class="ma-mo" th:text="'#' + ${d.maDonDat}">#1</td>
+                                    <td th:text="${d.nhaCungCap.tenNhaCungCap}">NCC</td>
+                                    <td th:text="${@dd.ngay(d.ngayLap)}">01/11</td>
+                                    <td class="canh-phai" th:text="${d.chiTiet.size()}">2</td>
+                                    <td class="o-dai" th:text="${d.ghiChu}">ghi chú</td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho nut--dac" th:href="@{/quan-tri/kho/phieu-nhap/lap(donDat=${d.maDonDat})}">Nhận hàng</a></div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="hang-nut"><a class="nut" href="/quan-tri/kho/phieu-nhap">Quay lại</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

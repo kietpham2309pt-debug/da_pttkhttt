@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Phiếu xuất #' + ${x.phieu().maPhieuXuat})}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main th:with="p=${x.phieu()}">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Phiếu xuất #' + ${x.phieu().maPhieuXuat})}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('phieu-xuat')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="'Phiếu xuất kho PX' + ${#numbers.formatInteger(p.maPhieuXuat, 5)}">Phiếu xuất kho</h1>
+                            <p>Mẫu 02-VT · <span class="the-nhan the-nhan--tat">Đã khoá</span></p>
+                        </div>
+                        <div class="qt-dau__nut khong-in">
+                            <button class="nut" type="button" onclick="window.print()">In phiếu</button>
+                            <a class="nut" href="/quan-tri/kho/phieu-xuat">Xuất kho</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div class="khoi">
+                        <dl class="thong-tin-luoi">
+                            <div><dt>Lý do xuất</dt><dd th:text="${p.lyDoXuat}">Xuất bán</dd></div>
+                            <div><dt>Đơn</dt><dd th:text="${@dd.maDon(p.donHang.maDonHang)} + ' · ' + ${p.donHang.trangThai.nhan}">DH</dd></div>
+                            <div><dt>Người nhận (khách)</dt><dd th:text="${p.donHang.hoTenNguoiNhan}">Tên</dd></div>
+                            <div><dt>Địa chỉ giao</dt><dd th:text="${p.donHang.diaChiGiao}">địa chỉ</dd></div>
+                            <div><dt>Người nhận hàng từ kho</dt><dd th:text="${x.nguoiNhanHang()}">NV</dd></div>
+                            <div><dt>Ngày xuất</dt><dd th:text="${@dd.ngayGio(p.ngayXuat)}">01/11</dd></div>
+                            <div><dt>Thủ kho</dt><dd th:text="${p.thuKho.hoTen}">Thủ kho</dd></div>
+                        </dl>
+                    </div>
+                    <div class="khoi">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Tên hàng</th>
+                                    <th>Model</th>
+                                    <th class="canh-phai">SL yêu cầu</th>
+                                    <th class="canh-phai">SL thực xuất</th>
+                                    <th>Số serial</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="d : ${x.dong()}">
+                                    <td th:text="${d.tenSanPham()}">Bếp</td>
+                                    <td class="ma-mo" th:text="${d.model()}">M</td>
+                                    <td class="canh-phai" th:text="${d.yeuCau()}">1</td>
+                                    <td class="canh-phai" th:text="${d.serial().size()}">1</td>
+                                    <td class="o-dai">
+                                        <span th:each="s, i : ${d.serial()}"><span class="serial-ma" th:text="${s.soSerial}">SN</span> <span class="chu-phu" th:text="'(' + ${s.trangThai.nhan} + ')'"></span><span th:unless="${i.last}">, </span></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="khoi khong-in">
+                        <p class="goi-y">Phiếu xuất là chứng từ ghi serial theo đơn, dùng để tra bảo hành. Phiếu đã lưu thì khoá; xuất nhầm serial thì lập phiếu điều chỉnh dẫn số phiếu gốc và lý do (chưa có trên bản chạy thử).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

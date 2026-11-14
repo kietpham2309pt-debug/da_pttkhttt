@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Phiếu bảo hành #' + ${p.maPhieu})}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main th:with="tt=${p.trangThai.name()}, guiHang=${loaiXuLy == 'GUI_HANG'}">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Phiếu bảo hành #' + ${p.maPhieu})}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('bao-hanh')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="'Phiếu tiếp nhận bảo hành #' + ${p.maPhieu}">Phiếu #1</h1>
+                            <p>
+                                <span class="the-nhan" th:classappend="${tt == 'DA_TRA_KHACH'} ? 'the-nhan--ok' : 'the-nhan--vang'" th:text="${p.trangThai.nhan}">Đã tiếp nhận</span>
+                                <span class="the-nhan" th:text="${nhanLoai}">Gửi hãng</span>
+                                <span th:if="${quaHan}" class="the-nhan the-nhan--do">Quá ngày hẹn trả</span>
+                            </p>
+                        </div>
+                        <div class="qt-dau__nut khong-in">
+                            <button class="nut" type="button" onclick="window.print()">In phiếu (2 liên)</button>
+                            <a class="nut" href="/quan-tri/bao-hanh">Bảo hành</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div th:if="${p.lanThu >= 3 and tt != 'DA_TRA_KHACH'}" class="canh-bao" role="alert"
+                         th:text="'Đây là lần bảo hành thứ ' + ${p.lanThu} + ' của máy: lần này sửa không được thì đổi máy mới hoặc hoàn tiền.'">Lần 3</div>
+                    <div class="khoi">
+                        <dl class="thong-tin-luoi">
+                            <div><dt>Máy</dt><dd th:text="${p.serial.sanPham.tenSanPham}">Bếp</dd></div>
+                            <div><dt>Model · serial</dt><dd><span th:text="${p.serial.sanPham.model}">M</span> · <span class="serial-ma" th:text="${p.serial.soSerial}">SN</span></dd></div>
+                            <div><dt>Ngày mua</dt><dd th:text="${@dd.ngay(p.serial.ngayBan)}">27/10</dd></div>
+                            <div><dt>Khách</dt><dd th:text="${p.hoTenKhach} + ' · ' + ${p.soDienThoaiKhach}">Khách</dd></div>
+                            <div><dt>Lần bảo hành</dt><dd th:text="${p.lanThu}">1</dd></div>
+                            <div><dt>Người tiếp nhận</dt><dd th:text="${p.nhanVien.hoTen}">NV</dd></div>
+                            <div><dt>Ngày nhận</dt><dd th:text="${@dd.ngayGio(p.ngayNhan)}">01/11</dd></div>
+                            <div><dt>Ngày hẹn trả</dt><dd th:text="${@dd.ngay(p.ngayHenTra)}">10/11</dd></div>
+                            <div><dt>Ngày gửi hãng</dt><dd th:text="${p.ngayGuiHang != null} ? ${@dd.ngay(p.ngayGuiHang)} : '—'">—</dd></div>
+                            <div><dt>Ngày nhận về</dt><dd th:text="${p.ngayNhanTuHang != null} ? ${@dd.ngay(p.ngayNhanTuHang)} : '—'">—</dd></div>
+                            <div><dt>Số ngày ở hãng</dt><dd th:text="${soNgayOHang}">0</dd></div>
+                            <div><dt>Ngày trả khách</dt><dd th:text="${p.ngayTraKhach != null} ? ${@dd.ngayGio(p.ngayTraKhach)} : '—'">—</dd></div>
+                        </dl>
+                        <dl class="thong-tin-luoi" style="margin-top:14px">
+                            <div><dt>Mô tả lỗi</dt><dd th:text="${p.moTaLoi}">Lỗi</dd></div>
+                            <div><dt>Tình trạng bên ngoài</dt><dd th:text="${p.tinhTrangBenNgoai}">Trầy</dd></div>
+                            <div><dt>Kết quả, ghi chú</dt><dd th:text="${p.ketQua != null} ? ${p.ketQua} : '—'">—</dd></div>
+                        </dl>
+                    </div>
+
+                    <div class="khoi khong-in" sec:authorize="hasRole('THU_KHO')" th:if="${guiHang and tt == 'DA_TIEP_NHAN'}">
+                        <div class="khoi__dau"><h2>Gửi trung tâm bảo hành hãng</h2></div>
+                        <form th:action="@{/quan-tri/bao-hanh/{m}/gui-hang(m=${p.maPhieu})}" method="post" class="form-dong">
+                            <div class="o-nhap">
+                                <label for="ngayGui">Ngày gửi</label>
+                                <input type="date" id="ngayGui" name="ngay" th:value="${homNay}" th:max="${homNay}">
+                            </div>
+                            <button class="nut nut--dac" type="submit">Đã gửi hãng</button>
+                        </form>
+                    </div>
+
+                    <div class="khoi khong-in" sec:authorize="hasRole('THU_KHO')" th:if="${tt == 'DA_GUI_HANG'}">
+                        <div class="khoi__dau"><h2>Nhận máy về từ hãng</h2></div>
+                        <form th:action="@{/quan-tri/bao-hanh/{m}/nhan-ve(m=${p.maPhieu})}" method="post" class="form-dong">
+                            <div class="o-nhap">
+                                <label for="ngayNhan">Ngày nhận về</label>
+                                <input type="date" id="ngayNhan" name="ngay" th:value="${homNay}" th:max="${homNay}">
+                            </div>
+                            <div class="o-nhap">
+                                <label for="ketQua">Kết quả</label>
+                                <select id="ketQua" name="ketQua">
+                                    <option value="SUA_XONG">Hãng đã sửa xong, máy chạy được</option>
+                                    <option value="KHONG_SUA_DUOC">Hãng không sửa được</option>
+                                </select>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="ghiChu">Ghi chú của hãng</label>
+                                <input type="text" id="ghiChu" name="ghiChu" maxlength="120">
+                            </div>
+                            <button class="nut nut--dac" type="submit">Đã nhận về</button>
+                        </form>
+                    </div>
+
+                    <div class="khoi khong-in" sec:authorize="hasRole('NV_BAN_HANG')"
+                         th:if="${(guiHang and tt == 'DA_NHAN_VE') or (!guiHang and tt == 'DA_TIEP_NHAN')}">
+                        <div class="khoi__dau"><h2 th:text="${guiHang} ? 'Trả máy cho khách' : 'Ghi kết quả sửa, đóng phiếu'">Trả khách</h2></div>
+                        <p class="goi-y" th:if="${guiHang}">Gọi khách tới nhận, thu lại liên phiếu của khách, khách ký nhận rồi bấm "Đã trả khách".</p>
+                        <p class="goi-y" th:unless="${guiHang}">Sau khi kỹ thuật (hoặc hãng tới nhà) sửa xong và khách xác nhận, ghi kết quả rồi đóng phiếu.</p>
+                        <form th:action="@{/quan-tri/bao-hanh/{m}/tra-khach(m=${p.maPhieu})}" method="post" class="form-dong">
+                            <div class="o-nhap">
+                                <label for="ketQuaTra">Kết quả</label>
+                                <input type="text" id="ketQuaTra" name="ketQua" maxlength="120" th:required="${!guiHang}" placeholder="Đã sửa xong, khách ký nhận">
+                            </div>
+                            <button class="nut nut--dac" type="submit">Đã trả khách</button>
+                        </form>
+                        <p th:if="${p.ketQua != null and #strings.contains(p.ketQua, 'không sửa được')}" class="canh-bao canh-bao--do">
+                            Hãng không sửa được: chuyển sang <a href="/quan-tri/doi-tra">đổi máy hoặc hoàn tiền</a>.
+                        </p>
+                    </div>
+
+                    <div class="khoi khong-in" sec:authorize="hasRole('NV_BAN_HANG')" th:if="${tt != 'DA_TRA_KHACH'}">
+                        <div class="khoi__dau"><h2>Đổi ngày hẹn trả</h2></div>
+                        <form th:action="@{/quan-tri/bao-hanh/{m}/doi-hen(m=${p.maPhieu})}" method="post" class="form-dong">
+                            <div class="o-nhap">
+                                <label for="ngayHenMoi">Ngày hẹn mới</label>
+                                <input type="date" id="ngayHenMoi" name="ngayHenTra" required th:min="${homNay}">
+                            </div>
+                            <button class="nut" type="submit">Lưu ngày hẹn mới</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

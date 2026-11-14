@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Bảo hành')}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Bảo hành')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('bao-hanh')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Bảo hành</h1>
+                            <p>Tra máy theo serial, số điện thoại người mua hoặc mã đơn; tiếp nhận máy lỗi, theo dõi máy gửi trung tâm bảo hành hãng tới khi trả khách.</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="thanh-loc">
+                        <form action="/quan-tri/bao-hanh" method="get">
+                            <select name="loai">
+                                <option value="serial" th:selected="${loai == 'serial'}">Số serial</option>
+                                <option value="sdt" th:selected="${loai == 'sdt'}">Số điện thoại người mua</option>
+                                <option value="don" th:selected="${loai == 'don'}">Mã đơn</option>
+                            </select>
+                            <input type="text" name="q" th:value="${q}" placeholder="BDT-BOS-001-0001 / 0912000001 / DH000001" required>
+                            <button class="nut nut--nho nut--dac" type="submit">Tra</button>
+                        </form>
+                    </div>
+
+                    <div class="khoi" th:if="${ketQua != null}">
+                        <div class="khoi__dau"><h2>Kết quả tra cứu bảo hành</h2></div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Máy</th>
+                                    <th>Serial</th>
+                                    <th>Đơn, người mua</th>
+                                    <th>Ngày bán</th>
+                                    <th>Hạn bảo hành</th>
+                                    <th class="canh-phai">Đã bảo hành</th>
+                                    <th>Trạng thái máy</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="m : ${ketQua}">
+                                    <td>
+                                        <span th:text="${m.may().sanPham.tenSanPham}">Bếp</span><br>
+                                        <span class="ma-mo" th:text="${m.may().sanPham.model}">M</span>
+                                    </td>
+                                    <td class="serial-ma" th:text="${m.may().soSerial}">SN</td>
+                                    <td>
+                                        <span th:text="${@dd.maDon(m.don().maDonHang)}">DH</span><br>
+                                        <span class="chu-phu" th:text="${m.don().hoTenNguoiNhan} + ' · ' + ${m.don().soDienThoaiNhan}">Tên</span>
+                                    </td>
+                                    <td th:text="${@dd.ngay(m.ngayBan())}">27/10/2026</td>
+                                    <td>
+                                        <span th:text="${@dd.ngay(m.hanBaoHanh())}">27/10/2029</span>
+                                        <span th:if="${m.conHan()}" class="the-nhan the-nhan--ok">Còn hạn</span>
+                                        <span th:unless="${m.conHan()}" class="the-nhan the-nhan--do">Hết hạn</span>
+                                        <br><span class="chu-phu" th:if="${m.soNgayOHang() > 0}" th:text="'Cộng ' + ${m.soNgayOHang()} + ' ngày máy ở hãng'"></span>
+                                    </td>
+                                    <td class="canh-phai">
+                                        <span th:text="${m.soLanDaBaoHanh()} + ' lần'">0 lần</span>
+                                        <span th:if="${m.quaSoLan()}" class="the-nhan the-nhan--do">Đổi mới / hoàn tiền</span>
+                                        <span th:if="${m.lanThuBa()}" class="the-nhan the-nhan--vang">Lần tới là lần 3</span>
+                                    </td>
+                                    <td th:text="${m.may().trangThai.nhan}">Đã bán</td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a th:if="${m.phieuDangMo() != null}" class="nut nut--nho"
+                                               th:href="@{/quan-tri/bao-hanh/{p}(p=${m.phieuDangMo().maPhieu})}" th:text="'Phiếu #' + ${m.phieuDangMo().maPhieu}">Phiếu</a>
+                                            <a sec:authorize="hasRole('NV_BAN_HANG')" th:if="${m.duocTiepNhan()}" class="nut nut--nho nut--dac"
+                                               th:href="@{/quan-tri/bao-hanh/tiep-nhan(serial=${m.may().soSerial})}">Lập phiếu tiếp nhận</a>
+                                            <a sec:authorize="hasRole('NV_BAN_HANG')" th:if="${m.quaSoLan()}" class="nut nut--nho nut--do"
+                                               href="/quan-tri/doi-tra">Chuyển sang đổi trả</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <th:block th:each="m : ${ketQua}">
+                            <div th:if="${!#lists.isEmpty(m.lichSu())}" class="khoi">
+                                <div class="khoi__dau"><h2 th:text="'Các lần bảo hành trước của máy ' + ${m.may().soSerial}">Lịch sử</h2></div>
+                                <table class="bang-dl">
+                                    <thead><tr><th>Phiếu</th><th>Lần</th><th>Ngày nhận</th><th>Lỗi</th><th class="canh-phai">Ngày ở hãng</th><th>Kết quả</th><th>Trạng thái</th></tr></thead>
+                                    <tbody>
+                                    <tr th:each="p : ${m.lichSu()}">
+                                        <td><a th:href="@{/quan-tri/bao-hanh/{x}(x=${p.maPhieu})}" th:text="'#' + ${p.maPhieu}">#1</a></td>
+                                        <td th:text="${p.lanThu}">1</td>
+                                        <td th:text="${@dd.ngay(p.ngayNhan)}">01/11</td>
+                                        <td class="o-dai" th:text="${p.moTaLoi}">Lỗi</td>
+                                        <td class="canh-phai" th:text="${m.ngayOHang(p)}">0</td>
+                                        <td class="o-dai" th:text="${p.ketQua}"></td>
+                                        <td th:text="${p.trangThai.nhan}">Đã trả</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </th:block>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2>Phiếu bảo hành đang mở</h2>
+                            <span th:if="${soQuaHan > 0}" class="the-nhan the-nhan--do" th:text="${soQuaHan} + ' phiếu quá hạn hẹn trả'">1 quá hạn</span>
+                        </div>
+                        <p th:if="${#lists.isEmpty(dangMo)}" class="goi-y">Không có phiếu nào đang mở.</p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(dangMo)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Phiếu</th>
+                                    <th>Máy, serial</th>
+                                    <th>Khách</th>
+                                    <th>Ngày nhận</th>
+                                    <th>Hẹn trả</th>
+                                    <th>Hình thức</th>
+                                    <th>Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="r : ${dangMo}" th:with="p=${r.phieu()}" th:classappend="${r.quaHan()} ? 'hang-qua-han'">
+                                    <td class="ma-mo" th:text="'#' + ${p.maPhieu} + ' · lần ' + ${p.lanThu}">#1</td>
+                                    <td>
+                                        <span th:text="${p.serial.sanPham.model}">M</span><br>
+                                        <span class="serial-ma" th:text="${p.serial.soSerial}">SN</span>
+                                    </td>
+                                    <td th:text="${p.hoTenKhach} + ' · ' + ${p.soDienThoaiKhach}">Khách</td>
+                                    <td th:text="${@dd.ngay(p.ngayNhan)}">01/11</td>
+                                    <td>
+                                        <span th:text="${@dd.ngay(p.ngayHenTra)}">10/11</span>
+                                        <span th:if="${r.quaHan()}" class="the-nhan the-nhan--do">Quá hạn</span>
+                                    </td>
+                                    <td th:text="${r.nhanLoai()}">Gửi hãng</td>
+                                    <td>
+                                        <span class="the-nhan" th:text="${p.trangThai.nhan}">Đã tiếp nhận</span>
+                                        <br><span class="chu-phu" th:if="${p.trangThai.name() == 'DA_GUI_HANG'}" th:text="'Ở hãng ' + ${r.soNgayOHang()} + ' ngày'"></span>
+                                    </td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" th:href="@{/quan-tri/bao-hanh/{m}(m=${p.maPhieu})}">Xử lý</a></div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi" th:unless="${#lists.isEmpty(daTra)}">
+                        <div class="khoi__dau"><h2>Đã trả khách gần đây</h2></div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead><tr><th>Phiếu</th><th>Serial</th><th>Khách</th><th>Ngày trả</th><th>Kết quả</th></tr></thead>
+                                <tbody>
+                                <tr th:each="p : ${daTra}">
+                                    <td><a th:href="@{/quan-tri/bao-hanh/{m}(m=${p.maPhieu})}" th:text="'#' + ${p.maPhieu}">#1</a></td>
+                                    <td class="serial-ma" th:text="${p.serial.soSerial}">SN</td>
+                                    <td th:text="${p.hoTenKhach}">Khách</td>
+                                    <td th:text="${@dd.ngayGio(p.ngayTraKhach)}">01/11</td>
+                                    <td class="o-dai" th:text="${p.ketQua}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

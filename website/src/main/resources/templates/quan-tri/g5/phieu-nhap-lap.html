@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Lập phiếu nhập')}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Lập phiếu nhập')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('phieu-nhap')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="'Lập phiếu nhập theo đơn đặt #' + ${f.maDonDat}">Lập phiếu nhập</h1>
+                            <p th:text="'Nhà cung cấp: ' + ${f.tenNhaCungCap}">NCC</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <form th:action="@{/quan-tri/kho/phieu-nhap/lap}" method="post">
+                        <input type="hidden" name="maDonDat" th:value="${f.maDonDat}">
+                        <div class="khoi">
+                            <div class="khoi__dau"><h2>Chứng từ của nhà cung cấp</h2></div>
+                            <div class="hang-form">
+                                <div class="o-nhap">
+                                    <label for="soHoaDon">Số hoá đơn nhà cung cấp</label>
+                                    <input type="text" id="soHoaDon" name="soHoaDon" maxlength="30" required th:value="${f.soHoaDon}">
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="ngayHoaDon">Ngày hoá đơn</label>
+                                    <input type="date" id="ngayHoaDon" name="ngayHoaDon" th:value="${f.ngayHoaDon}">
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="nguoiGiao">Người giao hàng</label>
+                                    <input type="text" id="nguoiGiao" name="nguoiGiao" maxlength="60" th:value="${f.nguoiGiao}">
+                                </div>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="tinhTrang">Tình trạng hàng (bắt buộc khi thực nhập ít hơn chứng từ)</label>
+                                <input type="text" id="tinhTrang" name="tinhTrang" maxlength="120" th:value="${f.tinhTrang}"
+                                       placeholder="Ví dụ: thiếu 1 thùng; 1 máy bật thử không lên, đã trả người giao">
+                                <span class="goi-y">Phần chênh lệch giữa chứng từ và thực nhập được ghi vào phiếu để báo nhà cung cấp giao bù hoặc đổi máy; hàng giao bù lập phiếu nhập mới cho cùng đơn đặt.</span>
+                            </div>
+                        </div>
+                        <div class="khoi">
+                            <div class="khoi__dau"><h2>Hàng thực nhận</h2></div>
+                            <p class="goi-y">Mỗi dòng serial một chiếc máy, đúng bằng số thực nhập. Serial không được trùng trên phiếu và chưa có trong hệ thống. Để trống số chứng từ nếu mẫu đó chưa về.</p>
+                            <div class="cuon-ngang">
+                                <table class="bang-dl bang-nhap">
+                                    <thead>
+                                    <tr>
+                                        <th>Mẫu máy</th>
+                                        <th class="canh-phai">Đặt / đã nhập</th>
+                                        <th>SL chứng từ</th>
+                                        <th>SL thực nhập</th>
+                                        <th>Đơn giá nhập (đ)</th>
+                                        <th>Serial (mỗi dòng một máy)</th>
+                                        <th>Giữ cho đơn khách</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="r, i : ${f.dong}">
+                                        <td>
+                                            <input type="hidden" name="maSanPham" th:value="${r.maSanPham}">
+                                            <span th:text="${r.tenSanPham}">Bếp</span><br>
+                                            <span class="ma-mo" th:text="${r.model}">M</span>
+                                            <span th:if="${r.giaTriCao}" class="the-nhan the-nhan--vang">Bật thử trước khi nhận</span>
+                                        </td>
+                                        <td class="canh-phai" th:text="${r.soDat} + ' / ' + ${r.daNhap}">3 / 0</td>
+                                        <td><input type="number" min="0" name="chungTu" th:value="${r.chungTu}"></td>
+                                        <td><input type="number" min="0" name="thucNhap" th:value="${r.thucNhap}"></td>
+                                        <td><input type="text" name="donGia" inputmode="numeric" th:value="${r.donGia}"></td>
+                                        <td><textarea name="serial" rows="4" th:text="${r.serial}" placeholder="SN0001&#10;SN0002"></textarea></td>
+                                        <td><input type="text" name="donRieng" maxlength="12" placeholder="DH000005" th:value="${r.donRieng}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu phiếu nhập</button>
+                                <a class="nut" href="/quan-tri/kho/phieu-nhap">Quay lại</a>
+                            </div>
+                            <p class="goi-y">Phiếu đã lưu thì khoá, không sửa được.</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>
