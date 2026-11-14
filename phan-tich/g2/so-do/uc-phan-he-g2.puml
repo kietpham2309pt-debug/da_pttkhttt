@@ -1,0 +1,35 @@
+@startuml uc-phan-he-g2
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam packageStyle rectangle
+left to right direction
+
+actor "Khách vãng lai" as KVL
+actor "Khách hàng" as KH
+actor "Nhân viên\nbán hàng" as NVBH
+actor "Quản lý\ncửa hàng" as QL
+
+KH --|> KVL
+
+rectangle "Phân hệ G2 · Sản phẩm và khuyến mãi" {
+  usecase "Tìm kiếm,\nlọc sản phẩm" as SP05
+  usecase "Xem chi tiết,\nso sánh sản phẩm" as SP06
+  usecase "Đánh giá sản phẩm" as SP07
+  usecase "Quản lý sản phẩm và\nthông số kỹ thuật" as SP02
+  usecase "Quản lý danh mục,\nthương hiệu" as SP01
+  usecase "Cập nhật giá bán" as SP03
+  usecase "Quản lý khuyến mãi,\nmã giảm giá" as SP04
+}
+
+KVL -- SP05
+KVL -- SP06
+KH -- SP07
+SP02 -- NVBH
+SP01 -- QL
+SP03 -- QL
+SP04 -- QL
+@enduml

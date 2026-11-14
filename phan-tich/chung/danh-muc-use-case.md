@@ -1,6 +1,6 @@
 # Danh mục use case hệ thống
 
-Bản nháp 0.2 (đã soát chéo) · G1 giữ · việc t101, t104 · tên và mã ở đây là **chuẩn chung**, sơ đồ use case phân hệ của từng gói phải dùng đúng
+Bản 0.3 (14/10/2026: thêm tác nhân Kế toán, khách vãng lai được đặt hàng) · G1 giữ · việc t101, t104 · tên và mã ở đây là **chuẩn chung**, sơ đồ use case phân hệ của từng gói phải dùng đúng
 
 ## 1. Use case tổng quát
 
@@ -24,7 +24,7 @@ Cột **Đặc tả**: ✓ là use case nên đặc tả (việc t103); ★ là 
 | UC-HT-01 | Đăng nhập | Nhân viên, Khách hàng | ★ (ví dụ có sẵn trong `mau-dac-ta.md`) |
 | UC-HT-02 | Quản lý tài khoản nhân viên | Quản trị hệ thống | ✓ |
 | UC-HT-03 | Phân quyền theo vai trò | Quản trị hệ thống | |
-| UC-HT-04 | Xem báo cáo doanh thu | Quản lý cửa hàng | ★ |
+| UC-HT-04 | Xem báo cáo doanh thu | Quản lý cửa hàng, Kế toán | ★ |
 | UC-HT-05 | Xem báo cáo tồn kho và bảo hành | Quản lý cửa hàng | |
 | UC-HT-06 | Đổi mật khẩu | Nhân viên, Khách hàng | |
 
@@ -45,11 +45,11 @@ Cột **Đặc tả**: ✓ là use case nên đặc tả (việc t103); ★ là 
 | UC-MH-01 | Đăng ký tài khoản khách hàng | Khách vãng lai | |
 | UC-MH-02 | Quản lý hồ sơ, sổ địa chỉ | Khách hàng | |
 | UC-MH-03 | Quản lý giỏ hàng | Khách vãng lai | |
-| UC-MH-04 | Đặt hàng | Khách hàng (đề xuất thêm Khách vãng lai, G3 chốt ở t102) | ★ |
+| UC-MH-04 | Đặt hàng | Khách vãng lai (Khách hàng kế thừa nên cũng dùng được) | ★ |
 | UC-MH-05 | Thanh toán trực tuyến | Khách hàng, Cổng thanh toán | ★ |
-| UC-MH-06 | Theo dõi đơn hàng | Khách hàng | ✓ |
-| UC-MH-07 | Huỷ đơn hàng | Khách hàng | |
-| UC-MH-08 | Áp mã giảm giá (`extend` UC-MH-04) | Khách hàng | |
+| UC-MH-06 | Theo dõi đơn hàng (số điện thoại kèm mã đơn) | Khách vãng lai | ✓ |
+| UC-MH-07 | Huỷ đơn hàng | Khách vãng lai | |
+| UC-MH-08 | Áp mã giảm giá (`extend` UC-MH-04) | Khách vãng lai | |
 
 ### G4 · Xử lý đơn, giao hàng, lắp đặt, đổi trả
 | Mã | Use case | Tác nhân | Đặc tả |
@@ -57,7 +57,7 @@ Cột **Đặc tả**: ✓ là use case nên đặc tả (việc t103); ★ là 
 | UC-DH-01 | Duyệt, xác nhận đơn hàng | Nhân viên bán hàng | ★ |
 | UC-DH-02 | Phân công giao hàng, lắp đặt | Quản lý cửa hàng | ✓ |
 | UC-DH-03 | Cập nhật trạng thái giao hàng | Nhân viên giao hàng – kỹ thuật; Nhân viên bán hàng (đơn gửi đơn vị vận chuyển) | |
-| UC-DH-04 | Xác nhận tiền thu khi giao | Quản lý cửa hàng | |
+| UC-DH-04 | Xác nhận tiền thu khi giao | Kế toán | |
 | UC-DH-05 | Lập biên bản lắp đặt | Nhân viên giao hàng – kỹ thuật | |
 | UC-DH-06 | Xử lý đổi trả, hoàn tiền | Nhân viên bán hàng (tiếp nhận), Quản lý cửa hàng (duyệt) | ★ |
 

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Có lỗi')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--hep">
+            <div class="the-tk">
+                <h1 th:text="${status == 404} ? 'Không tìm thấy trang' : 'Có lỗi xảy ra'">Có lỗi xảy ra</h1>
+                <p th:if="${status == 404}">Đường dẫn không tồn tại hoặc dữ liệu đã bị xoá.</p>
+                <p th:unless="${status == 404}">Hệ thống đang bận hoặc dữ liệu gửi lên không hợp lệ. Bạn thử lại sau ít phút.</p>
+                <p><a class="nut nut--dac" href="/">Về trang chủ</a></p>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

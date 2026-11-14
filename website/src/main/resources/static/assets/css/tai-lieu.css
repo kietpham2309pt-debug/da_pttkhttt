@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+.khoi a:not(.nut){color:var(--dong)}
+.khoi a:not(.nut):hover{text-decoration:underline}
+
+code{font-family:Consolas, "Cascadia Mono", monospace; font-size:.9em; padding:1px 6px; background:var(--nen-luoi); border:1px solid var(--vien); color:var(--dong)}
+
+.tl-ghi{margin:0 0 16px; max-width:72ch; font-size:14px; line-height:1.65; color:var(--chu-mo)}
+
+.tl-xem{display:flex; flex-wrap:wrap; gap:12px; align-items:center; padding:clamp(16px,2vw,22px); border:1px dashed var(--vien-sang); margin-bottom:12px}
+.tl-xem--cot{display:block}
+
+.tl-ma{margin:0; padding:14px 16px; background:var(--nen); border:1px solid var(--vien); overflow-x:auto; font:13px/1.6 Consolas, "Cascadia Mono", monospace; color:var(--chu-nhat); white-space:pre}
+.tl-ma code{padding:0; background:none; border:0; color:inherit; font-size:inherit}
+
+.tl-mau{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px}
+.tl-mau__o{border:1px solid var(--vien); background:var(--nen)}
+.tl-mau__mau{height:56px; border-bottom:1px solid var(--vien)}
+.tl-mau__chu{padding:10px 12px; font-size:12.5px; line-height:1.5; color:var(--chu-mo)}
+.tl-mau__chu b{display:block; color:var(--chu); font-weight:var(--dam-nhan)}
+
+.tl-chu{display:grid; gap:14px}
+.tl-chu p{margin:0}
+
+.tl-icon{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:10px}
+.tl-icon li{display:flex; align-items:center; gap:10px; min-width:0; padding:10px 12px; border:1px solid var(--vien); background:var(--nen); font-size:12.5px; color:var(--chu-nhat); overflow-wrap:anywhere}
+.tl-icon .ic{width:22px; height:22px; flex:none; color:var(--dong)}
+
+.tl-buoc{margin:0; padding-left:20px; display:grid; gap:10px; font-size:14.5px; line-height:1.65; color:var(--chu-nhat)}
+
+.tl-xem--cot > .o-tich + *{margin-top:18px}

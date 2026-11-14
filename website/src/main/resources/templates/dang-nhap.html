@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Đăng nhập')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="hero-sp hero-sp--dm" id="banner">
+        <img class="hero-sp__anh" src="/assets/img/banner-tai-khoan.jpg" alt="">
+        <span class="hero-sp__phu" aria-hidden="true"></span>
+        <div class="hero-sp__chu">
+            <div class="khung">
+                <h1>Đăng nhập</h1>
+                <p>Khách đăng nhập để theo dõi đơn và lưu địa chỉ; nhân viên đăng nhập để vào trang quản trị.</p>
+            </div>
+        </div>
+        <div class="hero-sp__duoi">
+            <div class="khung">
+                <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                    <a href="/">Trang chủ</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <span aria-current="page">Đăng nhập</span>
+                </nav>
+            </div>
+        </div>
+    </section>
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <div class="the-tk hien-dan">
+                <div class="thong-bao thong-bao--loi" role="alert" th:if="${param.sai}">Tên đăng nhập hoặc mật khẩu không đúng.</div>
+                <div class="thong-bao thong-bao--loi" role="alert" th:if="${param.tamKhoa}">Sai mật khẩu 5 lần liên tiếp, tài khoản tạm khoá 15 phút.</div>
+                <div class="thong-bao thong-bao--loi" role="alert" th:if="${param.daKhoa}">Tài khoản đã bị khoá, liên hệ cửa hàng.</div>
+                <div class="thong-bao thong-bao--ok" role="status" th:if="${param.daDangKy}">Đăng ký xong, mời bạn đăng nhập.</div>
+                <form th:action="@{/dang-nhap}" method="post">
+                    <input type="hidden" name="tiep" th:value="${param.tiep}">
+                    <div class="o-nhap">
+                        <label for="ten-dang-nhap">Tên đăng nhập</label>
+                        <input id="ten-dang-nhap" name="tenDangNhap" autocomplete="username" required autofocus>
+                    </div>
+                    <div class="o-nhap">
+                        <label for="mat-khau">Mật khẩu</label>
+                        <input id="mat-khau" name="matKhau" type="password" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" class="nut nut--dac the-tk__gui">Đăng nhập</button>
+                </form>
+                <p class="the-tk__doi">Chưa có tài khoản? <a href="/dang-ky">Đăng ký ngay</a></p>
+                <p class="the-tk__doi">Mua không cần tài khoản: <a href="/tra-cuu-don">tra cứu đơn bằng số điện thoại và mã đơn</a>.</p>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

@@ -1,0 +1,48 @@
+@startuml hd-buc03-1
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 18
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 160
+
+|Nhân viên bán hàng|
+start
+:Tiếp nhận đơn vừa chốt, gọi khách xác nhận trong 30 phút;
+if () then ([khách xác nhận])
+else ([không xác\nnhận được])
+  :Huỷ đơn, ghi lý do, báo kế toán hoàn cọc nếu có;
+  stop
+endif
+-[dashed]->
+:Đơn hàng
+[đã xác nhận]; <<object>>
+-[dashed]->
+|Quản lý cửa hàng|
+repeat
+  :Xếp lịch giao, phân công người phụ trách;
+repeat while () is ([trùng lịch]) not ([không trùng])
+-[dashed]->
+:Phiếu giao hàng
+[đã xếp lịch]; <<object>>
+-[dashed]->
+|Nhân viên bán hàng|
+:Gọi khách hẹn giờ giao, báo thủ kho soạn hàng;
+|Thủ kho|
+:Soạn hàng, lập phiếu xuất kho ghi số serial;
+-[dashed]->
+:Phiếu xuất kho; <<object>>
+-[dashed]->
+|Nhân viên giao hàng – kỹ thuật|
+:Nhận máy, giấy tờ, đối chiếu serial;
+if () then ([đơn nội thành])
+else ([đơn đi tỉnh])
+  :Bàn giao máy cho đơn vị vận chuyển;
+  |Kế toán|
+  :Đối chiếu tiền thu hộ khi đơn vị vận chuyển đối soát;
+  stop
+endif
+|Nhân viên giao hàng – kỹ thuật|
+(A)
+detach
+@enduml

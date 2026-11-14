@@ -38,10 +38,10 @@ KVL -- SP1
 KVL -- MH1
 KVL -- MH3
 KVL -- KB1
+KVL -- MH4
+KVL -- MH5
 KH -- SP2
 KH -- MH2
-KH -- MH4
-KH -- MH5
 KH -- HT1
 MH4 -- CTT
 @enduml

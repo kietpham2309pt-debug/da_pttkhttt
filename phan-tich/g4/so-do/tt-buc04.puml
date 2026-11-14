@@ -1,0 +1,68 @@
+@startuml tt-buc04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 19
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+skinparam participant {
+  BackgroundColor transparent
+  BorderColor transparent
+}
+hide footbox
+
+sprite $ttv <svg viewBox="0 0 64 64"><path d="M27 4 L33 8 L27 12" fill="none" stroke="black" stroke-width="2.5"/><circle cx="32" cy="34" r="24" fill="white" stroke="black" stroke-width="2.5"/><circle cx="32" cy="22" r="5" fill="none" stroke="black" stroke-width="2.5"/><path d="M32 27 L32 42 M23 32 L41 32 M32 42 L25 51 M32 42 L39 51" fill="none" stroke="black" stroke-width="2.5"/><path d="M42 54 L54 41" fill="none" stroke="black" stroke-width="2.5"/></svg>
+sprite $tt <svg viewBox="0 0 64 64"><circle cx="32" cy="30" r="24" fill="white" stroke="black" stroke-width="2.5"/><path d="M8 56 L56 56" fill="none" stroke="black" stroke-width="2.5"/><path d="M41 51 L53 37" fill="none" stroke="black" stroke-width="2.5"/></svg>
+
+actor "__: Khách__\n__hàng__" as KH
+boundary "__: Nhân viên__\n__bán hàng__" as NVBH
+boundary "__: Quản lý__\n__cửa hàng__" as QL
+actor "__: Chủ__\n__cửa hàng__" as CCH
+boundary "__: Thủ kho__" as TK
+participant "<$ttv{scale=0.6}>\n__: Kế toán__" as KT
+participant "<$tt{scale=0.6}>\n__: Phiếu__\n__đổi trả__" as PDT
+participant "<$tt{scale=0.6}>\n__: Hoá đơn__\n__bán hàng__" as HD
+participant "<$tt{scale=0.6}>\n__: Chiếc__\n__máy__" as CM
+participant "<$tt{scale=0.6}>\n__: Phiếu__\n__xuất kho__" as PXK
+
+KH -> NVBH : 1: Yêu cầu\nđổi trả
+activate NVBH
+NVBH -> PDT ++ : 2: Ghi phiếu đổi trả()
+deactivate PDT
+NVBH -> CM ++ : 3: Kiểm tra máy theo\nsố serial()
+deactivate CM
+NVBH -> HD ++ : 4: Tra ngày bán, tính\nhạn đổi trả()
+deactivate HD
+NVBH -> QL : 5: Chuyển phiếu\nđổi trả
+activate QL
+QL -> QL : 6: Xét theo quy\nđịnh đổi trả()
+QL -> CCH : 7: [ngoại lệ]:\nXin ý kiến
+CCH --> QL : 8: Ý kiến\ncủa chủ
+QL -> PDT ++ : 9: Duyệt, ghi hướng xử lý,\nphí khấu trừ()
+deactivate PDT
+QL --> NVBH : 10: Phiếu\nđã duyệt
+deactivate QL
+NVBH -> KH : 11: Báo kết quả,\nnhận lại máy
+KH --> NVBH : 12: Máy, hoá đơn,\nphụ kiện
+NVBH -> TK : 13: Chuyển máy\nvề kho
+activate TK
+TK -> CM ++ : 14: Nhận về kho,\nghi tình trạng()
+deactivate CM
+TK -> PXK ++ : 15: [đổi máy]:\nLập phiếu xuất\nmáy mới()
+deactivate PXK
+TK --> NVBH : 16: [đổi máy]:\nMáy mới
+deactivate TK
+NVBH -> KT : 17: [trả hàng]:\nYêu cầu hoàn tiền
+activate KT
+KT -> HD ++ : 18: Tra cách\nkhách đã trả()
+deactivate HD
+KT -> PDT ++ : 19: Ghi số tiền hoàn()
+deactivate PDT
+KT --> NVBH : 20: [trả hàng]:\nTiền hoàn
+deactivate KT
+NVBH -> KH : 21: Giao máy mới\nhoặc tiền hoàn
+KH --> NVBH : 22: Ký phiếu\nđổi trả
+NVBH -> PDT ++ : 23: Lưu phiếu\ncùng hoá đơn()
+deactivate PDT
+deactivate NVBH
+@enduml

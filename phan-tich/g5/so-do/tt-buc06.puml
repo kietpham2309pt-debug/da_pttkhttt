@@ -1,0 +1,58 @@
+@startuml tt-buc06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 19
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+skinparam participant {
+  BackgroundColor transparent
+  BorderColor transparent
+}
+hide footbox
+
+sprite $ttv <svg viewBox="0 0 64 64"><path d="M27 4 L33 8 L27 12" fill="none" stroke="black" stroke-width="2.5"/><circle cx="32" cy="34" r="24" fill="white" stroke="black" stroke-width="2.5"/><circle cx="32" cy="22" r="5" fill="none" stroke="black" stroke-width="2.5"/><path d="M32 27 L32 42 M23 32 L41 32 M32 42 L25 51 M32 42 L39 51" fill="none" stroke="black" stroke-width="2.5"/><path d="M42 54 L54 41" fill="none" stroke="black" stroke-width="2.5"/></svg>
+sprite $tt <svg viewBox="0 0 64 64"><circle cx="32" cy="30" r="24" fill="white" stroke="black" stroke-width="2.5"/><path d="M8 56 L56 56" fill="none" stroke="black" stroke-width="2.5"/><path d="M41 51 L53 37" fill="none" stroke="black" stroke-width="2.5"/></svg>
+skinparam sequenceReferenceBackgroundColor white
+
+actor "__: Khách__\n__hàng__" as KH
+boundary "__: Nhân viên__\n__bán hàng__" as NVBH
+participant "<$tt{scale=0.6}>\n__: Chiếc__\n__máy__" as CM
+participant "<$tt{scale=0.6}>\n__: Phiếu__\n__tiếp nhận__\n__bảo hành__" as PTN
+boundary "__: Thủ kho__" as TK
+participant "<$tt{scale=0.6}>\n__: Sổ theo dõi__\n__máy gửi hãng__" as STD
+actor "__: Trung tâm__\n__bảo hành hãng__" as TTBH
+
+KH -> NVBH : 1: Mang máy lỗi\ntới, báo lỗi
+ref over NVBH, CM : Kiểm tra máy theo số serial (BUC-09)
+activate NVBH
+NVBH -> KH : 2: [hết hạn]:\nBáo phí sửa
+NVBH -> KH : 3: [đã sửa 3 lần\nvẫn lỗi]: Đổi máy\nmới, hoàn tiền
+NVBH -> CM ++ : 4: Xem tình trạng\nbên ngoài()
+deactivate CM
+NVBH -> PTN ++ : 5: Lập phiếu\ntiếp nhận()
+deactivate PTN
+NVBH -> KH : 6: Đưa một liên\nphiếu tiếp nhận
+NVBH -> TK : 7: Giao máy\nvà liên lưu
+deactivate NVBH
+activate TK
+TK -> STD ++ : 8: Ghi ngày gửi()
+deactivate STD
+TK -> TTBH : 9: Gửi máy\nbảo hành
+deactivate TK
+TTBH --> TK : 10: Trả máy\nđã sửa
+activate TK
+TK -> CM ++ : 11: Kiểm tra\nmáy đã sửa()
+deactivate CM
+TK -> STD ++ : 12: Ghi ngày\nnhận về()
+deactivate STD
+TK -> NVBH : 13: Báo máy\nđã về
+deactivate TK
+activate NVBH
+NVBH -> KH : 14: Báo tới\nnhận máy
+KH -> NVBH : 15: Đưa liên\nphiếu tiếp nhận
+NVBH -> PTN ++ : 16: Ghi ngày trả()
+deactivate PTN
+NVBH --> KH : 17: Trả máy\nđã sửa
+deactivate NVBH
+@enduml

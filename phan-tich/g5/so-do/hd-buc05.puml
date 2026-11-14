@@ -1,0 +1,50 @@
+@startuml hd-buc05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 18
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 260
+
+|Thủ kho|
+start
+:Lập đơn đặt hàng nhà cung cấp;
+-[dashed]->
+:Đơn đặt hàng nhà cung cấp
+[đề xuất]; <<object>>
+-[dashed]->
+|Quản lý cửa hàng|
+:Xem đơn, chỉnh số lượng, chọn nhà cung cấp;
+repeat
+  :Xin ý kiến chủ cửa hàng duyệt đơn;
+  backward :Sửa đơn theo ý chủ;
+repeat while () is ([chủ chưa đồng ý]) not ([chủ đồng ý])
+-[dashed]->
+:Đơn đặt hàng nhà cung cấp
+[đã duyệt]; <<object>>
+-[dashed]->
+:Gửi đơn cho nhà cung cấp, báo thủ kho ngày giao;
+|Thủ kho|
+:Nhận hàng và hoá đơn, kiểm đếm, kiểm thùng, bật thử máy giá trị cao;
+if () then ([thiếu, hư])
+  :Trả máy hư, ghi số thiếu, báo nhà cung cấp giao bù hoặc đổi;
+else ([đủ, tốt])
+endif
+:Ghi số serial từng chiếc máy, xếp máy vào kho;
+if () then ([đặt riêng])
+  :Ghi mã đơn cạnh số serial, để riêng máy cho đơn;
+else ([bán thường])
+endif
+:Lập phiếu nhập kho, cùng người giao ký, chuyển phiếu và hoá đơn cho kế toán;
+-[dashed]->
+:Phiếu nhập kho; <<object>>
+-[dashed]->
+|Kế toán|
+:Đối chiếu phiếu nhập kho với hoá đơn nhà cung cấp;
+if () then ([hoá đơn lệch])
+  :Ghi khoản chênh lệch, chờ nhà cung cấp sửa hoá đơn;
+else ([khớp])
+endif
+:Ghi công nợ theo số thực nhập, thanh toán khi đến hạn;
+stop
+@enduml

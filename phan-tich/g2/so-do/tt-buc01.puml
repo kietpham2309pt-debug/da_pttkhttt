@@ -1,0 +1,62 @@
+@startuml tt-buc01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 19
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+skinparam participant {
+  BackgroundColor transparent
+  BorderColor transparent
+}
+hide footbox
+
+sprite $ttv <svg viewBox="0 0 64 64"><path d="M27 4 L33 8 L27 12" fill="none" stroke="black" stroke-width="2.5"/><circle cx="32" cy="34" r="24" fill="white" stroke="black" stroke-width="2.5"/><circle cx="32" cy="22" r="5" fill="none" stroke="black" stroke-width="2.5"/><path d="M32 27 L32 42 M23 32 L41 32 M32 42 L25 51 M32 42 L39 51" fill="none" stroke="black" stroke-width="2.5"/><path d="M42 54 L54 41" fill="none" stroke="black" stroke-width="2.5"/></svg>
+sprite $tt <svg viewBox="0 0 64 64"><circle cx="32" cy="30" r="24" fill="white" stroke="black" stroke-width="2.5"/><path d="M8 56 L56 56" fill="none" stroke="black" stroke-width="2.5"/><path d="M41 51 L53 37" fill="none" stroke="black" stroke-width="2.5"/></svg>
+
+actor "__: Khách hàng__" as KH
+actor "__: Chủ cửa hàng__" as CCH
+boundary "__: Quản lý__\n__cửa hàng__" as QL
+boundary "__: Nhân viên__\n__bán hàng__" as NVBH
+boundary "__: Thủ kho__" as TK
+participant "<$tt{scale=0.6}>\n__: Thông tin__\n__mẫu máy__" as TTMM
+participant "<$tt{scale=0.6}>\n__: Bảng giá và__\n__khuyến mãi__" as BG
+participant "<$tt{scale=0.6}>\n__: Chiếc__\n__máy__" as CM
+
+activate QL
+QL -> TK : 1: Chuyển thông\ntin mẫu máy mới
+activate TK
+TK -> TTMM ++ : 2: Tạo mã hàng()
+deactivate TTMM
+TK -> CM ++ : 3: Đếm máy\ncòn trong kho()
+deactivate CM
+TK --> QL : 4: Số máy còn\ntrong kho
+deactivate TK
+QL -> CCH : 5: Xin ý kiến\ngiá bán đề xuất
+CCH -> QL : 6: [chưa đồng ý]:\nYêu cầu sửa giá
+QL -> CCH : 7: Xin ý kiến lại\ngiá đã sửa
+CCH -> QL : 8: [đồng ý]:\nDuyệt giá bán
+QL -> BG ++ : 9: Ghi giá bán()
+deactivate BG
+QL -> NVBH : 10: Báo giá bán,\nsố máy còn
+activate NVBH
+NVBH -> TTMM ++ : 11: Thêm ảnh, bài\ngiới thiệu()
+deactivate TTMM
+NVBH -> NVBH : 12: Đăng ở các\nkênh bán()
+QL -> CCH : 13: Xin ý kiến\nchương trình\nkhuyến mãi
+CCH -> QL : 14: [đồng ý]:\nDuyệt khuyến mãi
+QL -> BG ++ : 15: Ghi khuyến\nmãi()
+deactivate BG
+QL -> NVBH : 16: Thông báo\nkhuyến mãi
+deactivate QL
+NVBH -> NVBH : 17: Cập nhật khuyến mãi\nlên các kênh bán()
+KH -> NVBH : 18: Hỏi về\nmẫu máy
+NVBH -> TTMM ++ : 19: Tra thông số()
+deactivate TTMM
+NVBH -> BG ++ : 20: Tra giá, khuyến\nmãi còn hạn()
+deactivate BG
+NVBH --> KH : 21: Thông\nsố, giá,\nkhuyến mãi
+KH -> NVBH : 22: [xin cộng\nhai khuyến\nmãi]:\nXin thêm\nkhuyến mãi
+NVBH --> KH : 23: Giá đã\ntính khuyến\nmãi hợp lệ
+deactivate NVBH
+@enduml

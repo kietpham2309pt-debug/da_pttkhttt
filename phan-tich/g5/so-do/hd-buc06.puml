@@ -1,0 +1,54 @@
+@startuml hd-buc06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 18
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 300
+
+|Nhân viên bán hàng|
+start
+:Tiếp nhận máy lỗi hoặc cuộc gọi báo lỗi;
+:Kiểm tra máy theo số serial (thực hiện BUC-09);
+if () then ([hết hạn])
+  :Báo khách hết hạn, báo phí sửa;
+  if () then ([từ chối])
+    :Trả lại máy cho khách;
+    stop
+  else ([đồng ý])
+  endif
+else ([còn hạn])
+endif
+:Xem tình trạng bên ngoài, xác định lỗi;
+switch ()
+case ([đã sửa 3 lần\nvẫn lỗi])
+  :Chuyển sang đổi máy mới hoặc hoàn tiền (BUC-04);
+  stop
+case ([lỗi do lắp đặt])
+  :Báo quản lý phân công nhân viên giao hàng – kỹ thuật tới sửa;
+  stop
+case ([lỗi của máy])
+endswitch
+:Lập phiếu tiếp nhận bảo hành, đưa khách một liên;
+if () then ([máy âm tủ])
+  :Báo hãng cử kỹ thuật tới nhà khách, ghi kết quả vào phiếu;
+  stop
+else ([mang tới được])
+endif
+:Giao máy và liên lưu của phiếu cho thủ kho;
+-[dashed]->
+:Phiếu tiếp nhận bảo hành
+[liên lưu]; <<object>>
+-[dashed]->
+|Thủ kho|
+:Gửi máy tới trung tâm bảo hành hãng, ghi ngày gửi;
+-[dashed]->
+:Sổ theo dõi máy gửi hãng
+[đã ghi ngày gửi]; <<object>>
+-[dashed]->
+:Nhận máy đã sửa, kiểm tra, ghi ngày nhận về, báo nhân viên bán hàng;
+|Nhân viên bán hàng|
+:Báo khách tới nhận máy;
+:Thu liên phiếu của khách, trả máy, ghi ngày trả;
+stop
+@enduml

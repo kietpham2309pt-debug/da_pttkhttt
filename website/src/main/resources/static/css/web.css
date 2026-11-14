@@ -1,0 +1,9 @@
+.thong-bao{margin:0 0 16px}
+.thong-bao--ok{border-color:var(--dong)}
+.qt-ben__dang-xuat{margin-top:6px}
+.qt-ben__dang-xuat .nut{width:100%}
+.o-so-ds{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.chu-phu{color:var(--chu-phu, #9c958c);font-size:.9em}
+.hang-form{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.hang-thao-tac form{display:inline}
+.canh-bao{border:1px solid var(--dong);padding:10px 14px;border-radius:10px;margin:0 0 14px}

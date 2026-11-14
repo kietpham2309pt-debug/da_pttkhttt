@@ -1,0 +1,38 @@
+@startuml uc-phan-he-g1
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+left to right direction
+
+actor "Khách hàng" as KH
+actor "Nhân viên\n{abstract}" as NV
+actor "Quản trị\nhệ thống" as QTHT
+actor "Quản lý\ncửa hàng" as QL
+actor "Kế toán" as KT
+
+QTHT -|> NV
+QL -|> NV
+KT -|> NV
+
+rectangle "Phân hệ Quản trị hệ thống và báo cáo" {
+  usecase "UC-HT-01\nĐăng nhập" as HT1
+  usecase "UC-HT-06\nĐổi mật khẩu" as HT6
+  usecase "UC-HT-02\nQuản lý tài khoản\nnhân viên" as HT2
+  usecase "UC-HT-03\nPhân quyền\ntheo vai trò" as HT3
+  usecase "UC-HT-04\nXem báo cáo\ndoanh thu" as HT4
+  usecase "UC-HT-05\nXem báo cáo tồn kho\nvà bảo hành" as HT5
+}
+
+KH -- HT1
+KH -- HT6
+NV -- HT1
+NV -- HT6
+QTHT -- HT2
+QTHT -- HT3
+QL -- HT4
+KT -- HT4
+QL -- HT5
+@enduml

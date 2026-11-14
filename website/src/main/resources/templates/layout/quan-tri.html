@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<nav th:fragment="menu(chon)" class="qt-ben" aria-label="Menu quản trị">
+    <span class="qt-ben__nhan">Quản trị hệ thống · G1</span>
+    <a href="/quan-tri" th:classappend="${chon == 'tong-quan'} ? 'dang-chon'">Tổng quan</a>
+    <a sec:authorize="hasRole('QUAN_TRI')" href="/quan-tri/tai-khoan" th:classappend="${chon == 'tai-khoan'} ? 'dang-chon'">Tài khoản nhân viên</a>
+    <a sec:authorize="hasAnyRole('QUAN_LY','KE_TOAN')" href="/quan-tri/bao-cao/doanh-thu" th:classappend="${chon == 'doanh-thu'} ? 'dang-chon'">Báo cáo doanh thu</a>
+    <a sec:authorize="hasAnyRole('QUAN_LY','KE_TOAN')" href="/quan-tri/bao-cao/ton-kho" th:classappend="${chon == 'bc-ton-kho'} ? 'dang-chon'">Báo cáo tồn kho, bảo hành</a>
+    <a href="/doi-mat-khau">Đổi mật khẩu</a>
+
+    <th:block sec:authorize="hasAnyRole('NV_BAN_HANG','QUAN_LY')">
+        <span class="qt-ben__nhan">Sản phẩm · G2</span>
+        <a href="/quan-tri/san-pham" th:classappend="${chon == 'san-pham'} ? 'dang-chon'">Sản phẩm, giá</a>
+        <a sec:authorize="hasRole('QUAN_LY')" href="/quan-tri/danh-muc" th:classappend="${chon == 'danh-muc'} ? 'dang-chon'">Danh mục, thương hiệu</a>
+        <a sec:authorize="hasRole('QUAN_LY')" href="/quan-tri/khuyen-mai" th:classappend="${chon == 'khuyen-mai'} ? 'dang-chon'">Khuyến mãi</a>
+    </th:block>
+
+    <th:block sec:authorize="hasAnyRole('NV_BAN_HANG','QUAN_LY','NV_GIAO_HANG','KE_TOAN')">
+        <span class="qt-ben__nhan">Đơn hàng · G4</span>
+        <a sec:authorize="hasAnyRole('NV_BAN_HANG','QUAN_LY')" href="/quan-tri/don-hang" th:classappend="${chon == 'don-hang'} ? 'dang-chon'">Đơn hàng</a>
+        <a sec:authorize="hasAnyRole('QUAN_LY','NV_GIAO_HANG','NV_BAN_HANG')" href="/quan-tri/giao-hang" th:classappend="${chon == 'giao-hang'} ? 'dang-chon'">Giao hàng, lắp đặt</a>
+        <a sec:authorize="hasRole('KE_TOAN')" href="/quan-tri/tien-thu" th:classappend="${chon == 'tien-thu'} ? 'dang-chon'">Tiền thu khi giao</a>
+        <a sec:authorize="hasAnyRole('NV_BAN_HANG','QUAN_LY','KE_TOAN')" href="/quan-tri/doi-tra" th:classappend="${chon == 'doi-tra'} ? 'dang-chon'">Đổi trả</a>
+    </th:block>
+
+    <th:block sec:authorize="hasAnyRole('THU_KHO','QUAN_LY','NV_BAN_HANG')">
+        <span class="qt-ben__nhan">Kho và bảo hành · G5</span>
+        <th:block sec:authorize="hasAnyRole('THU_KHO','QUAN_LY')">
+            <a href="/quan-tri/kho/nha-cung-cap" th:classappend="${chon == 'nha-cung-cap'} ? 'dang-chon'">Nhà cung cấp</a>
+            <a href="/quan-tri/kho/don-dat" th:classappend="${chon == 'don-dat'} ? 'dang-chon'">Đơn đặt hàng nhà cung cấp</a>
+            <a href="/quan-tri/kho/phieu-nhap" th:classappend="${chon == 'phieu-nhap'} ? 'dang-chon'">Phiếu nhập kho</a>
+            <a href="/quan-tri/kho/phieu-xuat" th:classappend="${chon == 'phieu-xuat'} ? 'dang-chon'">Xuất kho theo đơn</a>
+            <a href="/quan-tri/kho/ton-kho" th:classappend="${chon == 'ton-kho'} ? 'dang-chon'">Tồn kho, kiểm kê</a>
+            <a href="/quan-tri/kho/nhan-lai" th:classappend="${chon == 'nhan-lai'} ? 'dang-chon'">Nhận lại máy</a>
+        </th:block>
+        <a sec:authorize="hasAnyRole('NV_BAN_HANG','THU_KHO')" href="/quan-tri/bao-hanh" th:classappend="${chon == 'bao-hanh'} ? 'dang-chon'">Bảo hành</a>
+    </th:block>
+
+    <span class="qt-ben__nhan">Phía khách</span>
+    <a href="/">Xem trang khách</a>
+    <form action="/dang-xuat" method="post" class="qt-ben__dang-xuat">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <button type="submit" class="nut nut--nho">Đăng xuất <span sec:authentication="name"></span></button>
+    </form>
+</nav>
+
+<nav th:fragment="duongDan(ten)" class="duong-dan" aria-label="Đường dẫn phân cấp">
+    <a href="/">Trang chủ</a>
+    <span aria-hidden="true">&middot;</span>
+    <a href="/quan-tri">Quản trị</a>
+    <span aria-hidden="true">&middot;</span>
+    <span aria-current="page" th:text="${ten}">Màn hình</span>
+</nav>
+</body>
+</html>

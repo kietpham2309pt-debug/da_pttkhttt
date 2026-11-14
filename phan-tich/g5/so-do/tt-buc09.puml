@@ -1,0 +1,42 @@
+@startuml tt-buc09
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 19
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+skinparam participant {
+  BackgroundColor transparent
+  BorderColor transparent
+}
+hide footbox
+
+sprite $ttv <svg viewBox="0 0 64 64"><path d="M27 4 L33 8 L27 12" fill="none" stroke="black" stroke-width="2.5"/><circle cx="32" cy="34" r="24" fill="white" stroke="black" stroke-width="2.5"/><circle cx="32" cy="22" r="5" fill="none" stroke="black" stroke-width="2.5"/><path d="M32 27 L32 42 M23 32 L41 32 M32 42 L25 51 M32 42 L39 51" fill="none" stroke="black" stroke-width="2.5"/><path d="M42 54 L54 41" fill="none" stroke="black" stroke-width="2.5"/></svg>
+sprite $tt <svg viewBox="0 0 64 64"><circle cx="32" cy="30" r="24" fill="white" stroke="black" stroke-width="2.5"/><path d="M8 56 L56 56" fill="none" stroke="black" stroke-width="2.5"/><path d="M41 51 L53 37" fill="none" stroke="black" stroke-width="2.5"/></svg>
+
+boundary "__: Nhân viên__\n__bán hàng__" as NVBH
+participant "<$tt{scale=0.6}>\n__: Chiếc__\n__máy__" as CM
+participant "<$tt{scale=0.6}>\n__: Phiếu__\n__xuất kho__" as PX
+participant "<$tt{scale=0.6}>\n__: Hoá đơn__\n__bán hàng__" as HD
+participant "<$tt{scale=0.6}>\n__: Phiếu__\n__bảo hành__" as PBH
+participant "<$tt{scale=0.6}>\n__: Phiếu__\n__tiếp nhận__\n__bảo hành__" as PTN
+
+[-> NVBH : 1: Yêu cầu kiểm tra máy   
+activate NVBH
+NVBH -> CM ++ : 2: Đọc số serial\ntrên tem()
+deactivate CM
+NVBH -> PX ++ : 3: Tìm phiếu xuất\ntheo số serial()
+PX --> NVBH : 4: Mã đơn,\nngười nhận
+deactivate PX
+NVBH -> HD ++ : 5: [không thấy phiếu xuất]:\nTìm theo số điện thoại()
+deactivate HD
+NVBH -> HD ++ : 6: Lấy ngày bán()
+deactivate HD
+NVBH -> PBH ++ : 7: Đối chiếu model,\nsố serial()
+deactivate PBH
+NVBH -> PTN ++ : 8: Đếm số lần\nbảo hành()
+deactivate PTN
+NVBH -> NVBH : 9: Tính hạn bảo hành,\nhạn đổi trả()
+[<-- NVBH : 10: Kết quả kiểm tra   
+deactivate NVBH
+@enduml

@@ -1,0 +1,34 @@
+@startuml hd-buc09
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 18
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 300
+
+partition "Nhân viên bán hàng" {
+start
+:Đọc số serial trên tem máy;
+if () then ([tem mờ, mất])
+  :Lấy số serial trên phiếu bảo hành hoặc thùng máy;
+else ([đọc được])
+endif
+:Tìm phiếu xuất kho có số serial đó;
+if () then ([không tìm thấy])
+  :Tìm hoá đơn theo số điện thoại hoặc hoá đơn khách giữ;
+else ([tìm thấy])
+  :Lấy hoá đơn bán hàng của đơn ghi trên phiếu xuất kho;
+endif
+:Đối chiếu máy với phiếu xuất kho, phiếu bảo hành;
+if () then ([không khớp])
+  :Báo máy không do cửa hàng bán, từ chối tiếp nhận;
+  stop
+else ([khớp])
+endif
+:Xem các lần bảo hành trước của chiếc máy;
+:Tính hạn bảo hành;
+:Tính hạn đổi trả;
+:Báo kết quả kiểm tra cho bước đang làm;
+stop
+}
+@enduml

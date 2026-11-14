@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau(${tieuDe})}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--hep">
+            <div class="the-tk">
+                <h1 th:text="${tieuDe}">Thông báo</h1>
+                <p th:text="${noiDung}">Nội dung</p>
+                <p><a class="nut nut--dac" th:href="${lienKet != null} ? ${lienKet} : '/'" th:text="${chuLienKet != null} ? ${chuLienKet} : 'Về trang chủ'">Về trang chủ</a></p>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

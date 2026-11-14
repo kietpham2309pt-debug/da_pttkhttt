@@ -1,0 +1,56 @@
+@startuml hd-buc01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 18
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 200
+
+|Quản lý cửa hàng|
+start
+:Nhận thông tin mẫu máy mới từ hãng;
+if () then ([giá hãng đổi])
+  :Xin ý kiến chủ, ghi giá mới vào bảng giá;
+  |Nhân viên bán hàng|
+  :Sửa giá ở tất cả các kênh bán;
+  stop
+else ([mẫu máy mới])
+  |Thủ kho|
+  :Tạo mã hàng cho mẫu máy;
+  -[dashed]->
+  :Thông tin mẫu máy; <<object>>
+  -[dashed]->
+  :Xác nhận số máy còn trong kho;
+endif
+|Quản lý cửa hàng|
+repeat
+  :Đề xuất giá bán, xin ý kiến chủ cửa hàng;
+  backward :Sửa theo ý chủ;
+repeat while () is ([chủ chưa đồng ý]) not ([chủ đồng ý])
+:Ghi giá đã duyệt vào bảng giá;
+|Nhân viên bán hàng|
+:Chụp ảnh, viết bài, đăng ở các kênh bán;
+|Quản lý cửa hàng|
+repeat
+  :Lập khuyến mãi, xin ý kiến chủ cửa hàng;
+  backward :Sửa theo ý chủ;
+repeat while () is ([chủ chưa đồng ý]) not ([chủ đồng ý])
+:Ghi khuyến mãi, thông báo nhân viên bán hàng;
+-[dashed]->
+:Bảng giá và khuyến mãi
+[đã có khuyến mãi]; <<object>>
+-[dashed]->
+|Nhân viên bán hàng|
+:Cập nhật khuyến mãi lên các kênh bán;
+:Giới thiệu thông số, giá, khuyến mãi;
+if () then ([máy mới])
+else ([chọn máy\ntrưng bày])
+  :Báo giá riêng của hàng trưng bày;
+endif
+if () then ([áp được])
+else ([không\náp được])
+  :Giải thích quy định, chỉ tính khuyến mãi hợp lệ;
+endif
+:Gửi khách giá đã tính khuyến mãi;
+stop
+@enduml

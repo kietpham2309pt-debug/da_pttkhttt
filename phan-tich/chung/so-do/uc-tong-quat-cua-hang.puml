@@ -13,12 +13,14 @@ actor "Nhân viên\nbán hàng" as NVBH
 actor "Thủ kho" as TK
 actor "Nhân viên giao hàng\n– kỹ thuật" as NVGH
 actor "Quản lý\ncửa hàng" as QL
+actor "Kế toán" as KT
 actor "Quản trị\nhệ thống" as QTHT
 
 NVBH -|> NV
 TK -|> NV
 NVGH -|> NV
 QL -|> NV
+KT -|> NV
 QTHT -|> NV
 
 rectangle "Website bán hàng điện gia dụng · phía cửa hàng" {
@@ -46,13 +48,14 @@ rectangle "Website bán hàng điện gia dụng · phía cửa hàng" {
 NV -- HT1
 QTHT -- HT2
 QL -- HT3
+KT -- HT3
 NVBH -- SP1
 QL -- SP2
 NVBH -- DH1
 QL -- DH2
 NVGH -- DH2
 NVBH -- DH2
-QL -- DH3
+KT -- DH3
 NVBH -- DH4
 QL -- DH4
 TK -- KB1

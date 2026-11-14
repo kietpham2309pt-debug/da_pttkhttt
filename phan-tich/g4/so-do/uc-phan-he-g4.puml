@@ -1,0 +1,40 @@
+@startuml uc-phan-he-g4
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam packageStyle rectangle
+left to right direction
+
+actor "Nhân viên\n{abstract}" as NV
+actor "Nhân viên giao hàng\n– kỹ thuật" as NVGH
+actor "Nhân viên\nbán hàng" as NVBH
+actor "Quản lý\ncửa hàng" as QL
+actor "Kế toán" as KT
+
+NV <|-- NVGH
+NV <|-- NVBH
+NV <|-- QL
+NV <|-- KT
+
+rectangle "Phân hệ G4 · Xử lý đơn, giao hàng, lắp đặt, đổi trả" {
+  usecase "Lập biên bản\nlắp đặt" as DH5
+  usecase "Cập nhật trạng thái\ngiao hàng" as DH3
+  usecase "Duyệt, xác nhận\nđơn hàng" as DH1
+  usecase "Xử lý đổi trả,\nhoàn tiền" as DH6
+  usecase "Phân công giao hàng,\nlắp đặt" as DH2
+  usecase "Xác nhận tiền\nthu khi giao" as DH4
+}
+
+NVGH -- DH5
+NVGH -- DH3
+NVBH -- DH3
+NVBH -- DH1
+NVBH -- DH6
+QL -- DH6
+QL -- DH2
+KT -- DH6
+KT -- DH4
+@enduml

@@ -1,0 +1,37 @@
+@startuml hd-buc03-2
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 18
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 175
+
+|Nhân viên giao hàng – kỹ thuật|
+(A)
+:Giao máy theo giờ hẹn, khách kiểm hàng, ký phiếu giao hàng;
+if () then ([khách nhận])
+else ([không nhận])
+  :Ghi lý do, mang máy về;
+  |Thủ kho|
+  :Nhận lại máy, đối chiếu serial, nhập lại kho hoặc để bán giảm giá;
+  stop
+endif
+|Nhân viên giao hàng – kỹ thuật|
+if () then ([không lắp])
+else ([cần lắp])
+  :Thực hiện use case Lắp đặt tận nơi;
+endif
+:Thu tiền còn lại, giao hoá đơn và phiếu bảo hành;
+:Nộp tiền thu khi giao cho kế toán trong ngày;
+-[dashed]->
+:Phiếu giao hàng
+[khách đã ký]; <<object>>
+-[dashed]->
+|Kế toán|
+:Ghi sổ nộp tiền, đối chiếu với đơn hàng và phiếu giao hàng;
+if () then ([khớp])
+else ([tiền lệch])
+  :Đối chiếu lại từng phiếu, ghi khoản lệch, báo quản lý;
+endif
+stop
+@enduml

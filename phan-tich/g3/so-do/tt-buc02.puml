@@ -1,0 +1,56 @@
+@startuml tt-buc02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 19
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+skinparam participant {
+  BackgroundColor transparent
+  BorderColor transparent
+}
+hide footbox
+
+sprite $ttv <svg viewBox="0 0 64 64"><path d="M27 4 L33 8 L27 12" fill="none" stroke="black" stroke-width="2.5"/><circle cx="32" cy="34" r="24" fill="white" stroke="black" stroke-width="2.5"/><circle cx="32" cy="22" r="5" fill="none" stroke="black" stroke-width="2.5"/><path d="M32 27 L32 42 M23 32 L41 32 M32 42 L25 51 M32 42 L39 51" fill="none" stroke="black" stroke-width="2.5"/><path d="M42 54 L54 41" fill="none" stroke="black" stroke-width="2.5"/></svg>
+sprite $tt <svg viewBox="0 0 64 64"><circle cx="32" cy="30" r="24" fill="white" stroke="black" stroke-width="2.5"/><path d="M8 56 L56 56" fill="none" stroke="black" stroke-width="2.5"/><path d="M41 51 L53 37" fill="none" stroke="black" stroke-width="2.5"/></svg>
+
+actor "__: Khách__\n__hàng__" as KH
+boundary "__: Nhân viên__\n__bán hàng__" as NV
+participant "<$ttv{scale=0.6}>\n__: Kế toán__" as KT
+participant "<$tt{scale=0.6}>\n__: Thông tin__\n__mẫu máy__" as TT
+participant "<$tt{scale=0.6}>\n__: Chiếc__\n__máy__" as CM
+participant "<$tt{scale=0.6}>\n__: Bảng giá và__\n__khuyến mãi__" as BG
+participant "<$tt{scale=0.6}>\n__: Đơn hàng__" as DH
+
+KH -> NV : 1: Yêu cầu\nmua máy
+activate NV
+NV -> TT ++ : 2: Tra thông số\nmẫu máy()
+deactivate TT
+NV -> KH : 3: Tư vấn\nmẫu máy
+NV -> CM ++ : 4: Kiểm tra\ncòn hàng()
+CM --> NV : 5: Số máy\ncòn trong kho
+deactivate CM
+NV -> KH : 6: [hết hàng]:\nTư vấn mẫu khác
+NV -> BG ++ : 7: Tra giá,\nkhuyến mãi()
+deactivate BG
+NV -> KH : 8: Báo giá, khuyến mãi,\nphí giao, phí lắp
+KH -> NV : 9: Chốt mua, báo họ tên,\nsố điện thoại, địa chỉ,\ngiờ nhận, có lắp không
+NV -> DH ++ : 10: Lập đơn hàng()
+deactivate DH
+NV -> KH : 11: [đơn từ 10 triệu]:\nXin đặt cọc 10–20%
+KH -> NV : 12: [đồng ý]:\nChuyển tiền cọc
+NV -> DH ++ : 13: Ghi số tiền\nđã nhận()
+deactivate DH
+NV -> DH ++ : 14: [không đồng ý cọc]:\nGhi "khách không cọc"()
+deactivate DH
+NV -> KH : 15: Báo mã đơn,\nsố tiền còn lại
+NV -> KT : 16: Chuyển\nđơn hàng
+activate KT
+KT -> DH ++ : 17: Ghi số đã thu,\nsố còn phải thu()
+deactivate DH
+KT --> NV : 18: Đã ghi nhận
+deactivate KT
+NV -> DH ++ : 19: Chuyển sang\ngiao hàng()
+deactivate DH
+deactivate NV
+@enduml

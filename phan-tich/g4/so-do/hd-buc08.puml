@@ -1,0 +1,41 @@
+@startuml hd-buc08
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 18
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 175
+
+partition "Nhân viên giao hàng – kỹ thuật" {
+start
+:Tiếp nhận máy cần lắp, hỏi khách vị trí lắp;
+repeat
+  :Khảo sát chỗ lắp: đo tủ, khoét đá, điện, nước;
+  backward :Hẹn khách buổi lắp khác, báo quản lý xếp lại lịch;
+repeat while () is ([chưa sẵn sàng]) not ([sẵn sàng])
+if () then ([trong danh mục])
+else ([ngoài\ndanh mục])
+  :Báo giá vật tư phát sinh, khách đồng ý;
+endif
+:Lắp máy, đấu nối điện, nước;
+:Chạy thử máy cùng khách;
+if () then ([chạy tốt])
+else ([máy lỗi])
+  :Ghi lỗi vào biên bản, mang máy về đổi;
+  stop
+endif
+:Lập biên bản lắp đặt: máy, serial, kết quả chạy thử;
+:Tính phí lắp, vật tư phát sinh theo bảng giá;
+-[dashed]->
+:Biên bản lắp đặt
+[đã ghi phí]; <<object>>
+-[dashed]->
+:Đưa khách ký biên bản, giao khách một bản;
+-[dashed]->
+:Biên bản lắp đặt
+[khách đã ký]; <<object>>
+-[dashed]->
+:Thu phí lắp, vật tư, hướng dẫn khách dùng máy;
+stop
+}
+@enduml

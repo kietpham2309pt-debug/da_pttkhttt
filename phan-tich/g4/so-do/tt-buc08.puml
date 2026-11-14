@@ -1,0 +1,46 @@
+@startuml tt-buc08
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 19
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+skinparam participant {
+  BackgroundColor transparent
+  BorderColor transparent
+}
+hide footbox
+
+sprite $ttv <svg viewBox="0 0 64 64"><path d="M27 4 L33 8 L27 12" fill="none" stroke="black" stroke-width="2.5"/><circle cx="32" cy="34" r="24" fill="white" stroke="black" stroke-width="2.5"/><circle cx="32" cy="22" r="5" fill="none" stroke="black" stroke-width="2.5"/><path d="M32 27 L32 42 M23 32 L41 32 M32 42 L25 51 M32 42 L39 51" fill="none" stroke="black" stroke-width="2.5"/><path d="M42 54 L54 41" fill="none" stroke="black" stroke-width="2.5"/></svg>
+sprite $tt <svg viewBox="0 0 64 64"><circle cx="32" cy="30" r="24" fill="white" stroke="black" stroke-width="2.5"/><path d="M8 56 L56 56" fill="none" stroke="black" stroke-width="2.5"/><path d="M41 51 L53 37" fill="none" stroke="black" stroke-width="2.5"/></svg>
+
+actor "__: Khách__\n__hàng__" as KH
+boundary "__: Nhân viên__\n__giao hàng –__\n__kỹ thuật__" as NVGH
+participant "<$tt{scale=0.6}>\n__: Chiếc__\n__máy__" as CM
+participant "<$tt{scale=0.6}>\n__: Bảng giá__\n__công lắp__\n__và vật tư__" as BG
+participant "<$tt{scale=0.6}>\n__: Biên bản__\n__lắp đặt__" as BB
+
+NVGH -> KH : 1: Hỏi vị trí lắp
+activate NVGH
+KH --> NVGH : 2: Chỉ vị trí lắp
+NVGH -> NVGH : 3: Khảo sát tủ, khoét\nđá, điện, nước()
+NVGH -> KH : 4: [chưa sẵn sàng]:\nHẹn buổi lắp khác
+NVGH -> KH : 5: [ngoài danh mục]:\nBáo giá vật tư phát sinh
+KH --> NVGH : 6: Đồng ý báo giá
+NVGH -> CM ++ : 7: Lắp máy,\nđấu nối()
+deactivate CM
+NVGH -> CM ++ : 8: Chạy thử()
+CM --> NVGH : 9: Kết quả\nchạy thử
+deactivate CM
+NVGH -> BB ++ : 10: Lập biên bản\nlắp đặt()
+deactivate BB
+NVGH -> BG ++ : 11: Tra phí lắp,\nvật tư()
+deactivate BG
+NVGH -> BB ++ : 12: Ghi phí\nphát sinh()
+deactivate BB
+NVGH -> KH : 13: Đưa ký\nbiên bản
+KH --> NVGH : 14: Biên bản đã ký
+NVGH -> KH : 15: Thu phí lắp, vật tư,\nhướng dẫn dùng máy
+KH --> NVGH : 16: Tiền phí lắp,\nvật tư
+deactivate NVGH
+@enduml

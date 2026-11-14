@@ -13,6 +13,7 @@ actor "Nhân viên\nbán hàng" as NVBH
 actor "Thủ kho" as TK
 actor "Nhân viên giao hàng\n– kỹ thuật" as NVGH
 actor "Quản lý\ncửa hàng" as QL
+actor "Kế toán" as KT
 actor "Quản trị\nhệ thống" as QTHT
 actor "Cổng thanh toán" as CTT <<hệ thống ngoài>>
 
@@ -21,5 +22,6 @@ NVBH -up-|> NV
 TK -up-|> NV
 NVGH -up-|> NV
 QL -up-|> NV
+KT -up-|> NV
 QTHT -up-|> NV
 @enduml

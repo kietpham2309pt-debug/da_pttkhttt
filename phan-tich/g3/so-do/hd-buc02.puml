@@ -1,0 +1,58 @@
+@startuml hd-buc02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 18
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 280
+
+|Nhân viên bán hàng|
+start
+:Tiếp nhận yêu cầu mua máy;
+:Tư vấn mẫu máy theo nhu cầu;
+repeat
+  :Kiểm tra mẫu máy còn hàng;
+  backward :Báo ngày có hàng, tư vấn mẫu khác;
+repeat while () is ([hết hàng]) not ([còn hàng])
+:Báo giá, khuyến mãi, phí giao lắp;
+if () then ([mua mang về])
+  :Lập hoá đơn, phiếu bảo hành có số serial;
+  -[dashed]->
+  :Hoá đơn bán hàng; <<object>>
+  -[dashed]->
+  :Thu tiền, giao máy, nộp kế toán;
+  stop
+else ([cần giao hàng])
+endif
+:Lập đơn hàng;
+-[dashed]->
+:Đơn hàng; <<object>>
+-[dashed]->
+:Thống nhất cách trả tiền, xin cọc;
+if () then ([có tiền cọc hoặc trả trước])
+  :Nhận tiền, ghi số tiền vào đơn hàng;
+else ([không trả trước])
+  if () then ([không đồng ý cọc])
+    :Ghi "khách không cọc" vào đơn hàng;
+  else ([đơn dưới 10 triệu])
+  endif
+endif
+:Báo khách mã đơn, số tiền còn lại;
+-[dashed]->
+:Đơn hàng
+[đã ghi cách trả tiền]; <<object>>
+-[dashed]->
+|Kế toán|
+:Đối chiếu tiền, ghi số đã thu và số còn phải thu;
+|Nhân viên bán hàng|
+:Chuyển đơn sang khâu giao hàng;
+if () then ([khách huỷ đơn])
+  :Ghi lý do huỷ, báo kế toán;
+  |Kế toán|
+  :Hoàn cọc, trừ phí nếu đã xuất kho;
+  stop
+else ([khách giữ đơn])
+endif
+|Nhân viên bán hàng|
+stop
+@enduml

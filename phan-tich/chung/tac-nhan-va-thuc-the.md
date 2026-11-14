@@ -132,23 +132,19 @@ nên thừa tác viên ở mục 2 (người làm việc trong cửa hàng) tr�
 
 | Tác nhân | Kế thừa từ | Làm được gì (tóm tắt) | Gói có use case |
 |---|---|---|---|
-| Khách vãng lai | | Xem, tìm, so sánh sản phẩm; quản lý giỏ hàng; đăng ký; tra cứu bảo hành | G2, G3, G5 |
-| Khách hàng | Khách vãng lai | Đăng nhập, đặt hàng, áp mã giảm giá, thanh toán, theo dõi và huỷ đơn, quản lý hồ sơ, đánh giá sản phẩm | G1, G2, G3 |
+| Khách vãng lai | | Xem, tìm, so sánh sản phẩm; quản lý giỏ hàng; đặt hàng, áp mã giảm giá, thanh toán; theo dõi và huỷ đơn bằng số điện thoại kèm mã đơn; đăng ký; tra cứu bảo hành | G2, G3, G5 |
+| Khách hàng | Khách vãng lai | Đăng nhập, quản lý hồ sơ và sổ địa chỉ, xem lại đơn cũ, đánh giá sản phẩm | G1, G2, G3 |
 | Nhân viên (trừu tượng) | | Đăng nhập, đổi mật khẩu | G1 |
 | Nhân viên bán hàng | Nhân viên | Cập nhật sản phẩm, duyệt đơn, cập nhật đơn gửi đơn vị vận chuyển, tiếp nhận đổi trả, tiếp nhận bảo hành | G2, G4, G5 |
 | Thủ kho | Nhân viên | Quản lý nhà cung cấp, nhập kho, xuất kho, nhận lại máy, kiểm kê | G5 |
 | Nhân viên giao hàng – kỹ thuật | Nhân viên | Cập nhật trạng thái giao, lập biên bản lắp đặt | G4 |
-| Quản lý cửa hàng | Nhân viên | Danh mục, giá, khuyến mãi, phân công giao lắp, xác nhận tiền thu khi giao, duyệt đổi trả, xem báo cáo | G1, G2, G4 |
+| Quản lý cửa hàng | Nhân viên | Danh mục, giá, khuyến mãi, phân công giao lắp, duyệt đổi trả, xem báo cáo | G1, G2, G4 |
+| Kế toán | Nhân viên | Xác nhận tiền thu khi giao, xem báo cáo doanh thu | G1, G4 |
 | Quản trị hệ thống | Nhân viên | Tài khoản nhân viên, phân quyền | G1 |
 | Cổng thanh toán | | Hệ thống bên ngoài nhận tiền trực tuyến | G3 |
 
-**Kế toán và Chủ cửa hàng** không có tác nhân riêng trên website: họ dùng tài khoản có vai **Quản lý cửa hàng**
-(xác nhận tiền thu khi giao, xem báo cáo).
-**Đề xuất chốt ở họp t112:** cửa hàng giả định có kế toán riêng làm nhiều việc trên hệ thống (nhận tiền thu khi giao, đối soát, ghép báo cáo: `MP2 A4`, `D5`; `MP3 A2`, `D5`),
-trong khi YC-SP-09 chỉ cho Quản lý sửa giá. Nên thêm tác nhân **Kế toán** kế thừa Nhân viên, nối UC-DH-04 Xác nhận tiền thu khi giao và UC-HT-04 Xem báo cáo doanh thu, rồi vẽ lại sơ đồ tác nhân hệ thống.
-Cùng buổi chốt luôn chủ có cần tài khoản riêng để duyệt giá, đơn đặt hàng trên website không (hiện YC-SP-09 chỉ bắt ghi lý do và lưu vết).
-
-**G3 quyết khi vẽ sơ đồ use case phân hệ (t102):** khách vãng lai có được đặt hàng chỉ bằng số điện thoại hay không.
-Theo cửa hàng giả định nên **cho phép**: YC-MH-01 ưu tiên Cao, MediaMart không bắt tạo tài khoản (TL-18), 3/10 vai khách mô phỏng chỉ muốn nhập số điện thoại (`MK K11`).
-Nếu cho phép thì UC-MH-04, UC-MH-06, UC-MH-07 nối với Khách vãng lai, và `DonHang` thêm `hoTenNguoiDat`, `soDienThoaiNguoiDat`
-(bắt buộc khi đơn không gắn `KhachHang`), để vẫn tra được đơn và bảo hành theo số điện thoại người mua.
+**Chốt 14/10/2026:**
+- Thêm tác nhân **Kế toán** kế thừa Nhân viên: cửa hàng giả định có kế toán riêng nhận và đối chiếu tiền thu khi giao, ghép báo cáo (`MP2 A4`, `D5`; `MP3 A2`, `D5`). Kế toán là tác nhân của UC-DH-04 Xác nhận tiền thu khi giao và dùng chung UC-HT-04 Xem báo cáo doanh thu với Quản lý cửa hàng.
+- **Chủ cửa hàng** không có tác nhân riêng: dùng tài khoản vai Quản lý cửa hàng để xem báo cáo. Việc chủ duyệt giá nằm ngoài website; YC-SP-09 chỉ bắt ghi lý do và lưu vết khi giá dưới giá nhập.
+- **Khách vãng lai được đặt hàng** chỉ với họ tên, số điện thoại, địa chỉ (YC-MH-01; MediaMart không bắt tạo tài khoản, TL-18; 3/10 vai khách mô phỏng chỉ muốn nhập số điện thoại, `MK K11`).
+  UC-MH-04, UC-MH-06, UC-MH-07, UC-MH-08 nối với Khách vãng lai; Khách hàng kế thừa nên cũng dùng được. `DonHang` lưu `hoTenNguoiNhan`, `soDienThoaiNhan` (đã có trong `lop-va-trang-thai-chung.md`) để tra đơn và bảo hành theo số điện thoại người mua.

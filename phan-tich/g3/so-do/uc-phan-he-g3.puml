@@ -1,0 +1,37 @@
+@startuml uc-phan-he-g3
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam packageStyle rectangle
+left to right direction
+
+actor "Khách vãng lai" as KVL
+actor "Khách hàng" as KH
+actor "Cổng thanh toán" as CTT
+
+KH -|> KVL
+
+rectangle "Phân hệ G3 · Mua hàng trực tuyến và thanh toán" {
+  usecase "Đăng ký tài khoản\nkhách hàng" as MH1
+  usecase "Quản lý hồ sơ,\nsổ địa chỉ" as MH2
+  usecase "Quản lý giỏ hàng" as MH3
+  usecase "Đặt hàng" as MH4
+  usecase "Áp mã giảm giá" as MH8
+  usecase "Thanh toán\ntrực tuyến" as MH5
+  usecase "Theo dõi đơn hàng" as MH6
+  usecase "Huỷ đơn hàng" as MH7
+}
+
+KVL -- MH1
+KVL -- MH3
+KVL -- MH4
+KVL -- MH5
+KVL -- MH6
+KVL -- MH7
+KH -- MH2
+MH8 .> MH4 : <U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><U+00A0><<extend>>
+MH5 --- CTT
+@enduml

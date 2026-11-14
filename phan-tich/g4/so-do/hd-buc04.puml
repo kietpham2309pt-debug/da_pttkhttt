@@ -1,0 +1,57 @@
+@startuml hd-buc04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 18
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 200
+
+|Nhân viên bán hàng|
+start
+:Tiếp nhận yêu cầu, ghi phiếu đổi trả;
+:Thực hiện use case Kiểm tra máy theo số serial;
+-[dashed]->
+:Phiếu đổi trả
+[chờ duyệt]; <<object>>
+-[dashed]->
+|Quản lý cửa hàng|
+:Xét yêu cầu theo quy định đổi trả;
+if () then ([thường])
+else ([ngoại lệ])
+  :Xin ý kiến chủ cửa hàng;
+endif
+if () then ([nhận lại])
+else ([từ chối])
+  :Ghi lý do từ chối lên phiếu;
+  |Nhân viên bán hàng|
+  :Báo khách, hướng dẫn bảo hành nếu lỗi do hãng;
+  stop
+endif
+|Quản lý cửa hàng|
+:Duyệt, ghi hướng xử lý và phí khấu trừ;
+-[dashed]->
+:Phiếu đổi trả
+[đã duyệt]; <<object>>
+-[dashed]->
+|Nhân viên bán hàng|
+:Báo kết quả, nhận lại máy, hoá đơn, phụ kiện;
+|Thủ kho|
+:Nhận máy về kho, đối chiếu serial, ghi tình trạng;
+if () then ([máy tốt])
+  :Nhập lại kho;
+else ([máy lỗi])
+  :Để riêng chờ gửi hãng;
+endif
+if () then ([đổi máy])
+  :Xuất máy mới, lập phiếu xuất kho;
+  -[dashed]->
+  :Phiếu xuất kho; <<object>>
+  -[dashed]->
+else ([trả hàng])
+  |Kế toán|
+  :Hoàn tiền theo cách khách đã trả;
+endif
+|Nhân viên bán hàng|
+:Giao máy mới hoặc báo đã hoàn tiền, khách ký phiếu;
+stop
+@enduml

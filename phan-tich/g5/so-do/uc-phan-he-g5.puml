@@ -1,0 +1,39 @@
+@startuml uc-phan-he-g5
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam packageStyle rectangle
+left to right direction
+
+actor "Thủ kho" as TK
+actor "Nhân viên\nbán hàng" as NVBH
+actor "Khách vãng lai" as KVL
+actor "Khách hàng" as KH
+
+
+rectangle "Phân hệ kho, nhà cung cấp, bảo hành (G5)" {
+  usecase "UC-KB-01\nQuản lý nhà cung cấp" as KB1
+  usecase "UC-KB-02\nLập đơn đặt hàng\nnhà cung cấp" as KB2
+  usecase "UC-KB-03\nLập phiếu nhập kho,\nghi số serial" as KB3
+  usecase "UC-KB-04\nLập phiếu xuất kho\ntheo đơn" as KB4
+  usecase "UC-KB-05\nKiểm kê,\ncảnh báo tồn thấp" as KB5
+  usecase "UC-KB-08\nNhận lại máy về kho" as KB8
+  usecase "UC-KB-06\nTiếp nhận bảo hành" as KB6
+  usecase "UC-KB-07\nTra cứu bảo hành" as KB7
+}
+
+TK -- KB1
+TK -- KB2
+TK -- KB3
+TK -- KB4
+TK -- KB5
+TK -- KB8
+TK -- KB6
+NVBH -- KB6
+KB7 -- KVL
+KVL <|-- KH
+KB6 ..> KB7 : <<include>>
+@enduml

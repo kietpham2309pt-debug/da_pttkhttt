@@ -97,7 +97,7 @@ Cột **Ưu tiên** xét theo điều người bán mô phỏng muốn có (`MP2
 |---|---|---|---|---|---|
 | 1 | YC-HT-01 | Nhân viên đăng nhập; mỗi vai chỉ thấy chức năng của vai mình, một người được kiêm nhiều vai | MP3 A2, A3; MP2 A2, A3 | UC-HT-01, UC-HT-03 | Cao |
 | 2 | YC-HT-02 | Quản lý tài khoản nhân viên: thêm, khoá, gán vai | MP3 A2 | UC-HT-02 | Cao |
-| 3 | YC-HT-03 | Báo cáo doanh thu theo ngày, tháng, nhóm hàng, kênh bán; dùng được cho tự kê khai thuế của hộ kinh doanh | MP2 A4; TL-27 | UC-HT-04 | Cao |
+| 3 | YC-HT-03 | Báo cáo doanh thu theo ngày, tháng, nhóm hàng; dùng được cho tự kê khai thuế của hộ kinh doanh | MP2 A4; TL-27 | UC-HT-04 | Cao |
 | 4 | YC-HT-04 | Báo cáo nhập – xuất – tồn theo mẫu máy (dạng sổ S2d-HKD) và báo cáo máy đang bảo hành | MP2 A4, E3; MP3 A4; TL-30 | UC-HT-05 | Trung bình |
 | 5 | YC-HT-05 | Lưu vết ai sửa giá, ai đổi trạng thái đơn, ai xuất kho, lúc nào | MP2 A5; MP3 A5 | UC-SP-03, UC-DH-03 | Cao |
 | 6 | YC-HT-06 | Trang thông tin cửa hàng (tên, địa chỉ, mã số thuế, điện thoại) và bộ trang chính sách (giá, giao hàng, đổi trả, bảo hành, thanh toán, bảo mật, khiếu nại); liên kết đặt ở chân trang mọi màn hình | TL-20 Đ11; TL-21 | Chưa có (đề xuất) | Cao |
@@ -144,7 +144,7 @@ Cột **Ưu tiên** xét theo điều người bán mô phỏng muốn có (`MP2
 | 32 | YC-DH-03 | Phí giao tính theo ngưỡng giá trị đơn và khoảng cách (G4 đặt mức phí), hiện cho khách trước khi đặt (G3) | MP2 D2, D3; TL-01, TL-07, TL-11, TL-14; MK K17 | UC-MH-04 | Trung bình |
 | 33 | YC-DH-04 | Cập nhật trạng thái giao: đang giao, đã giao, giao không thành công (kèm lý do) | MP2 C6, C7, D3 | UC-DH-03 | Cao |
 | 34 | YC-DH-05 | Biên bản lắp đặt ghi máy và serial, kết quả chạy thử, công lắp và vật tư phát sinh theo bảng giá, khách ký xác nhận | MP3 D2; MP2 D2; TL-01, TL-08, TL-14 | UC-DH-05 | Trung bình |
-| 35 | YC-DH-06 | Ghi tiền thu khi giao theo từng đơn, kế toán xác nhận trong ngày (trên website dùng tài khoản vai Quản lý cho tới khi chốt tác nhân Kế toán ở t112); đơn đã giao thì sinh yêu cầu lập hoá đơn dù chưa thu tiền | MP2 D5; MP3 D5; TL-26 | UC-DH-04 | Cao |
+| 35 | YC-DH-06 | Ghi tiền thu khi giao theo từng đơn, kế toán xác nhận trong ngày; đơn đã giao thì sinh yêu cầu lập hoá đơn dù chưa thu tiền | MP2 D5; MP3 D5; TL-26 | UC-DH-04 | Cao |
 | 36 | YC-DH-07 | Yêu cầu đổi trả ghi loại lý do (lỗi nhà sản xuất, không đúng mô tả, đổi ý), phí khấu trừ, người duyệt; lý do "không đúng mô tả" thì bắt buộc nhận lại | MP2 D4; MP3 D4; TL-03, TL-12, TL-15, TL-20 Đ16 | UC-DH-06 | Cao |
 | 37 | YC-DH-08 | Hoàn tiền theo cách khách đã trả (luật bắt buộc khi khách chấm dứt hợp đồng vì thông tin thiếu hoặc sai; trường hợp khác theo chính sách cửa hàng) | TL-03; TL-22 Đ38 k3, k4 | UC-DH-06 | Trung bình |
 

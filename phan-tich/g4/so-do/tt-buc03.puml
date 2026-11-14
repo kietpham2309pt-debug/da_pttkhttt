@@ -1,0 +1,74 @@
+@startuml tt-buc03
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 19
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+skinparam participant {
+  BackgroundColor transparent
+  BorderColor transparent
+}
+hide footbox
+
+sprite $ttv <svg viewBox="0 0 64 64"><path d="M27 4 L33 8 L27 12" fill="none" stroke="black" stroke-width="2.5"/><circle cx="32" cy="34" r="24" fill="white" stroke="black" stroke-width="2.5"/><circle cx="32" cy="22" r="5" fill="none" stroke="black" stroke-width="2.5"/><path d="M32 27 L32 42 M23 32 L41 32 M32 42 L25 51 M32 42 L39 51" fill="none" stroke="black" stroke-width="2.5"/><path d="M42 54 L54 41" fill="none" stroke="black" stroke-width="2.5"/></svg>
+sprite $tt <svg viewBox="0 0 64 64"><circle cx="32" cy="30" r="24" fill="white" stroke="black" stroke-width="2.5"/><path d="M8 56 L56 56" fill="none" stroke="black" stroke-width="2.5"/><path d="M41 51 L53 37" fill="none" stroke="black" stroke-width="2.5"/></svg>
+
+actor "__: Khách__\n__hàng__" as KH
+boundary "__: Nhân viên__\n__bán hàng__" as NVBH
+boundary "__: Quản lý__\n__cửa hàng__" as QL
+boundary "__: Thủ kho__" as TK
+boundary "__: Nhân viên__\n__giao hàng –__\n__kỹ thuật__" as NVGH
+participant "<$ttv{scale=0.6}>\n__: Kế toán__" as KT
+participant "<$tt{scale=0.6}>\n__: Đơn hàng__" as DH
+participant "<$tt{scale=0.6}>\n__: Phiếu__\n__giao hàng__" as PGH
+participant "<$tt{scale=0.6}>\n__: Phiếu__\n__xuất kho__" as PXK
+participant "<$tt{scale=0.6}>\n__: Chiếc__\n__máy__" as CM
+participant "<$tt{scale=0.6}>\n__: Sổ nộp__\n__tiền__" as SNT
+
+KH -> NVBH : 1: Chốt\nđơn hàng
+activate NVBH
+NVBH -> KH : 2: Gọi xác\nnhận trong\n30 phút
+KH --> NVBH : 3: Xác nhận,\ngiờ muốn\nnhận
+NVBH -> DH ++ : 4: Ghi đã\nxác nhận()
+deactivate DH
+NVBH -> QL : 5: Chuyển\nđơn xếp lịch
+activate QL
+QL -> PGH ++ : 6: Xếp lịch,\nphân công()
+deactivate PGH
+QL -> PGH ++ : 7: [trùng lịch]:\nĐổi người hoặc\nkhung giờ()
+deactivate PGH
+QL --> NVBH : 8: Lịch giao\nđã xếp
+deactivate QL
+NVBH -> KH : 9: Hẹn ngày,\ngiờ giao
+NVBH -> TK : 10: Báo\nsoạn hàng
+deactivate NVBH
+activate TK
+TK -> CM ++ : 11: Chọn máy\ntheo đơn()
+deactivate CM
+TK -> PXK ++ : 12: Lập phiếu xuất,\nghi serial()
+deactivate PXK
+TK -> NVGH : 13: Giao máy,\nphiếu xuất\nkho
+deactivate TK
+activate NVGH
+NVGH -> PXK ++ : 14: Đối chiếu\nserial()
+deactivate PXK
+NVGH -> KH : 15: Giao máy\ntheo giờ hẹn
+KH --> NVGH : 16: Phiếu giao\nhàng đã ký
+NVGH -> PGH ++ : 17: Ghi khách\nđã nhận()
+deactivate PGH
+NVGH -> KH : 18: [máy cần lắp]:\nLắp đặt tận nơi
+NVGH -> KH : 19: Giao hoá đơn,\nphiếu bảo hành
+KH --> NVGH : 20: Tiền còn lại\ncủa đơn
+NVGH -> KT : 21: Nộp tiền,\nphiếu giao\nhàng
+deactivate NVGH
+activate KT
+KT -> SNT ++ : 22: Ghi tiền nộp()
+deactivate SNT
+KT -> DH ++ : 23: Đối chiếu\nvới đơn()
+deactivate DH
+KT -> SNT ++ : 24: [tiền lệch]:\nGhi khoản lệch()
+deactivate SNT
+KT --> NVGH : 25: Xác nhận\nđã nhận\ntiền
+deactivate KT
+@enduml

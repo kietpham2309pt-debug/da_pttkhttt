@@ -1,0 +1,63 @@
+@startuml tt-buc05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 19
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+skinparam participant {
+  BackgroundColor transparent
+  BorderColor transparent
+}
+hide footbox
+
+sprite $ttv <svg viewBox="0 0 64 64"><path d="M27 4 L33 8 L27 12" fill="none" stroke="black" stroke-width="2.5"/><circle cx="32" cy="34" r="24" fill="white" stroke="black" stroke-width="2.5"/><circle cx="32" cy="22" r="5" fill="none" stroke="black" stroke-width="2.5"/><path d="M32 27 L32 42 M23 32 L41 32 M32 42 L25 51 M32 42 L39 51" fill="none" stroke="black" stroke-width="2.5"/><path d="M42 54 L54 41" fill="none" stroke="black" stroke-width="2.5"/></svg>
+sprite $tt <svg viewBox="0 0 64 64"><circle cx="32" cy="30" r="24" fill="white" stroke="black" stroke-width="2.5"/><path d="M8 56 L56 56" fill="none" stroke="black" stroke-width="2.5"/><path d="M41 51 L53 37" fill="none" stroke="black" stroke-width="2.5"/></svg>
+
+actor "__: Chủ__\n__cửa hàng__" as CCH
+boundary "__: Quản lý__\n__cửa hàng__" as QL
+boundary "__: Thủ kho__" as TK
+participant "<$ttv{scale=0.6}>\n__: Kế toán__" as KT
+participant "<$tt{scale=0.6}>\n__: Đơn đặt hàng__\n__nhà cung cấp__" as DDH
+participant "<$tt{scale=0.6}>\n__: Hoá đơn__\n__nhà cung cấp__" as HD
+participant "<$tt{scale=0.6}>\n__: Chiếc__\n__máy__" as CM
+participant "<$tt{scale=0.6}>\n__: Phiếu__\n__nhập kho__" as PN
+actor "__: Nhà__\n__cung cấp__" as NCC
+
+activate TK
+TK -> DDH ++ : 1: Lập đơn\nđặt hàng()
+deactivate DDH
+TK -> QL : 2: Gửi đơn\nđặt hàng
+deactivate TK
+activate QL
+QL -> DDH ++ : 3: Chỉnh số lượng,\nnhà cung cấp()
+deactivate DDH
+QL -> CCH : 4: Xin duyệt\nđơn đặt hàng
+CCH -> QL : 5: [chưa đồng ý]:\nYêu cầu sửa đơn
+QL -> DDH ++ : 6: Sửa đơn()
+deactivate DDH
+QL -> CCH : 7: Xin duyệt lại
+CCH -> QL : 8: [đồng ý]:\nDuyệt đơn
+QL -> NCC : 9: Gửi đơn đặt hàng
+QL -> TK : 10: Báo ngày\ngiao dự kiến
+deactivate QL
+NCC -> TK : 11: Giao hàng\nkèm hoá đơn
+activate TK
+TK -> HD ++ : 12: Đối chiếu\nsố lượng()
+deactivate HD
+TK -> CM ++ : 13: Kiểm thùng,\nbật thử()
+deactivate CM
+TK -> NCC : 14: [thiếu, hư]:\nTrả máy hư,\nbáo giao bù
+TK -> CM ++ : 15: Ghi số serial()
+deactivate CM
+TK -> PN ++ : 16: Lập phiếu\nnhập kho()
+deactivate PN
+TK -> KT : 17: Chuyển phiếu nhập\nvà hoá đơn
+deactivate TK
+activate KT
+KT -> PN ++ : 18: Lấy số\nthực nhập()
+deactivate PN
+KT -> HD ++ : 19: Đối chiếu\nsố tiền()
+deactivate HD
+KT -> KT : 20: Ghi công nợ\nnhà cung cấp()
+@enduml

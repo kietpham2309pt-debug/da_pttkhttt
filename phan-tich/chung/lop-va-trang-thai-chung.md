@@ -25,7 +25,7 @@ Thuộc tính ghi ở mức phân tích; cột **Kiểu gợi ý** để dùng l
 | Lớp | Thuộc tính | Ghi chú |
 |---|---|---|
 | `TaiKhoan` | tenDangNhap, matKhau (đã băm), trangThai (Đang dùng, Đã khoá), ngayTao, soLanSaiLienTiep, khoaDenLuc, phaiDoiMatKhau | Ba thuộc tính cuối phục vụ quy tắc của UC-HT-01 (khoá 15 phút sau 5 lần sai, đổi mật khẩu lần đầu) |
-| `VaiTro` | maVaiTro, tenVaiTro | Khách hàng, Nhân viên bán hàng, Thủ kho, Nhân viên giao hàng – kỹ thuật, Quản lý cửa hàng, Quản trị hệ thống. Một tài khoản có **nhiều vai** vì cửa hàng nhỏ một người kiêm nhiều việc |
+| `VaiTro` | maVaiTro, tenVaiTro | Khách hàng, Nhân viên bán hàng, Thủ kho, Nhân viên giao hàng – kỹ thuật, Quản lý cửa hàng, Kế toán, Quản trị hệ thống. Một tài khoản có **nhiều vai** vì cửa hàng nhỏ một người kiêm nhiều việc |
 | `NhanVien` | maNhanVien, hoTen, soDienThoai | |
 
 ### G2 sở hữu: `DanhMuc`, `ThuongHieu`, `SanPham`, `KhuyenMai`
