@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Kết quả thanh toán')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section th:replace="~{khach/manh :: hero('/assets/img/banner-gio-hang.jpg', 'Kết quả thanh toán', 'Kết quả do cổng thanh toán (mô phỏng) gửi về.')}"></section>
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+            <div class="kh-the">
+                <h2 th:class="${thanhCong} ? 'kh-chu-xanh' : 'kh-chu-do'" th:text="${thanhCong} ? 'Thanh toán thành công' : 'Thanh toán không thành công'">Kết quả</h2>
+                <dl class="kh-thong-tin">
+                    <dt>Mã đơn</dt><dd th:text="${@dd.maDon(don.maDonHang)}">DH</dd>
+                    <dt>Mã giao dịch</dt><dd th:text="${gd.maGiaoDichCong}">MOCK</dd>
+                    <dt>Loại</dt><dd th:text="${gd.loai.nhan}">Loại</dd>
+                    <dt>Cách trả</dt><dd th:text="${gd.phuongThuc}">Cách</dd>
+                    <dt th:text="${thanhCong} ? 'Số tiền đã trả' : 'Số tiền'">Số tiền</dt><dd th:text="${@dd.tien(gd.soTien)}">0</dd>
+                    <dt>Thời điểm</dt><dd th:text="${@dd.ngayGio(gd.thoiDiem)}">thời điểm</dd>
+                    <dt>Còn phải trả khi nhận hàng</dt><dd th:text="${@dd.tien(tt.conLai)}">0</dd>
+                    <dt>Trạng thái thanh toán</dt><dd th:text="${don.trangThaiThanhToan.nhan}">TT</dd>
+                </dl>
+                <p class="goi-y" th:if="${thanhCong and don.email != null}" th:text="|Xác nhận thanh toán sẽ gửi tới ${don.email}.|">email</p>
+                <p class="chu-phu" th:unless="${thanhCong}">Đơn hàng giữ nguyên, chưa bị trừ tiền. Bạn thử thanh toán lại<th:block th:if="${don.tienCoc == 0}"> hoặc đổi sang trả tiền mặt khi nhận hàng</th:block>.</p>
+                <div class="kh-dong-nut">
+                    <a class="nut nut--dac" th:if="${!thanhCong and tt.coTheThanhToan}" th:href="@{/thanh-toan/{m}(m=${don.maDonHang})}">Thử thanh toán lại</a>
+                    <form method="post" th:action="@{/thanh-toan/{m}/tien-mat(m=${don.maDonHang})}" th:if="${!thanhCong and don.tienCoc == 0 and tt.daTra == 0}">
+                        <button type="submit" class="nut">Đổi sang tiền mặt khi nhận</button>
+                    </form>
+                    <a class="nut" th:href="@{/tra-cuu-don/{m}(m=${don.maDonHang})}">Xem đơn hàng</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

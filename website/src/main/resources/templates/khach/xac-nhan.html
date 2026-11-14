@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Xác nhận đơn hàng')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section th:replace="~{khach/manh :: hero('/assets/img/banner-gio-hang.jpg', 'Xác nhận đơn hàng', 'Xem lại toàn bộ đơn trước khi đặt. Bạn sửa được thông tin hoặc giỏ hàng.')}"></section>
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+            <form method="post" th:action="@{/dat-hang/xac-nhan}">
+                <input type="hidden" name="maLuot" th:value="${maLuot}">
+                <input type="hidden" name="tongDaXem" th:value="${bang.tongTien}">
+                <div class="gio__bo-cuc">
+                    <div class="gio__ds">
+                        <div class="kh-the">
+                            <h2>Người nhận và địa chỉ</h2>
+                            <dl class="kh-thong-tin">
+                                <dt>Họ tên</dt><dd th:text="${phieu.hoTen}">Tên</dd>
+                                <dt>Số điện thoại</dt><dd th:text="${phieu.soDienThoai}">SĐT</dd>
+                                <dt>Email</dt><dd th:text="${phieu.email != null and !phieu.email.isBlank()} ? ${phieu.email} : 'Không có'">Email</dd>
+                                <dt>Giao tới</dt><dd th:text="${diaChiDayDu}">Địa chỉ</dd>
+                                <dt>Khu vực</dt><dd th:text="${bang.noiThanh} ? 'Nội thành – cửa hàng tự giao' : 'Đi tỉnh – gửi đơn vị vận chuyển, không lắp đặt'">Khu vực</dd>
+                                <dt>Thời hạn giao dự kiến</dt><dd th:text="${bang.noiThanh} ? '1 – 2 ngày sau khi nhân viên gọi xác nhận' : '3 – 5 ngày sau khi nhân viên gọi xác nhận'">Thời hạn</dd>
+                                <dt>Cách thanh toán</dt><dd th:text="${phieu.phuongThucEnum().nhan}">Cách</dd>
+                                <dt th:if="${phieu.ghiChu != null and !phieu.ghiChu.isBlank()}">Ghi chú</dt>
+                                <dd th:if="${phieu.ghiChu != null and !phieu.ghiChu.isBlank()}" th:text="${phieu.ghiChu}">Ghi chú</dd>
+                            </dl>
+                            <p class="kh-dong-nut"><a class="nut nut--nho" href="/dat-hang">Sửa thông tin nhận hàng</a></p>
+                        </div>
+                        <div class="kh-the">
+                            <h2>Sản phẩm</h2>
+                            <div class="cuon-ngang">
+                                <table class="bang-dl">
+                                    <thead>
+                                    <tr><th scope="col">Mẫu máy</th><th scope="col">Đơn giá</th><th scope="col">SL</th><th scope="col">Khuyến mãi</th><th scope="col">Lắp đặt</th><th scope="col">Thành tiền</th></tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="d : ${bang.dong}">
+                                        <td data-nhan="Mẫu máy" th:text="${d.the.ten}">Tên</td>
+                                        <td data-nhan="Đơn giá" th:text="${@dd.tien(d.donGia)}">0</td>
+                                        <td data-nhan="SL" th:text="${d.soLuong}">1</td>
+                                        <td data-nhan="Khuyến mãi" th:text="${d.giam > 0} ? |-${@dd.tien(d.giam)}| : '—'">—</td>
+                                        <td data-nhan="Lắp đặt" th:text="${!d.canLap} ? 'Không cần' : (${d.lapDat and bang.noiThanh} ? 'Có' : 'Không')">Có</td>
+                                        <td data-nhan="Thành tiền" th:text="${@dd.tien(d.thanhTien)}">0</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="kh-dong-nut"><a class="nut nut--nho" href="/gio-hang">Sửa giỏ hàng</a></p>
+                        </div>
+                        <div class="kh-the">
+                            <h2>Đồng ý</h2>
+                            <label class="kh-o-tich">
+                                <input type="checkbox" name="dongYDieuKien" value="true">
+                                <span>Tôi đồng ý với <a href="/chinh-sach/dieu-khoan" target="_blank">điều kiện giao dịch</a> của Bep Nè (bắt buộc).</span>
+                            </label>
+                            <label class="kh-o-tich">
+                                <input type="checkbox" name="dongYXuLyDuLieu" value="true">
+                                <span>Tôi đồng ý cho Bep Nè dùng họ tên, số điện thoại, địa chỉ để <b>giao hàng, lắp đặt và bảo hành</b> theo
+                                    <a href="/chinh-sach/bao-mat" target="_blank">Chính sách bảo mật</a> (bắt buộc).</span>
+                            </label>
+                            <label class="kh-o-tich">
+                                <input type="checkbox" name="dongYQuangCao" value="true" th:checked="${dongYQuangCao == true}">
+                                <span>Tôi muốn nhận tin khuyến mãi qua điện thoại, email (không bắt buộc, bỏ lúc nào cũng được).</span>
+                            </label>
+                        </div>
+                    </div>
+                    <aside class="tong" aria-label="Tổng tiền">
+                        <h2>Thanh toán</h2>
+                        <dl class="tong__ds">
+                            <div><dt th:text="|Tiền hàng (${bang.soMon} món)|">Tiền hàng</dt><dd th:text="${@dd.tien(bang.tienHang)}">0</dd></div>
+                            <div th:if="${bang.giamSanPham > 0}"><dt>Khuyến mãi sản phẩm</dt><dd th:text="|-${@dd.tien(bang.giamSanPham)}|">0</dd></div>
+                            <div th:if="${bang.giamMa > 0}"><dt th:text="|Mã ${bang.maGiam.maCode}|">Mã</dt><dd th:text="|-${@dd.tien(bang.giamMa)}|">0</dd></div>
+                            <div><dt>Phí giao hàng</dt><dd><span class="tong__mien">Miễn phí</span></dd></div>
+                            <div>
+                                <dt>Phí lắp đặt</dt>
+                                <dd>
+                                    <span class="tong__mien" th:if="${bang.phiLapDat == 0}" th:text="${bang.coLapDat} ? 'Miễn phí' : 'Không lắp'">0</span>
+                                    <span th:if="${bang.phiLapDat > 0}" th:text="${@dd.tien(bang.phiLapDat)}">0</span>
+                                </dd>
+                            </div>
+                            <div th:if="${bang.tienCoc > 0}"><dt>Tiền cọc (10%, trả trực tuyến)</dt><dd th:text="${@dd.tien(bang.tienCoc)}">0</dd></div>
+                        </dl>
+                        <p class="tong__cong"><span>Tổng cộng</span><b th:text="${@dd.tien(bang.tongTien)}">0 ₫</b></p>
+                        <button type="submit" class="nut nut--dac tong__dat">Đặt hàng</button>
+                        <p class="tong__ghi">Giá đã gồm VAT; phí giao và phí lắp ghi riêng. Nhân viên sẽ gọi xác nhận trong giờ làm việc.</p>
+                    </aside>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

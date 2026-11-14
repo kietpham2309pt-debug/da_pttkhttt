@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau(${danhMucChon != null} ? ${danhMucChon.tenDanhMuc} : 'Sản phẩm')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section class="hero-sp hero-sp--dm" id="banner">
+        <img class="hero-sp__anh" th:src="${danhMucChon != null} ? |/assets/img/banner-${danhMucChon.maDanhMuc}.jpg| : '/assets/img/hero-san-pham.jpg'" alt="">
+        <span class="hero-sp__phu" aria-hidden="true"></span>
+        <div class="hero-sp__chu">
+            <div class="khung">
+                <h1 th:text="${danhMucChon != null} ? ${danhMucChon.tenDanhMuc} : (${loc.tuKhoa != null} ? |Kết quả cho “${loc.tuKhoa}”| : 'Tất cả sản phẩm')">Sản phẩm</h1>
+                <p>Giá bán đã gồm VAT. Phí giao và phí lắp đặt ghi riêng khi đặt hàng.</p>
+            </div>
+        </div>
+        <div class="hero-sp__duoi">
+            <div class="khung">
+                <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                    <a href="/">Trang chủ</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <a href="/san-pham" th:if="${danhMucChon != null}">Sản phẩm</a>
+                    <span aria-hidden="true" th:if="${danhMucChon != null}">&middot;</span>
+                    <span aria-current="page" th:text="${danhMucChon != null} ? ${danhMucChon.tenDanhMuc} : 'Sản phẩm'">Sản phẩm</span>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+            <form class="ds" method="get" action="/san-pham">
+                <input type="hidden" name="danhMuc" th:value="${loc.danhMuc}" th:if="${loc.danhMuc != null}">
+                <div class="ds__thanh">
+                    <p class="ds__nhan">
+                        <svg class="ic"><use xlink:href="#ic-bo-loc"/></svg>
+                        Bộ lọc
+                    </p>
+                    <div class="ds__tt">
+                        <p class="ds__dem">(<span id="dem-so" th:text="${kq.totalElements}">0</span> sản phẩm)</p>
+                        <div class="ds__sap">
+                            <label for="sapXep">Sắp xếp theo:</label>
+                            <span class="ds__o">
+                                <select id="sapXep" name="sapXep">
+                                    <option value="moi" th:selected="${loc.sapXep == 'moi'}">Mới nhất</option>
+                                    <option value="gia-tang" th:selected="${loc.sapXep == 'gia-tang'}">Giá thấp đến cao</option>
+                                    <option value="gia-giam" th:selected="${loc.sapXep == 'gia-giam'}">Giá cao đến thấp</option>
+                                    <option value="ten" th:selected="${loc.sapXep == 'ten'}">Tên A đến Z</option>
+                                </select>
+                                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-chevron"/></svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ds__than">
+                    <div class="loc kh-loc">
+                        <details class="loc__nhom" open>
+                            <summary>
+                                Từ khoá
+                                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-chevron"/></svg>
+                            </summary>
+                            <div class="o-nhap">
+                                <label for="tuKhoa" class="an-nhin">Tên hoặc model</label>
+                                <input id="tuKhoa" type="search" name="tuKhoa" th:value="${loc.tuKhoa}" placeholder="Tên hoặc model">
+                            </div>
+                        </details>
+                        <details class="loc__nhom" open>
+                            <summary>
+                                Danh mục
+                                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-chevron"/></svg>
+                            </summary>
+                            <ul class="loc__ds">
+                                <li><a class="loc__muc loc__muc--ve" th:href="@{/san-pham(tuKhoa=${loc.tuKhoa})}">Tất cả danh mục</a></li>
+                                <li th:each="dm : ${dsDanhMuc}">
+                                    <a class="loc__muc" th:href="@{/san-pham(danhMuc=${dm.maDanhMuc},tuKhoa=${loc.tuKhoa})}">
+                                        <span class="loc__ten" th:text="${dm.tenDanhMuc}" th:style="${dm.maDanhMuc == loc.danhMuc} ? 'color:var(--dong)' : ''">Danh mục</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </details>
+                        <details class="loc__nhom" open>
+                            <summary>
+                                Thương hiệu
+                                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-chevron"/></svg>
+                            </summary>
+                            <ul class="loc__ds">
+                                <li th:each="h : ${dsThuongHieu}">
+                                    <label class="loc__muc">
+                                        <input type="checkbox" name="thuongHieu" th:value="${h.maThuongHieu}" th:checked="${loc.thuongHieu.contains(h.maThuongHieu)}">
+                                        <span class="loc__o" aria-hidden="true"></span>
+                                        <span class="loc__ten" th:text="${h.tenThuongHieu}">Hãng</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </details>
+                        <details class="loc__nhom" open>
+                            <summary>
+                                Khoảng giá (đồng)
+                                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-chevron"/></svg>
+                            </summary>
+                            <div class="kh-loc-gia">
+                                <div class="o-nhap">
+                                    <label for="giaTu">Từ</label>
+                                    <input id="giaTu" type="number" min="0" step="100000" name="giaTu" th:value="${loc.giaTu}">
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="giaDen">Đến</label>
+                                    <input id="giaDen" type="number" min="0" step="100000" name="giaDen" th:value="${loc.giaDen}">
+                                </div>
+                            </div>
+                        </details>
+                        <button type="submit" class="nut nut--dac">Áp dụng bộ lọc</button>
+                        <p class="loc__ve" th:if="${loc.coLoc}"><a th:href="${duongDanBoLoc}">Bỏ lọc</a></p>
+                        <p class="loc__ve"><a href="/so-sanh">So sánh mẫu máy</a></p>
+                    </div>
+
+                    <div class="ds__phai" id="kq">
+                        <div class="luoi-sp" th:if="${kq.hasContent()}">
+                            <th:block th:each="t : ${kq.content}"><a th:replace="~{khach/manh :: theSp(${t})}"></a></th:block>
+                        </div>
+                        <div class="trong" th:unless="${kq.hasContent()}">
+                            <svg class="ic ic--to" aria-hidden="true"><use xlink:href="#ic-tim-kiem"/></svg>
+                            <p th:if="${loc.coLoc}">Không có mẫu máy phù hợp với bộ lọc đã chọn.</p>
+                            <p th:unless="${loc.coLoc}">Không tìm thấy sản phẩm phù hợp. Bạn thử xem theo danh mục hoặc gọi 0339 999 999 để được tư vấn.</p>
+                            <a class="nut nut--dac" th:if="${loc.coLoc}" th:href="${duongDanBoLoc}">Bỏ lọc</a>
+                            <a class="nut" th:unless="${loc.coLoc}" href="/san-pham">Xem tất cả sản phẩm</a>
+                        </div>
+                        <nav class="trang" aria-label="Phân trang" th:if="${kq.totalPages > 1}">
+                            <a class="trang__nut" th:if="${kq.number > 0}" th:href="${duongDanTrang + kq.number}">&lsaquo;</a>
+                            <a th:each="i : ${#numbers.sequence(1, kq.totalPages)}" th:href="${duongDanTrang + i}"
+                               class="trang__nut" th:classappend="${i == kq.number + 1} ? 'dang-chon'" th:text="${i}">1</a>
+                            <a class="trang__nut" th:if="${kq.number + 2 <= kq.totalPages}" th:href="${duongDanTrang + (kq.number + 2)}">&rsaquo;</a>
+                        </nav>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

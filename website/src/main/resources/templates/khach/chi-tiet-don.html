@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau(${@dd.maDon(don.maDonHang)})}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section class="hero-sp hero-sp--dm" id="banner">
+        <img class="hero-sp__anh" src="/assets/img/banner-tai-khoan.jpg" alt="">
+        <span class="hero-sp__phu" aria-hidden="true"></span>
+        <div class="hero-sp__chu">
+            <div class="khung">
+                <h1 th:text="|Đơn hàng ${@dd.maDon(don.maDonHang)}|">Đơn hàng</h1>
+                <p th:text="|Đặt lúc ${@dd.ngayGio(don.ngayDat)}|">Đặt lúc</p>
+            </div>
+        </div>
+        <div class="hero-sp__duoi">
+            <div class="khung">
+                <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                    <a href="/">Trang chủ</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <a href="/tra-cuu-don">Tra cứu đơn</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <span aria-current="page" th:text="${@dd.maDon(don.maDonHang)}">Mã</span>
+                </nav>
+            </div>
+        </div>
+    </section>
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+            <div class="kh-luoi-2">
+                <div>
+                    <div class="kh-the">
+                        <h2>Trạng thái đơn</h2>
+                        <p><span th:replace="~{khach/manh :: nhanDon(${don.trangThai})}"></span></p>
+                        <ol class="kh-moc" style="margin-top:14px">
+                            <li th:each="ls : ${tt.lichSu}">
+                                <b th:text="${ls.trangThaiMoi.nhan}">Trạng thái</b>
+                                <span class="chu-phu" th:text="${@dd.ngayGio(ls.thoiDiem)}">thời điểm</span>
+                                <span class="chu-phu" th:if="${ls.ghiChu != null}" th:text="|· ${ls.ghiChu}|">ghi chú</span>
+                            </li>
+                        </ol>
+                        <th:block th:if="${tt.phieuGiao != null}" th:with="pg=${tt.phieuGiao}">
+                            <h3 style="margin-top:16px">Lịch giao</h3>
+                            <dl class="kh-thong-tin">
+                                <dt>Việc</dt><dd th:text="${pg.loaiViec.nhan}">Giao</dd>
+                                <dt th:if="${pg.ngayHen != null}">Ngày hẹn</dt>
+                                <dd th:if="${pg.ngayHen != null}" th:text="${@dd.ngay(pg.ngayHen)} + (${pg.gioBatDau != null and pg.gioKetThuc != null} ? ', ' + ${#temporals.format(pg.gioBatDau, 'HH:mm')} + ' – ' + ${#temporals.format(pg.gioKetThuc, 'HH:mm')} : '')">ngày</dd>
+                                <dt th:if="${pg.donViVanChuyen != null}">Đơn vị vận chuyển</dt>
+                                <dd th:if="${pg.donViVanChuyen != null}" th:text="${pg.donViVanChuyen}">ĐVVC</dd>
+                                <dt th:if="${pg.maVanDon != null}">Mã vận đơn</dt>
+                                <dd th:if="${pg.maVanDon != null}" th:text="${pg.maVanDon}">MVĐ</dd>
+                                <dt>Tình trạng giao</dt><dd th:text="${pg.trangThai.nhan}">TT</dd>
+                            </dl>
+                        </th:block>
+                        <p class="chu-phu" th:if="${tt.phieuGiao == null and (don.trangThai.name() == 'CHO_XAC_NHAN' or don.trangThai.name() == 'DA_XAC_NHAN')}">Chưa hẹn lịch giao, nhân viên sẽ gọi hẹn ngày giờ với bạn.</p>
+                        <p th:if="${don.trangThai.name() == 'DA_HUY' and don.lyDoHuy != null}" th:text="|Lý do huỷ: ${don.lyDoHuy}|">Lý do</p>
+                        <p th:if="${tt.daHoan > 0}" class="kh-chu-xanh" th:text="|Đã hoàn ${@dd.tien(tt.daHoan)} theo cách bạn đã trả.|">Hoàn</p>
+                    </div>
+
+                    <div class="kh-the">
+                        <h2>Người nhận</h2>
+                        <dl class="kh-thong-tin">
+                            <dt>Họ tên</dt><dd th:text="${don.hoTenNguoiNhan}">Tên</dd>
+                            <dt>Số điện thoại</dt><dd th:text="${@dd.che(don.soDienThoaiNhan)}">SĐT</dd>
+                            <dt>Địa chỉ</dt><dd th:text="${tt.diaChiChe}">Địa chỉ</dd>
+                            <dt>Khu vực</dt><dd th:text="${don.noiThanh} ? 'Nội thành' : 'Đi tỉnh'">Khu vực</dd>
+                        </dl>
+                    </div>
+
+                    <div class="kh-the">
+                        <h2>Hoá đơn</h2>
+                        <p th:if="${don.soHoaDon != null}" th:text="|Số hoá đơn: ${don.soHoaDon}. Hoá đơn điện tử tra cứu bằng số này tại cửa hàng.|">Số HĐ</p>
+                        <p th:if="${don.soHoaDon == null}" class="chu-phu">Hoá đơn lập khi giao hàng.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="kh-the">
+                        <h2>Sản phẩm</h2>
+                        <ul class="dat__ds">
+                            <li th:each="ct : ${don.chiTiet}">
+                                <span class="dat__ten" th:text="${ct.tenSanPhamLucBan}">Tên</span>
+                                <span class="dat__sl" th:text="|×${ct.soLuong}|">×1</span>
+                                <span class="dat__tien" th:text="${@dd.tien(ct.donGia * ct.soLuong)}">0</span>
+                            </li>
+                        </ul>
+                        <dl class="tong__ds">
+                            <div><dt>Tiền hàng</dt><dd th:text="${@dd.tien(don.tienHang)}">0</dd></div>
+                            <div th:if="${don.tienGiam > 0}"><dt>Giảm giá</dt><dd th:text="|-${@dd.tien(don.tienGiam)}|">0</dd></div>
+                            <div><dt>Phí giao hàng</dt><dd th:text="${don.phiGiao > 0} ? ${@dd.tien(don.phiGiao)} : 'Miễn phí'">0</dd></div>
+                            <div><dt>Phí lắp đặt</dt><dd th:text="${don.phiLapDat > 0} ? ${@dd.tien(don.phiLapDat)} : (${don.canLapDat} ? 'Miễn phí' : 'Không lắp')">0</dd></div>
+                            <div><dt>Tổng tiền</dt><dd><b th:text="${@dd.tien(don.tongTien)}">0</b></dd></div>
+                            <div th:if="${don.tienCoc > 0}"><dt>Tiền cọc</dt><dd th:text="${@dd.tien(don.tienCoc)}">0</dd></div>
+                            <div><dt>Đã trả</dt><dd th:text="${@dd.tien(tt.daTra)}">0</dd></div>
+                            <div><dt>Còn phải trả</dt><dd th:text="${@dd.tien(tt.conLai)}">0</dd></div>
+                            <div><dt>Cách thanh toán</dt><dd th:text="${don.phuongThucThanhToan.nhan}">Cách</dd></div>
+                            <div><dt>Thanh toán</dt><dd th:text="${don.trangThaiThanhToan.nhan}">TT</dd></div>
+                        </dl>
+                        <div class="kh-dong-nut">
+                            <a class="nut nut--dac" th:if="${tt.coTheThanhToan}" th:href="@{/thanh-toan/{m}(m=${don.maDonHang})}">Thanh toán ngay</a>
+                        </div>
+                    </div>
+
+                    <div class="kh-the" th:if="${!tt.giaoDich.isEmpty()}">
+                        <h2>Giao dịch thanh toán</h2>
+                        <ul class="kh-moc">
+                            <li th:each="gd : ${tt.giaoDich}">
+                                <b th:text="|${gd.loai.nhan} ${@dd.tien(gd.soTien)}|">Loại</b>
+                                <span class="chu-phu" th:text="|${gd.trangThai.nhan} · ${@dd.ngayGio(gd.thoiDiem)} · ${gd.phuongThuc}|">chi tiết</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="kh-the" th:if="${tt.coTheHuy}">
+                        <h2>Huỷ đơn</h2>
+                        <p class="chu-phu">Đơn đang chờ xác nhận nên bạn tự huỷ được. Tiền cọc đã trả (nếu có) được hoàn đủ theo cách bạn đã trả.</p>
+                        <form method="post" th:action="@{/tra-cuu-don/{m}/huy(m=${don.maDonHang})}">
+                            <div class="o-nhap">
+                                <label for="lyDo">Lý do huỷ</label>
+                                <input id="lyDo" name="lyDo" maxlength="200" required>
+                            </div>
+                            <button type="submit" class="nut nut--do">Huỷ đơn</button>
+                        </form>
+                    </div>
+                    <div class="kh-the" th:if="${don.trangThai.name() == 'DA_XAC_NHAN'}">
+                        <h2>Muốn huỷ đơn?</h2>
+                        <p class="chu-phu">Đơn đã được xác nhận. Bạn gọi <a href="tel:0339999999">0339 999 999</a>, nhân viên sẽ huỷ giúp nếu máy chưa xuất kho.</p>
+                    </div>
+                </div>
+            </div>
+            <p class="kh-dong-nut"><a class="nut" href="/tra-cuu-don">Tra cứu đơn khác</a> <a class="nut" href="tel:0339999999">Gọi cửa hàng 0339 999 999</a></p>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

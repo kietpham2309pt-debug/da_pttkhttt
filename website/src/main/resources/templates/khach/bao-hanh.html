@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Tra cứu bảo hành')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section th:replace="~{khach/manh :: hero('/assets/img/banner-tai-khoan.jpg', 'Tra cứu bảo hành', 'Tra theo số serial trên máy, hoặc theo số điện thoại đã mua hàng.')}"></section>
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <div class="kh-luoi-2">
+                <form class="kh-the" method="get" action="/bao-hanh">
+                    <input type="hidden" name="cach" value="serial">
+                    <h2>Theo số serial</h2>
+                    <div class="o-nhap">
+                        <label for="soSerial">Số serial</label>
+                        <input id="soSerial" name="soSerial" maxlength="50" th:value="${cach == 'serial'} ? ${soSerial} : ''" placeholder="Ví dụ BDT-BOS-001-0001">
+                        <span class="o-nhap__goi">In trên tem dán ở thân máy và trên phiếu bảo hành.</span>
+                    </div>
+                    <button type="submit" class="nut nut--dac">Tra cứu</button>
+                </form>
+                <form class="kh-the" method="get" action="/bao-hanh">
+                    <input type="hidden" name="cach" value="sdt">
+                    <h2>Theo số điện thoại</h2>
+                    <div class="o-nhap">
+                        <label for="soDienThoai">Số điện thoại người nhận</label>
+                        <input id="soDienThoai" name="soDienThoai" type="tel" inputmode="numeric" maxlength="10" th:value="${soDienThoai}">
+                    </div>
+                    <div class="o-nhap">
+                        <label for="maDon">Mã đơn (không bắt buộc)</label>
+                        <input id="maDon" name="maDon" maxlength="14" th:value="${maDon}" placeholder="DH000012">
+                    </div>
+                    <button type="submit" class="nut nut--dac">Tra cứu</button>
+                </form>
+            </div>
+
+            <div style="margin-top:24px">
+                <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+            </div>
+
+            <div class="kh-the" th:each="kq : ${ketQua}">
+                <h2 th:text="|${kq.tenSanPham} · serial ${kq.soSerial}|">Máy</h2>
+                <dl class="kh-thong-tin">
+                    <dt>Thương hiệu, model</dt><dd th:text="|${kq.thuongHieu} ${kq.model}|">Hãng</dd>
+                    <dt>Mã đơn</dt><dd th:text="${@dd.maDon(kq.maDon)}">DH</dd>
+                    <dt>Ngày bán</dt><dd th:text="${@dd.ngay(kq.ngayBan)}">ngày</dd>
+                    <dt>Thời hạn bảo hành</dt><dd th:text="|${kq.thoiHanThang} tháng|">36 tháng</dd>
+                    <dt>Hạn bảo hành</dt><dd th:text="${@dd.ngay(kq.hanBaoHanh)}">ngày</dd>
+                    <dt>Tình trạng</dt>
+                    <dd>
+                        <span th:class="${kq.conHan} ? 'the-nhan the-nhan--ok' : 'the-nhan the-nhan--do'" th:text="${kq.conHan} ? 'Còn hạn bảo hành' : 'Hết hạn bảo hành'">Còn hạn</span>
+                        <span class="chu-phu" th:text="|Máy: ${kq.trangThaiMay}|">Máy</span>
+                    </dd>
+                    <dt>Số lần bảo hành</dt><dd th:text="${kq.soLanBaoHanh}">0</dd>
+                </dl>
+                <div class="cuon-ngang" th:if="${!kq.phieu.isEmpty()}" style="margin-top:14px">
+                    <table class="bang-dl">
+                        <thead>
+                        <tr><th scope="col">Lần</th><th scope="col">Ngày nhận</th><th scope="col">Lỗi khách báo</th><th scope="col">Hẹn trả</th><th scope="col">Trạng thái</th><th scope="col">Kết quả</th></tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="p : ${kq.phieu}">
+                            <td data-nhan="Lần" th:text="${p.lanThu}">1</td>
+                            <td data-nhan="Ngày nhận" th:text="${@dd.ngay(p.ngayNhan)}">ngày</td>
+                            <td data-nhan="Lỗi" th:text="${p.moTaLoi}">lỗi</td>
+                            <td data-nhan="Hẹn trả" th:text="${p.ngayHenTra != null} ? ${@dd.ngay(p.ngayHenTra)} : '—'">ngày</td>
+                            <td data-nhan="Trạng thái" th:text="${p.trangThai.nhan}">TT</td>
+                            <td data-nhan="Kết quả" th:text="${p.ketQua != null} ? ${p.ketQua} : '—'">KQ</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="chu-phu" th:if="${kq.phieu.isEmpty()}" style="margin-top:10px">Máy chưa bảo hành lần nào.</p>
+            </div>
+            <p class="chu-phu" style="margin-top:18px">Máy hỏng trong hạn bảo hành: mang máy kèm số serial tới cửa hàng hoặc gọi 0339 999 999 để được tiếp nhận.</p>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>
