@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vn.edu.huit.pttk.diengiadung.khodulieu.TaiKhoanDAO;
 import vn.edu.huit.pttk.diengiadung.nghiepvu.TaiKhoanBUS;
@@ -70,7 +71,7 @@ public class ChungController {
         return "thong-diep";
     }
 
-    @GetMapping("/khong-co-quyen")
+    @RequestMapping("/khong-co-quyen")
     public String khongCoQuyen(Model model) {
         model.addAttribute("tieuDe", "Không có quyền");
         model.addAttribute("noiDung", "Vai trò của tài khoản này không được dùng chức năng vừa mở.");

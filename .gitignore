@@ -5,3 +5,4 @@ __pycache__/
 # website
 website/target/
 website/.mvn/wrapper/maven-wrapper.jar
+.claude/
