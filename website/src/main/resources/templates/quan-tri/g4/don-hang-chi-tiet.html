@@ -30,7 +30,7 @@
                     <div class="canh-bao" th:if="${tt == 'CHO_XAC_NHAN' and ct.soLanGoi > 0}"
                          th:text="'Đã gọi khách ' + ${ct.soLanGoi} + ' lần chưa được' + (${ct.soLanGoi >= soLanGoiToiDa} ? ': đủ số lần quy định, có thể huỷ với lý do Không liên lạc được.' : '.')"></div>
                     <div class="canh-bao" th:if="${tt == 'CHO_XAC_NHAN' and ct.canXinCoc}"
-                         th:text="'Đơn từ 10 triệu: xin cọc 10–20% (' + ${@dd.tien(ct.cocTu)} + ' – ' + ${@dd.tien(ct.cocDen)} + '). Khách chuyển cọc qua cổng thanh toán thì đơn hiện số tiền cọc.'"></div>
+                         th:text="'Đơn trên 10 triệu: xin cọc 10–20% (' + ${@dd.tien(ct.cocTu)} + ' – ' + ${@dd.tien(ct.cocDen)} + '). Khách chuyển cọc qua cổng thanh toán thì đơn hiện số tiền cọc.'"></div>
                     <div class="canh-bao" th:if="${tt == 'CHO_XAC_NHAN' and ct.thieuHang}">Có mẫu máy không đủ số lượng trong kho (xem cột Kho). Khách chờ thì ghi ngày dự kiến có hàng vào ghi chú; không chờ thì huỷ với lý do Hết hàng.</div>
 
                     <div class="g4-hai-cot">

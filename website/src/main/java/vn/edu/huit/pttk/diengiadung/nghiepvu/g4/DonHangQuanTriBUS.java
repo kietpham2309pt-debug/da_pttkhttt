@@ -159,7 +159,7 @@ public class DonHangQuanTriBUS {
         List<YeuCauDoiTra> yeuCau = yeuCauDAO.theoDon(don);
         boolean coTheHuy = don.getTrangThai() == TrangThaiDonHang.CHO_XAC_NHAN
                 || (don.getTrangThai() == TrangThaiDonHang.DA_XAC_NHAN && phieuXuat.isEmpty());
-        boolean xinCoc = don.getTongTien() != null && don.getTongTien() >= NGUONG_XIN_COC
+        boolean xinCoc = don.getTongTien() != null && don.getTongTien() > NGUONG_XIN_COC
                 && (don.getTienCoc() == null || don.getTienCoc() == 0);
         long tong = don.getTongTien() == null ? 0 : don.getTongTien();
         return new ChiTietDon(don, sp, lichSu, phieuGiao, phieuXuat, giaoDich, yeuCau, soLanGoi(don), phutCho(don),

@@ -143,10 +143,10 @@ public class GiaBUS {
         if (!coLap) {
             return 0;
         }
-        return giaTriSauGiam >= NGUONG_MIEN_PHI_LAP ? 0 : PHI_LAP_DON_NHO;
+        return giaTriSauGiam > NGUONG_MIEN_PHI_LAP ? 0 : PHI_LAP_DON_NHO;
     }
 
     public static long tienCoc(long tongTien) {
-        return tongTien >= NGUONG_COC ? tongTien * PHAN_TRAM_COC / 100 : 0;
+        return tongTien > NGUONG_COC ? tongTien * PHAN_TRAM_COC / 100 : 0;
     }
 }

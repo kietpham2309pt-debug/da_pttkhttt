@@ -159,7 +159,7 @@ public class DonHangKhachBUS {
         }
         DonHang don = tt.getDon();
         if (don.getTienCoc() != null && don.getTienCoc() > 0) {
-            throw new LoiNghiepVu("Đơn từ " + DinhDangTien.tien(GiaBUS.NGUONG_COC) + " phải đặt cọc trực tuyến, chưa đổi sang tiền mặt được.");
+            throw new LoiNghiepVu("Đơn trên " + DinhDangTien.tien(GiaBUS.NGUONG_COC) + " phải đặt cọc trực tuyến, chưa đổi sang tiền mặt được.");
         }
         if (tt.getDaTra() > 0 || !(don.getTrangThai() == TrangThaiDonHang.CHO_XAC_NHAN || don.getTrangThai() == TrangThaiDonHang.DA_XAC_NHAN)) {
             throw new LoiNghiepVu("Đơn này không đổi cách thanh toán được nữa.");
