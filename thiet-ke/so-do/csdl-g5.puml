@@ -1,0 +1,124 @@
+@startuml csdl-g5
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+skinparam defaultFontSize 14
+entity NhaCungCap {
+  * maNhaCungCap : BIGINT <<PK>>
+  --
+  *tenNhaCungCap : VARCHAR(150)
+  *soDienThoai : VARCHAR(15)
+  email : VARCHAR(100)
+  diaChi : VARCHAR(255)
+  *dangHopTac : BIT(1)
+}
+entity DonDatHangNCC {
+  * maDonDat : BIGINT <<PK>>
+  --
+  *maNhaCungCap : BIGINT <<FK>>
+  *ngayLap : DATETIME
+  *trangThai : VARCHAR(15)
+  *maNguoiLap : BIGINT <<FK>>
+  maNguoiGui : BIGINT <<FK>>
+  ghiChu : VARCHAR(255)
+}
+entity ChiTietDonDatHangNCC {
+  * maDonDat : BIGINT <<PK>> <<FK>>
+  * maSanPham : BIGINT <<PK>> <<FK>>
+  --
+  *soLuong : INT
+}
+entity PhieuNhap {
+  * maPhieuNhap : BIGINT <<PK>>
+  --
+  *maNhaCungCap : BIGINT <<FK>>
+  maDonDat : BIGINT <<FK>>
+  soHoaDonNCC : VARCHAR(30)
+  *ngayNhap : DATETIME
+  *maThuKho : BIGINT <<FK>>
+  ghiChu : VARCHAR(255)
+}
+entity ChiTietPhieuNhap {
+  * maChiTietNhap : BIGINT <<PK>>
+  --
+  *maPhieuNhap : BIGINT <<FK>>
+  *maSanPham : BIGINT <<FK>>
+  *soLuongChungTu : INT
+  *soLuongThucNhap : INT
+  *donGiaNhap : BIGINT
+}
+entity SanPhamSerial {
+  * soSerial : VARCHAR(50) <<PK>>
+  --
+  *maSanPham : BIGINT <<FK>>
+  *maChiTietNhap : BIGINT <<FK>>
+  *ngayNhap : DATETIME
+  ngayBan : DATETIME
+  maDonHangBan : BIGINT <<FK>>
+  *trangThai : VARCHAR(25)
+}
+entity PhieuXuat {
+  * maPhieuXuat : BIGINT <<PK>>
+  --
+  *maDonHang : BIGINT <<FK>>
+  *ngayXuat : DATETIME
+  *lyDoXuat : VARCHAR(100)
+  *maThuKho : BIGINT <<FK>>
+}
+entity PhieuBaoHanh {
+  * maPhieu : BIGINT <<PK>>
+  --
+  *soSerial : VARCHAR(50) <<FK>>
+  *hoTenKhach : VARCHAR(100)
+  *soDienThoaiKhach : VARCHAR(15)
+  *ngayNhan : DATETIME
+  *moTaLoi : VARCHAR(500)
+  *tinhTrangBenNgoai : VARCHAR(255)
+  *ngayHenTra : DATE
+  *lanThu : INT
+  ngayGuiHang : DATETIME
+  ngayNhanTuHang : DATETIME
+  ngayTraKhach : DATETIME
+  ketQua : VARCHAR(255)
+  *trangThai : VARCHAR(15)
+  *maNhanVien : BIGINT <<FK>>
+}
+entity ChiTietPhieuXuat {
+  * maPhieuXuat : BIGINT <<PK>> <<FK>>
+  * soSerial : VARCHAR(50) <<PK>> <<FK>>
+  --
+}
+entity DonHang <<G3>> {
+  * maDonHang <<PK>>
+}
+entity NhanVien <<G1>> {
+  * maNhanVien <<PK>>
+}
+entity SanPham <<G2>> {
+  * maSanPham <<PK>>
+}
+NhaCungCap ||--o{ DonDatHangNCC
+NhanVien ||--o{ DonDatHangNCC
+NhanVien |o--o{ DonDatHangNCC
+DonDatHangNCC ||--o{ ChiTietDonDatHangNCC
+SanPham ||--o{ ChiTietDonDatHangNCC
+NhaCungCap ||--o{ PhieuNhap
+DonDatHangNCC |o--o{ PhieuNhap
+NhanVien ||--o{ PhieuNhap
+PhieuNhap ||--o{ ChiTietPhieuNhap
+SanPham ||--o{ ChiTietPhieuNhap
+SanPham ||--o{ SanPhamSerial
+ChiTietPhieuNhap ||--o{ SanPhamSerial
+DonHang |o--o{ SanPhamSerial
+DonHang ||--o{ PhieuXuat
+NhanVien ||--o{ PhieuXuat
+SanPhamSerial ||--o{ PhieuBaoHanh
+NhanVien ||--o{ PhieuBaoHanh
+PhieuXuat ||--o{ ChiTietPhieuXuat
+SanPhamSerial ||--o{ ChiTietPhieuXuat
+@enduml

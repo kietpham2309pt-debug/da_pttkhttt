@@ -1,0 +1,110 @@
+@startuml csdl-g2
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+skinparam defaultFontSize 14
+entity DanhMuc {
+  * maDanhMuc : VARCHAR(30) <<PK>>
+  --
+  *tenDanhMuc : VARCHAR(100)
+  *thuTu : INT
+}
+entity ThuongHieu {
+  * maThuongHieu : BIGINT <<PK>>
+  --
+  *tenThuongHieu : VARCHAR(60)
+  xuatXu : VARCHAR(60)
+}
+entity SanPham {
+  * maSanPham : BIGINT <<PK>>
+  --
+  *tenSanPham : VARCHAR(200)
+  *model : VARCHAR(60)
+  *maDanhMuc : VARCHAR(30) <<FK>>
+  *maThuongHieu : BIGINT <<FK>>
+  giaBan : BIGINT
+  giaNiemYet : BIGINT
+  *thoiHanBaoHanh : INT
+  *canLapDat : BIT(1)
+  moTa : TEXT
+  anh : VARCHAR(255)
+  *trangThai : VARCHAR(20)
+  *ngayTao : DATETIME
+}
+entity ThongSoKyThuat {
+  * maThongSo : BIGINT <<PK>>
+  --
+  *maSanPham : BIGINT <<FK>>
+  *tenThongSo : VARCHAR(80)
+  *giaTri : VARCHAR(120)
+}
+entity LichSuGia {
+  * maLichSu : BIGINT <<PK>>
+  --
+  *maSanPham : BIGINT <<FK>>
+  giaCu : BIGINT
+  *giaMoi : BIGINT
+  lyDo : VARCHAR(255)
+  *duoiGiaNhap : BIT(1)
+  *thoiDiem : DATETIME
+  *maNhanVien : BIGINT <<FK>>
+}
+entity KhuyenMai {
+  * maKhuyenMai : BIGINT <<PK>>
+  --
+  *tenKhuyenMai : VARCHAR(150)
+  *loai : VARCHAR(25)
+  maCode : VARCHAR(30)
+  *kieuGiam : VARCHAR(15)
+  *mucGiam : BIGINT
+  giamToiDa : BIGINT
+  *donToiThieu : BIGINT
+  quaTang : VARCHAR(150)
+  *ngayBatDau : DATE
+  *ngayKetThuc : DATE
+  soLuotToiDa : INT
+  *soLuotDaDung : INT
+  *trangThai : VARCHAR(15)
+  *maNguoiTao : BIGINT <<FK>>
+}
+entity DanhGia {
+  * maDanhGia : BIGINT <<PK>>
+  --
+  *maSanPham : BIGINT <<FK>>
+  *maKhachHang : BIGINT <<FK>>
+  *maDonHang : BIGINT <<FK>>
+  *soSao : INT
+  noiDung : VARCHAR(1000)
+  *ngayDanhGia : DATETIME
+}
+entity KhuyenMaiSanPham {
+  * maKhuyenMai : BIGINT <<PK>> <<FK>>
+  * maSanPham : BIGINT <<PK>> <<FK>>
+  --
+}
+entity DonHang <<G3>> {
+  * maDonHang <<PK>>
+}
+entity KhachHang <<G3>> {
+  * maKhachHang <<PK>>
+}
+entity NhanVien <<G1>> {
+  * maNhanVien <<PK>>
+}
+DanhMuc ||--o{ SanPham
+ThuongHieu ||--o{ SanPham
+SanPham ||--o{ ThongSoKyThuat
+SanPham ||--o{ LichSuGia
+NhanVien ||--o{ LichSuGia
+NhanVien ||--o{ KhuyenMai
+SanPham ||--o{ DanhGia
+KhachHang ||--o{ DanhGia
+DonHang ||--o{ DanhGia
+KhuyenMai ||--o{ KhuyenMaiSanPham
+SanPham ||--o{ KhuyenMaiSanPham
+@enduml

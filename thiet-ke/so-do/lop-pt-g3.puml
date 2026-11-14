@@ -1,0 +1,92 @@
+@startuml lop-pt-g3
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+class KhachHang {
+  maKhachHang
+  hoTen
+  soDienThoai
+  email
+  ngayDangKy
+  --
+  capNhatHoSo()
+  diaChiMacDinh()
+}
+class DiaChiGiaoHang {
+  maDiaChi
+  hoTenNguoiNhan
+  soDienThoai
+  diaChi
+  noiThanh
+  macDinh
+  --
+  datMacDinh()
+}
+class DonHang {
+  maDonHang
+  hoTenNguoiNhan
+  soDienThoaiNhan
+  email
+  diaChiGiao
+  noiThanh
+  canLapDat
+  ngayDat
+  ngayHoanThanh
+  tienHang
+  tienGiam
+  phiGiao
+  phiLapDat
+  tongTien
+  tienCoc
+  phuongThucThanhToan
+  trangThaiThanhToan
+  trangThai
+  ghiChu
+  lyDoHuy
+  soHoaDon
+  dongYXuLyDuLieu
+  dongYQuangCao
+  /soTienConPhaiThu
+  --
+  tinhTongTien()
+  tinhTienCoc()
+  doiTrangThai()
+  huy()
+  apKhuyenMai()
+}
+class ChiTietDonHang {
+  maChiTiet
+  tenSanPhamLucBan
+  soLuong
+  donGia
+  --
+  thanhTien()
+}
+class GiaoDichThanhToan {
+  maGiaoDich
+  loai
+  soTien
+  phuongThuc
+  maGiaoDichCong
+  trangThai
+  thoiDiem
+  --
+}
+class KhuyenMai <<G2>>
+class NhanVien <<G1>>
+class SanPham <<G2>>
+class TaiKhoan <<G1>>
+TaiKhoan "1" -- "0..1" KhachHang
+KhachHang "1" -- "*" DiaChiGiaoHang
+KhachHang "0..1" -- "*" DonHang
+KhuyenMai "0..1" -- "*" DonHang
+NhanVien "0..1" -- "*" DonHang : nhanVienDuyet
+DonHang "1" *-- "*" ChiTietDonHang
+SanPham "1" -- "*" ChiTietDonHang
+DonHang "1" -- "*" GiaoDichThanhToan
+@enduml

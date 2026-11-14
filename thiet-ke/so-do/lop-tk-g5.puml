@@ -1,0 +1,107 @@
+@startuml lop-tk-g5
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+class NhaCungCap {
+  - maNhaCungCap : long
+  - tenNhaCungCap : String
+  - soDienThoai : String
+  - email : String
+  - diaChi : String
+  - dangHopTac : boolean
+  --
+  + ngungHopTac() : void
+}
+class DonDatHangNCC {
+  - maDonDat : long
+  - ngayLap : LocalDateTime
+  - trangThai : TrangThaiDonDat
+  - ghiChu : String
+  --
+  + guiNhaCungCap(quanLy : NhanVien) : void
+  + huy() : void
+}
+class ChiTietDonDatHangNCC {
+  - soLuong : int
+  --
+}
+class PhieuNhap {
+  - maPhieuNhap : long
+  - soHoaDonNCC : String
+  - ngayNhap : LocalDateTime
+  - ghiChu : String
+  --
+  + themDong(sp : SanPham, soChungTu : int, soThucNhap : int, donGia : long) : ChiTietPhieuNhap
+}
+class ChiTietPhieuNhap {
+  - maChiTietNhap : long
+  - soLuongChungTu : int
+  - soLuongThucNhap : int
+  - donGiaNhap : long
+  --
+  + ghiSerial(dsSerial : List<String>) : void
+}
+class SanPhamSerial {
+  - soSerial : String
+  - ngayNhap : LocalDateTime
+  - ngayBan : LocalDateTime
+  - trangThai : TrangThaiSerial
+  - /hanBaoHanh : LocalDate
+  --
+  + hanBaoHanh() : LocalDate
+  + conBaoHanh(ngay : LocalDate) : boolean
+  + doiTrangThai(moi : TrangThaiSerial) : void
+}
+class PhieuXuat {
+  - maPhieuXuat : long
+  - ngayXuat : LocalDateTime
+  - lyDoXuat : String
+  --
+  + chonSerial(may : SanPhamSerial) : void
+}
+class PhieuBaoHanh {
+  - maPhieu : long
+  - hoTenKhach : String
+  - soDienThoaiKhach : String
+  - ngayNhan : LocalDateTime
+  - moTaLoi : String
+  - tinhTrangBenNgoai : String
+  - ngayHenTra : LocalDate
+  - lanThu : int
+  - ngayGuiHang : LocalDateTime
+  - ngayNhanTuHang : LocalDateTime
+  - ngayTraKhach : LocalDateTime
+  - ketQua : String
+  - trangThai : TrangThaiBaoHanh
+  --
+  + guiHang(ngay : LocalDateTime) : void
+  + nhanVe(ketQua : String) : void
+  + traKhach() : void
+}
+class DonHang <<G3>>
+class NhanVien <<G1>>
+class SanPham <<G2>>
+NhaCungCap "1" -- "*" DonDatHangNCC : nhaCungCap
+NhanVien "1" -- "*" DonDatHangNCC : nguoiLap
+NhanVien "0..1" -- "*" DonDatHangNCC : nguoiGui
+DonDatHangNCC "1" *-- "*" ChiTietDonDatHangNCC : donDat
+SanPham "1" -- "*" ChiTietDonDatHangNCC : sanPham
+NhaCungCap "1" -- "*" PhieuNhap : nhaCungCap
+DonDatHangNCC "0..1" -- "*" PhieuNhap : donDat
+NhanVien "1" -- "*" PhieuNhap : thuKho
+PhieuNhap "1" *-- "*" ChiTietPhieuNhap : phieuNhap
+SanPham "1" -- "*" ChiTietPhieuNhap : sanPham
+SanPham "1" -- "*" SanPhamSerial : sanPham
+ChiTietPhieuNhap "1" -- "*" SanPhamSerial : chiTietNhap
+DonHang "0..1" -- "*" SanPhamSerial : donHangBan
+DonHang "1" -- "*" PhieuXuat : donHang
+NhanVien "1" -- "*" PhieuXuat : thuKho
+SanPhamSerial "*" -- "*" PhieuXuat : serial
+SanPhamSerial "1" -- "*" PhieuBaoHanh : serial
+NhanVien "1" -- "*" PhieuBaoHanh : nhanVien
+@enduml

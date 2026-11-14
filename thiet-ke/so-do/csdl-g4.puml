@@ -1,0 +1,98 @@
+@startuml csdl-g4
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+skinparam defaultFontSize 14
+entity LichSuTrangThaiDon {
+  * maLichSu : BIGINT <<PK>>
+  --
+  *maDonHang : BIGINT <<FK>>
+  trangThaiCu : VARCHAR(25)
+  *trangThaiMoi : VARCHAR(25)
+  *thoiDiem : DATETIME
+  maNhanVien : BIGINT <<FK>>
+  ghiChu : VARCHAR(255)
+}
+entity PhieuGiaoHang {
+  * maPhieuGiao : BIGINT <<PK>>
+  --
+  *maDonHang : BIGINT <<FK>>
+  *loaiViec : VARCHAR(15)
+  maNhanVienGiao : BIGINT <<FK>>
+  donViVanChuyen : VARCHAR(80)
+  maVanDon : VARCHAR(40)
+  *ngayHen : DATE
+  *gioBatDau : TIME
+  *gioKetThuc : TIME
+  lyDoTrungLich : VARCHAR(255)
+  *trangThai : VARCHAR(25)
+  lyDoKhongThanhCong : VARCHAR(255)
+  *tienThuKhiGiao : BIGINT
+  maKeToanXacNhan : BIGINT <<FK>>
+  thoiDiemXacNhanTien : DATETIME
+  *maNguoiPhanCong : BIGINT <<FK>>
+}
+entity PhieuLapDat {
+  * maPhieuLapDat : BIGINT <<PK>>
+  --
+  *maPhieuGiao : BIGINT <<FK>>
+  *ketQuaChayThu : VARCHAR(255)
+  tinhTrangCongTrinh : VARCHAR(255)
+  phatSinh : VARCHAR(255)
+  *phiLapDat : BIGINT
+  *phiVatTu : BIGINT
+  *khachDaKy : BIT(1)
+  *ngayLap : DATETIME
+}
+entity YeuCauDoiTra {
+  * maYeuCau : BIGINT <<PK>>
+  --
+  *maDonHang : BIGINT <<FK>>
+  *ngayYeuCau : DATETIME
+  *loaiLyDo : VARCHAR(25)
+  *lyDo : VARCHAR(500)
+  *hinhThuc : VARCHAR(10)
+  *tinhTrangMay : VARCHAR(255)
+  *conSeal : BIT(1)
+  *phiKhauTru : BIGINT
+  *soTienHoan : BIGINT
+  *laNgoaiLe : BIT(1)
+  ghiChuYKienChu : VARCHAR(255)
+  *trangThai : VARCHAR(15)
+  *maNhanVienTiepNhan : BIGINT <<FK>>
+  maNguoiDuyet : BIGINT <<FK>>
+  ngayDuyet : DATETIME
+  lyDoTuChoi : VARCHAR(255)
+}
+entity ChiTietDoiTra {
+  * maYeuCau : BIGINT <<PK>> <<FK>>
+  * soSerial : VARCHAR(50) <<PK>> <<FK>>
+  --
+}
+entity DonHang <<G3>> {
+  * maDonHang <<PK>>
+}
+entity NhanVien <<G1>> {
+  * maNhanVien <<PK>>
+}
+entity SanPhamSerial <<G5>> {
+  * soSerial <<PK>>
+}
+DonHang ||--o{ LichSuTrangThaiDon
+NhanVien |o--o{ LichSuTrangThaiDon
+DonHang ||--o{ PhieuGiaoHang
+NhanVien |o--o{ PhieuGiaoHang
+NhanVien |o--o{ PhieuGiaoHang
+NhanVien ||--o{ PhieuGiaoHang
+PhieuGiaoHang ||--o{ PhieuLapDat
+DonHang ||--o{ YeuCauDoiTra
+NhanVien ||--o{ YeuCauDoiTra
+NhanVien |o--o{ YeuCauDoiTra
+YeuCauDoiTra ||--o{ ChiTietDoiTra
+SanPhamSerial ||--o{ ChiTietDoiTra
+@enduml

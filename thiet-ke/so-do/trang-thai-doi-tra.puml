@@ -1,0 +1,20 @@
+@startuml trang-thai-doi-tra
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+
+state "Chờ duyệt" as CD
+state "Đã duyệt" as DD
+state "Từ chối" as TC
+state "Hoàn tất" as HT
+
+[*] --> CD : nhân viên bán hàng\ntiếp nhận (UC-DH-06)
+CD --> DD : quản lý duyệt\n[trong hạn hoặc chủ đồng ý ngoại lệ]
+CD --> TC : quản lý từ chối\n[quá hạn, không đúng điều kiện]
+DD --> HT : kế toán hoàn tiền\nhoặc đã xuất máy đổi
+TC --> [*]
+HT --> [*]
+@enduml

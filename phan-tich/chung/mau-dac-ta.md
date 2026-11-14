@@ -79,7 +79,7 @@ mỗi dòng thay thế là một nhánh có điều kiện `[...]`; mỗi giấy
 | Kết quả | Chủ cửa hàng nhận báo cáo kinh doanh tháng kèm đề xuất đã duyệt để quyết định nhập hàng, khuyến mãi |
 | Quy tắc nghiệp vụ | QĐ1. Báo cáo chốt trước ngày 5 tháng sau. · QĐ2. Doanh thu tính theo ngày giao xong, không theo ngày đặt. |
 | Biểu mẫu | Hoá đơn bán hàng, Sổ nộp tiền, Phiếu nhập kho, Phiếu xuất kho, Phiếu tiếp nhận bảo hành, Báo cáo kinh doanh |
-| Vấn đề hiện tại | Vấn đề 3 ở `hien-trang-to-chuc.md`: cộng tay từ nhiều sổ, lệch tiền phát hiện muộn |
+| Vấn đề hiện tại | Vấn đề 5 ở `hien-trang-to-chuc.md`: tiền thu khi giao ghi sổ tay, ghép báo cáo mất 3–4 tiếng, hay lệch |
 
 **2. Sơ đồ đối tượng nghiệp vụ** (làm như C3-51: tác nhân nối với thừa tác viên giao tiếp với nó, thừa tác viên nối với thực thể nó xử lý, ghi bản số hai đầu)
 

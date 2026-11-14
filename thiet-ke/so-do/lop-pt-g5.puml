@@ -1,0 +1,107 @@
+@startuml lop-pt-g5
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+class NhaCungCap {
+  maNhaCungCap
+  tenNhaCungCap
+  soDienThoai
+  email
+  diaChi
+  dangHopTac
+  --
+  ngungHopTac()
+}
+class DonDatHangNCC {
+  maDonDat
+  ngayLap
+  trangThai
+  ghiChu
+  --
+  guiNhaCungCap()
+  huy()
+}
+class ChiTietDonDatHangNCC {
+  soLuong
+  --
+}
+class PhieuNhap {
+  maPhieuNhap
+  soHoaDonNCC
+  ngayNhap
+  ghiChu
+  --
+  themDong()
+}
+class ChiTietPhieuNhap {
+  maChiTietNhap
+  soLuongChungTu
+  soLuongThucNhap
+  donGiaNhap
+  --
+  ghiSerial()
+}
+class SanPhamSerial {
+  soSerial
+  ngayNhap
+  ngayBan
+  trangThai
+  /hanBaoHanh
+  --
+  hanBaoHanh()
+  conBaoHanh()
+  doiTrangThai()
+}
+class PhieuXuat {
+  maPhieuXuat
+  ngayXuat
+  lyDoXuat
+  --
+  chonSerial()
+}
+class PhieuBaoHanh {
+  maPhieu
+  hoTenKhach
+  soDienThoaiKhach
+  ngayNhan
+  moTaLoi
+  tinhTrangBenNgoai
+  ngayHenTra
+  lanThu
+  ngayGuiHang
+  ngayNhanTuHang
+  ngayTraKhach
+  ketQua
+  trangThai
+  --
+  guiHang()
+  nhanVe()
+  traKhach()
+}
+class DonHang <<G3>>
+class NhanVien <<G1>>
+class SanPham <<G2>>
+NhaCungCap "1" -- "*" DonDatHangNCC
+NhanVien "1" -- "*" DonDatHangNCC : nguoiLap
+NhanVien "0..1" -- "*" DonDatHangNCC : nguoiGui
+DonDatHangNCC "1" *-- "*" ChiTietDonDatHangNCC : donDat
+SanPham "1" -- "*" ChiTietDonDatHangNCC
+NhaCungCap "1" -- "*" PhieuNhap
+DonDatHangNCC "0..1" -- "*" PhieuNhap : donDat
+NhanVien "1" -- "*" PhieuNhap : thuKho
+PhieuNhap "1" *-- "*" ChiTietPhieuNhap
+SanPham "1" -- "*" ChiTietPhieuNhap
+SanPham "1" -- "*" SanPhamSerial
+ChiTietPhieuNhap "1" -- "*" SanPhamSerial : chiTietNhap
+DonHang "0..1" -- "*" SanPhamSerial : donHangBan
+DonHang "1" -- "*" PhieuXuat
+NhanVien "1" -- "*" PhieuXuat : thuKho
+SanPhamSerial "*" -- "*" PhieuXuat : serial
+SanPhamSerial "1" -- "*" PhieuBaoHanh : serial
+NhanVien "1" -- "*" PhieuBaoHanh
+@enduml

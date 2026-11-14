@@ -1,0 +1,98 @@
+@startuml lop-pt-g2
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+class DanhMuc {
+  maDanhMuc
+  tenDanhMuc
+  thuTu
+  --
+  coSanPham()
+}
+class ThuongHieu {
+  maThuongHieu
+  tenThuongHieu
+  xuatXu
+  --
+}
+class SanPham {
+  maSanPham
+  tenSanPham
+  model
+  giaBan
+  giaNiemYet
+  thoiHanBaoHanh
+  canLapDat
+  moTa
+  anh
+  trangThai
+  ngayTao
+  --
+  capNhatGia()
+  moBan()
+  ngungBan()
+  soMayTrongKho()
+  giaSauKhuyenMai()
+}
+class ThongSoKyThuat {
+  maThongSo
+  tenThongSo
+  giaTri
+  --
+}
+class LichSuGia {
+  maLichSu
+  giaCu
+  giaMoi
+  lyDo
+  duoiGiaNhap
+  thoiDiem
+  --
+}
+class KhuyenMai {
+  maKhuyenMai
+  tenKhuyenMai
+  loai
+  maCode
+  kieuGiam
+  mucGiam
+  giamToiDa
+  donToiThieu
+  quaTang
+  ngayBatDau
+  ngayKetThuc
+  soLuotToiDa
+  soLuotDaDung
+  trangThai
+  --
+  conHieuLuc()
+  tinhTienGiam()
+  tamDung()
+  tangLuotDung()
+}
+class DanhGia {
+  maDanhGia
+  soSao
+  noiDung
+  ngayDanhGia
+  --
+}
+class DonHang <<G3>>
+class KhachHang <<G3>>
+class NhanVien <<G1>>
+DanhMuc "1" -- "*" SanPham
+ThuongHieu "1" -- "*" SanPham
+SanPham "1" *-- "*" ThongSoKyThuat
+SanPham "1" -- "*" LichSuGia
+NhanVien "1" -- "*" LichSuGia
+NhanVien "1" -- "*" KhuyenMai : nguoiTao
+SanPham "*" -- "*" KhuyenMai
+SanPham "1" -- "*" DanhGia
+KhachHang "1" -- "*" DanhGia
+DonHang "1" -- "*" DanhGia
+@enduml

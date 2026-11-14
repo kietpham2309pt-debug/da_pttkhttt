@@ -1,0 +1,84 @@
+@startuml lop-tong-hop
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+skinparam defaultFontSize 14
+hide members
+package "G1 · Quản trị hệ thống" {
+  class VaiTro
+  class TaiKhoan
+  class NhanVien
+}
+package "G2 · Sản phẩm và khuyến mãi" {
+  class DanhMuc
+  class ThuongHieu
+  class SanPham
+  class ThongSoKyThuat
+  class LichSuGia
+  class KhuyenMai
+  class DanhGia
+}
+package "G3 · Mua hàng và thanh toán" {
+  class KhachHang
+  class DiaChiGiaoHang
+  class DonHang
+  class ChiTietDonHang
+  class GiaoDichThanhToan
+}
+package "G4 · Đơn hàng, giao lắp, đổi trả" {
+  class LichSuTrangThaiDon
+  class PhieuGiaoHang
+  class PhieuLapDat
+  class YeuCauDoiTra
+}
+package "G5 · Kho, nhà cung cấp, bảo hành" {
+  class NhaCungCap
+  class DonDatHangNCC
+  class ChiTietDonDatHangNCC
+  class PhieuNhap
+  class ChiTietPhieuNhap
+  class SanPhamSerial
+  class PhieuXuat
+  class PhieuBaoHanh
+}
+VaiTro "*" -- "*" TaiKhoan
+TaiKhoan "1" -- "0..1" NhanVien
+TaiKhoan "1" -- "0..1" KhachHang
+KhachHang "1" -- "*" DiaChiGiaoHang
+DanhMuc "1" -- "*" SanPham
+ThuongHieu "1" -- "*" SanPham
+SanPham "1" -- "*" ThongSoKyThuat
+SanPham "1" -- "*" LichSuGia
+SanPham "*" -- "*" KhuyenMai
+KhachHang "1" -- "*" DonHang
+KhuyenMai "1" -- "*" DonHang
+DonHang "1" -- "*" ChiTietDonHang
+SanPham "1" -- "*" ChiTietDonHang
+DonHang "1" -- "*" GiaoDichThanhToan
+DonHang "1" -- "*" LichSuTrangThaiDon
+SanPham "1" -- "*" DanhGia
+KhachHang "1" -- "*" DanhGia
+DonHang "1" -- "*" DanhGia
+DonHang "1" -- "*" PhieuGiaoHang
+PhieuGiaoHang "1" -- "0..1" PhieuLapDat
+NhaCungCap "1" -- "*" DonDatHangNCC
+DonDatHangNCC "1" -- "*" ChiTietDonDatHangNCC
+SanPham "1" -- "*" ChiTietDonDatHangNCC
+NhaCungCap "1" -- "*" PhieuNhap
+DonDatHangNCC "1" -- "*" PhieuNhap
+PhieuNhap "1" -- "*" ChiTietPhieuNhap
+SanPham "1" -- "*" ChiTietPhieuNhap
+SanPham "1" -- "*" SanPhamSerial
+ChiTietPhieuNhap "1" -- "*" SanPhamSerial
+DonHang "1" -- "*" SanPhamSerial
+DonHang "1" -- "*" PhieuXuat
+SanPhamSerial "*" -- "*" PhieuXuat
+DonHang "1" -- "*" YeuCauDoiTra
+SanPhamSerial "*" -- "*" YeuCauDoiTra
+SanPhamSerial "1" -- "*" PhieuBaoHanh
+@enduml

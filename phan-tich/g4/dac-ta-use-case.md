@@ -54,13 +54,13 @@ Danh mục chung không có quan hệ include, extend nào giữa các use case 
 - `3b.` Khách báo huỷ, hoặc đã gọi đủ số lần theo mức chủ cửa hàng quy định mà không liên lạc được: nhân viên bấm "Huỷ đơn", chọn lý do (Khách huỷ, Không liên lạc được, Hết hàng, Khác); hệ thống bắt buộc có lý do, chuyển đơn sang Đã huỷ, thêm dòng lịch sử; đơn đã nhận cọc thì hiện số tiền phải hoàn đủ cho khách (QĐ3 của BUC-03).
 - `4a.` Không đủ hàng: hệ thống báo mẫu máy thiếu và số còn; khách đồng ý chờ thì nhân viên ghi ngày dự kiến có hàng vào ghi chú, đơn giữ Chờ xác nhận; khách không chờ thì huỷ như `3b` với lý do Hết hàng.
 - `4b.` Đơn đã đổi trạng thái trong lúc nhân viên đang gọi (khách tự huỷ ở UC-MH-07, hoặc nhân viên khác đã xác nhận): hệ thống báo "Đơn #… đã ở trạng thái …", không ghi đè.
-- `4c.` Đơn từ 10 triệu đồng chưa có tiền cọc: hệ thống nhắc "Đơn từ 10 triệu: xin cọc 10–20%" kèm số tiền gợi ý; khách chuyển cọc (UC-MH-05) thì đơn hiện số tiền cọc rồi tiếp tục bước 5; khách không cọc thì xử lý theo mức chủ cửa hàng quy định.
+- `4c.` Đơn có tiền hàng trên 10 triệu đồng chưa có tiền cọc: hệ thống nhắc "Đơn trên 10 triệu: xin cọc 10–20%" kèm số tiền gợi ý; khách chuyển cọc (UC-MH-05) thì đơn hiện số tiền cọc rồi tiếp tục bước 5; khách không cọc thì xử lý theo mức chủ cửa hàng quy định.
 
 **Ngoại lệ**
 - Mất kết nối hoặc lỗi máy chủ khi bấm Xác nhận, Huỷ: không đổi trạng thái, không thêm dòng lịch sử; báo "Chưa lưu được, thử lại".
 - Phiên đăng nhập hết hạn: chuyển về trang đăng nhập, đơn giữ nguyên trạng thái.
 
-**Quy tắc nghiệp vụ:** QĐ1 (gọi xác nhận trong 30 phút), QĐ3 (huỷ trước khi xuất kho hoàn đủ cọc) của BUC-03; đơn từ 10 triệu xin cọc 10–20% (`MP2 C3`);
+**Quy tắc nghiệp vụ:** QĐ1 (gọi xác nhận trong 30 phút), QĐ3 (huỷ trước khi xuất kho hoàn đủ cọc) của BUC-03; đơn trên 10 triệu xin cọc 10–20% (`MP2 C3`);
 YC-DH-01; YC-HT-05 (lưu vết ai đổi trạng thái đơn); chuyển trạng thái theo mục 4 của `lop-va-trang-thai-chung.md` (Chờ xác nhận sang Đã xác nhận hoặc Đã huỷ; Đã xác nhận sang Đã huỷ chỉ khi chưa xuất kho).
 
 ## UC-DH-06 Xử lý đổi trả, hoàn tiền

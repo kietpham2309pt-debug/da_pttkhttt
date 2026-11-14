@@ -1,0 +1,84 @@
+@startuml lop-pt-g4
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+class LichSuTrangThaiDon {
+  maLichSu
+  trangThaiCu
+  trangThaiMoi
+  thoiDiem
+  ghiChu
+  --
+}
+class PhieuGiaoHang {
+  maPhieuGiao
+  loaiViec
+  donViVanChuyen
+  maVanDon
+  ngayHen
+  gioBatDau
+  gioKetThuc
+  lyDoTrungLich
+  trangThai
+  lyDoKhongThanhCong
+  tienThuKhiGiao
+  thoiDiemXacNhanTien
+  --
+  trungLichVoi()
+  baoDaGiao()
+  baoKhongThanhCong()
+  xacNhanTienThu()
+}
+class PhieuLapDat {
+  maPhieuLapDat
+  ketQuaChayThu
+  tinhTrangCongTrinh
+  phatSinh
+  phiLapDat
+  phiVatTu
+  khachDaKy
+  ngayLap
+  --
+  tongPhi()
+}
+class YeuCauDoiTra {
+  maYeuCau
+  ngayYeuCau
+  loaiLyDo
+  lyDo
+  hinhThuc
+  tinhTrangMay
+  conSeal
+  phiKhauTru
+  soTienHoan
+  laNgoaiLe
+  ghiChuYKienChu
+  trangThai
+  ngayDuyet
+  lyDoTuChoi
+  --
+  trongHanDoiTra()
+  duyet()
+  tuChoi()
+  hoanTien()
+}
+class DonHang <<G3>>
+class NhanVien <<G1>>
+class SanPhamSerial <<G5>>
+DonHang "1" *-- "*" LichSuTrangThaiDon
+NhanVien "0..1" -- "*" LichSuTrangThaiDon
+DonHang "1" -- "*" PhieuGiaoHang
+NhanVien "0..1" -- "*" PhieuGiaoHang : nhanVienGiao
+NhanVien "0..1" -- "*" PhieuGiaoHang : keToanXacNhan
+NhanVien "1" -- "*" PhieuGiaoHang : nguoiPhanCong
+PhieuGiaoHang "1" -- "0..1" PhieuLapDat : phieuGiao
+DonHang "1" -- "*" YeuCauDoiTra
+NhanVien "1" -- "*" YeuCauDoiTra : nhanVienTiepNhan
+NhanVien "0..1" -- "*" YeuCauDoiTra : nguoiDuyet
+SanPhamSerial "*" -- "*" YeuCauDoiTra : serial
+@enduml

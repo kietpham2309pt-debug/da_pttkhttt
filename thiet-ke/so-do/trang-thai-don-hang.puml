@@ -1,0 +1,29 @@
+@startuml trang-thai-don-hang
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+
+state "Chờ xác nhận" as CXN
+state "Đã xác nhận" as DXN
+state "Đang giao" as DG
+state "Hoàn thành" as HT
+state "Giao không\nthành công" as GKTC
+state "Đã huỷ" as DH
+state "Đã trả hàng" as DTH
+
+[*] --> CXN : đặt hàng\n(UC-MH-04)
+CXN --> DXN : gọi được khách, còn hàng\n(UC-DH-01)
+CXN --> DH : khách tự huỷ (UC-MH-07)\nhoặc không liên lạc được
+DXN --> DH : khách huỷ trước\nkhi xuất kho
+DXN --> DG : lập phiếu xuất\n(UC-KB-04)
+DG --> HT : khách nhận, lắp xong\n(UC-DH-03, UC-DH-05)
+DG --> GKTC : khách từ chối nhận\n(UC-DH-03)
+HT --> DTH : trả toàn bộ đơn,\nquản lý duyệt (UC-DH-06)
+DH --> [*]
+GKTC --> [*]
+DTH --> [*]
+HT --> [*]
+@enduml

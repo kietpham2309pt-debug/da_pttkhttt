@@ -1,0 +1,26 @@
+@startuml trang-thai-chiec-may
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+
+state "Trong kho" as TK
+state "Đã xuất" as DX
+state "Đã bán" as DB
+state "Đang bảo hành" as DBH
+state "Trả về kho" as TVK
+state "Lỗi chờ gửi hãng" as LOI
+
+[*] --> TK : nhập kho, ghi serial\n(UC-KB-03)
+TK --> DX : xuất theo đơn\n(UC-KB-04)
+DX --> DB : đơn hoàn thành,\nghi ngày bán (UC-DH-03)
+DX --> TK : giao không thành công,\nnhận lại (UC-KB-08)
+DB --> DBH : tiếp nhận bảo hành\n(UC-KB-06)
+DBH --> DB : trả máy đã sửa\n(UC-KB-06)
+DB --> TVK : đổi trả được duyệt\n(UC-DH-06)
+TVK --> TK : kiểm tra còn tốt\n(UC-KB-08)
+TVK --> LOI : máy lỗi\n(UC-KB-08)
+LOI --> [*]
+@enduml

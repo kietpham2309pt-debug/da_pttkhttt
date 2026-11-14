@@ -1,0 +1,98 @@
+@startuml lop-tk-g2
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+class DanhMuc {
+  - maDanhMuc : String
+  - tenDanhMuc : String
+  - thuTu : int
+  --
+  + coSanPham() : boolean
+}
+class ThuongHieu {
+  - maThuongHieu : long
+  - tenThuongHieu : String
+  - xuatXu : String
+  --
+}
+class SanPham {
+  - maSanPham : long
+  - tenSanPham : String
+  - model : String
+  - giaBan : long
+  - giaNiemYet : long
+  - thoiHanBaoHanh : int
+  - canLapDat : boolean
+  - moTa : String
+  - anh : String
+  - trangThai : TrangThaiSanPham
+  - ngayTao : LocalDateTime
+  --
+  + capNhatGia(giaMoi : long, lyDo : String, nhanVien : NhanVien) : LichSuGia
+  + moBan() : void
+  + ngungBan() : void
+  + soMayTrongKho() : int
+  + giaSauKhuyenMai() : long
+}
+class ThongSoKyThuat {
+  - maThongSo : long
+  - tenThongSo : String
+  - giaTri : String
+  --
+}
+class LichSuGia {
+  - maLichSu : long
+  - giaCu : long
+  - giaMoi : long
+  - lyDo : String
+  - duoiGiaNhap : boolean
+  - thoiDiem : LocalDateTime
+  --
+}
+class KhuyenMai {
+  - maKhuyenMai : long
+  - tenKhuyenMai : String
+  - loai : LoaiKhuyenMai
+  - maCode : String
+  - kieuGiam : KieuGiam
+  - mucGiam : long
+  - giamToiDa : long
+  - donToiThieu : long
+  - quaTang : String
+  - ngayBatDau : LocalDate
+  - ngayKetThuc : LocalDate
+  - soLuotToiDa : int
+  - soLuotDaDung : int
+  - trangThai : TrangThaiKhuyenMai
+  --
+  + conHieuLuc(ngay : LocalDate) : boolean
+  + tinhTienGiam(tienHang : long) : long
+  + tamDung() : void
+  + tangLuotDung() : void
+}
+class DanhGia {
+  - maDanhGia : long
+  - soSao : int
+  - noiDung : String
+  - ngayDanhGia : LocalDateTime
+  --
+}
+class DonHang <<G3>>
+class KhachHang <<G3>>
+class NhanVien <<G1>>
+DanhMuc "1" -- "*" SanPham : danhMuc
+ThuongHieu "1" -- "*" SanPham : thuongHieu
+SanPham "1" *-- "*" ThongSoKyThuat : sanPham
+SanPham "1" -- "*" LichSuGia : sanPham
+NhanVien "1" -- "*" LichSuGia : nhanVien
+NhanVien "1" -- "*" KhuyenMai : nguoiTao
+SanPham "*" -- "*" KhuyenMai : sanPham
+SanPham "1" -- "*" DanhGia : sanPham
+KhachHang "1" -- "*" DanhGia : khachHang
+DonHang "1" -- "*" DanhGia : donHang
+@enduml

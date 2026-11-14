@@ -1,0 +1,42 @@
+@startuml csdl-g1
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+skinparam defaultFontSize 14
+entity VaiTro {
+  * maVaiTro : VARCHAR(30) <<PK>>
+  --
+  *tenVaiTro : VARCHAR(60)
+}
+entity TaiKhoan {
+  * maTaiKhoan : BIGINT <<PK>>
+  --
+  *tenDangNhap : VARCHAR(50)
+  *matKhau : VARCHAR(100)
+  *trangThai : VARCHAR(20)
+  *ngayTao : DATETIME
+  *soLanSaiLienTiep : INT
+  khoaDenLuc : DATETIME
+  *phaiDoiMatKhau : BIT(1)
+}
+entity NhanVien {
+  * maNhanVien : BIGINT <<PK>>
+  --
+  *hoTen : VARCHAR(100)
+  *soDienThoai : VARCHAR(15)
+  *maTaiKhoan : BIGINT <<FK>>
+}
+entity TaiKhoanVaiTro {
+  * maTaiKhoan : BIGINT <<PK>> <<FK>>
+  * maVaiTro : VARCHAR(30) <<PK>> <<FK>>
+  --
+}
+TaiKhoan ||--o{ NhanVien
+TaiKhoan ||--o{ TaiKhoanVaiTro
+VaiTro ||--o{ TaiKhoanVaiTro
+@enduml

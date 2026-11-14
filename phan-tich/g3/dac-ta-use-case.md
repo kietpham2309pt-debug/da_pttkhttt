@@ -63,7 +63,7 @@ Vì vậy Đặt hàng, Thanh toán trực tuyến, Theo dõi đơn hàng, Huỷ
 
 **Ngoại lệ:** mất kết nối hoặc lỗi lưu khi bấm "Đặt hàng" thì không tạo đơn dở dang, giỏ hàng giữ nguyên, báo "Chưa đặt được đơn, vui lòng thử lại"; khách bấm "Đặt hàng" hai lần liên tiếp thì chỉ tạo một đơn.
 
-**Quy tắc nghiệp vụ:** QĐ2 (một mã giảm giá và một quà tặng), QĐ3 (giá đã gồm VAT, phí ghi riêng), QĐ4, QĐ5 (giao và lắp nội thành, đơn tỉnh), QĐ7 (cọc 10–20% đơn từ 10 triệu đồng; trên website mức đơn và tỷ lệ cọc do chủ cửa hàng đặt) của BUC-02;
+**Quy tắc nghiệp vụ:** QĐ2 (một mã giảm giá và một quà tặng), QĐ3 (giá đã gồm VAT, phí ghi riêng), QĐ4, QĐ5 (giao và lắp nội thành, đơn tỉnh), QĐ7 (cọc 10–20% đơn có tiền hàng trên 10 triệu đồng; trên website mức đơn và tỷ lệ cọc do chủ cửa hàng đặt) của BUC-02;
 `YC-MH-01` (đặt không cần tài khoản), `YC-MH-03` (màn hình xác nhận đủ thông tin, khách sửa được rồi đồng ý điều kiện giao dịch), `YC-MH-04` (ô đồng ý không tích sẵn, tách mục đích), `YC-MH-06` (cọc cho đơn giá trị cao và đơn giao tỉnh), `YC-DH-03` (hiện phí giao trước khi đặt), `YC-SP-08` (đổi giá không làm đổi giá trên đơn đã đặt).
 
 ## UC-MH-05 Thanh toán trực tuyến

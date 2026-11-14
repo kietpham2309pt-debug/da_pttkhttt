@@ -1,0 +1,92 @@
+@startuml lop-tk-g3
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+class KhachHang {
+  - maKhachHang : long
+  - hoTen : String
+  - soDienThoai : String
+  - email : String
+  - ngayDangKy : LocalDateTime
+  --
+  + capNhatHoSo(hoTen : String, email : String) : void
+  + diaChiMacDinh() : DiaChiGiaoHang
+}
+class DiaChiGiaoHang {
+  - maDiaChi : long
+  - hoTenNguoiNhan : String
+  - soDienThoai : String
+  - diaChi : String
+  - noiThanh : boolean
+  - macDinh : boolean
+  --
+  + datMacDinh() : void
+}
+class DonHang {
+  - maDonHang : long
+  - hoTenNguoiNhan : String
+  - soDienThoaiNhan : String
+  - email : String
+  - diaChiGiao : String
+  - noiThanh : boolean
+  - canLapDat : boolean
+  - ngayDat : LocalDateTime
+  - ngayHoanThanh : LocalDateTime
+  - tienHang : long
+  - tienGiam : long
+  - phiGiao : long
+  - phiLapDat : long
+  - tongTien : long
+  - tienCoc : long
+  - phuongThucThanhToan : PhuongThucThanhToan
+  - trangThaiThanhToan : TrangThaiThanhToan
+  - trangThai : TrangThaiDonHang
+  - ghiChu : String
+  - lyDoHuy : String
+  - soHoaDon : String
+  - dongYXuLyDuLieu : boolean
+  - dongYQuangCao : boolean
+  - /soTienConPhaiThu : long
+  --
+  + tinhTongTien() : long
+  + tinhTienCoc() : long
+  + doiTrangThai(moi : TrangThaiDonHang, nhanVien : NhanVien) : void
+  + huy(lyDo : String) : void
+  + apKhuyenMai(km : KhuyenMai) : void
+}
+class ChiTietDonHang {
+  - maChiTiet : long
+  - tenSanPhamLucBan : String
+  - soLuong : int
+  - donGia : long
+  --
+  + thanhTien() : long
+}
+class GiaoDichThanhToan {
+  - maGiaoDich : long
+  - loai : LoaiGiaoDich
+  - soTien : long
+  - phuongThuc : String
+  - maGiaoDichCong : String
+  - trangThai : TrangThaiGiaoDich
+  - thoiDiem : LocalDateTime
+  --
+}
+class KhuyenMai <<G2>>
+class NhanVien <<G1>>
+class SanPham <<G2>>
+class TaiKhoan <<G1>>
+TaiKhoan "1" -- "0..1" KhachHang : taiKhoan
+KhachHang "1" -- "*" DiaChiGiaoHang : khachHang
+KhachHang "0..1" -- "*" DonHang : khachHang
+KhuyenMai "0..1" -- "*" DonHang : khuyenMai
+NhanVien "0..1" -- "*" DonHang : nhanVienDuyet
+DonHang "1" *-- "*" ChiTietDonHang : donHang
+SanPham "1" -- "*" ChiTietDonHang : sanPham
+DonHang "1" -- "*" GiaoDichThanhToan : donHang
+@enduml

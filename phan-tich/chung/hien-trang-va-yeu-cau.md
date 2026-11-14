@@ -128,10 +128,10 @@ Cột **Ưu tiên** xét theo điều người bán mô phỏng muốn có (`MP2
 | 21 | YC-MH-03 | Màn hình xác nhận đơn hiện đủ sản phẩm, số lượng, thời hạn giao, khuyến mãi, tiền hàng, phí giao, phí lắp, cách thanh toán; khách sửa được rồi bấm đồng ý điều kiện giao dịch | TL-20 Đ12 | UC-MH-04 | Cao |
 | 22 | YC-MH-04 | Ô đồng ý xử lý dữ liệu **không tích sẵn**, tách mục đích giao hàng và bảo hành với mục đích quảng cáo; lưu lại lần đồng ý | TL-24 Đ9; TL-25 Đ6 | UC-MH-04 | Cao |
 | 23 | YC-MH-05 | Thanh toán: tiền mặt khi nhận, chuyển khoản hoặc QR, thẻ; trả góp qua công ty tài chính | MP2 C3; TL-05, TL-13; MK K10 | UC-MH-05 | Cao |
-| 24 | YC-MH-06 | Đặt cọc trực tuyến cho đơn giá trị cao và đơn giao tỉnh; mức cọc do chủ đặt; ghi số tiền cọc trên đơn | MP2 C3, C6, F2; MP3 C3; TL-17 | UC-MH-05 | Cao |
+| 24 | YC-MH-06 | Đặt cọc trực tuyến cho đơn có tiền hàng trên 10 triệu đồng (vai mô phỏng xin 10–20%, bản chạy thử dùng 10%); mức cọc do chủ đặt; ghi số tiền cọc trên đơn | MP2 C3, C6, F2; MP3 C3; TL-17 | UC-MH-05 | Cao |
 | 25 | YC-MH-07 | Áp một mã giảm giá còn hạn vào đơn, không cộng hai mã | MP2 B4; TL-19 | UC-MH-08 | Trung bình |
 | 26 | YC-MH-08 | Tra đơn bằng số điện thoại kèm mã đơn; thấy trạng thái, ngày giờ hẹn giao lắp | MP2 C7; MP3 C7; TL-04, TL-10 | UC-MH-06 | Cao |
-| 27 | YC-MH-09 | Huỷ đơn khi chưa xuất kho; hoàn đủ tiền đã thu | MP2 C4; TL-13 | UC-MH-07 | Trung bình |
+| 27 | YC-MH-09 | Khách tự huỷ đơn còn Chờ xác nhận; đơn Đã xác nhận mà chưa xuất kho thì khách gọi, nhân viên bán hàng huỷ (UC-DH-01); hoàn đủ tiền đã thu | MP2 C4; TL-13 | UC-MH-07, UC-DH-01 | Trung bình |
 | 28 | YC-MH-10 | Khách xem, tải, in hoá đơn và chứng từ của đơn | TL-22 Đ29; TL-26 | UC-MH-06 | Trung bình |
 | 29 | YC-MH-11 | Giỏ hàng: thêm nhiều mẫu máy, sửa số lượng, chọn có lắp đặt hay không; giữ giỏ khi chưa đăng nhập | TL-19; MK K17 | UC-MH-03 | Cao |
 

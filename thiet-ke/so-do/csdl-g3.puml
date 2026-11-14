@@ -1,0 +1,99 @@
+@startuml csdl-g3
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+skinparam defaultFontSize 14
+entity KhachHang {
+  * maKhachHang : BIGINT <<PK>>
+  --
+  *hoTen : VARCHAR(100)
+  *soDienThoai : VARCHAR(15)
+  email : VARCHAR(100)
+  *ngayDangKy : DATETIME
+  *maTaiKhoan : BIGINT <<FK>>
+}
+entity DiaChiGiaoHang {
+  * maDiaChi : BIGINT <<PK>>
+  --
+  *maKhachHang : BIGINT <<FK>>
+  *hoTenNguoiNhan : VARCHAR(100)
+  *soDienThoai : VARCHAR(15)
+  *diaChi : VARCHAR(255)
+  *noiThanh : BIT(1)
+  *macDinh : BIT(1)
+}
+entity DonHang {
+  * maDonHang : BIGINT <<PK>>
+  --
+  maKhachHang : BIGINT <<FK>>
+  *hoTenNguoiNhan : VARCHAR(100)
+  *soDienThoaiNhan : VARCHAR(15)
+  email : VARCHAR(100)
+  *diaChiGiao : VARCHAR(255)
+  *noiThanh : BIT(1)
+  *canLapDat : BIT(1)
+  *ngayDat : DATETIME
+  ngayHoanThanh : DATETIME
+  *tienHang : BIGINT
+  *tienGiam : BIGINT
+  *phiGiao : BIGINT
+  *phiLapDat : BIGINT
+  *tongTien : BIGINT
+  *tienCoc : BIGINT
+  *phuongThucThanhToan : VARCHAR(20)
+  *trangThaiThanhToan : VARCHAR(20)
+  *trangThai : VARCHAR(25)
+  maKhuyenMai : BIGINT <<FK>>
+  maNhanVienDuyet : BIGINT <<FK>>
+  ghiChu : VARCHAR(500)
+  lyDoHuy : VARCHAR(255)
+  soHoaDon : VARCHAR(30)
+  *dongYXuLyDuLieu : BIT(1)
+  *dongYQuangCao : BIT(1)
+}
+entity ChiTietDonHang {
+  * maChiTiet : BIGINT <<PK>>
+  --
+  *maDonHang : BIGINT <<FK>>
+  *maSanPham : BIGINT <<FK>>
+  *tenSanPhamLucBan : VARCHAR(200)
+  *soLuong : INT
+  *donGia : BIGINT
+}
+entity GiaoDichThanhToan {
+  * maGiaoDich : BIGINT <<PK>>
+  --
+  *maDonHang : BIGINT <<FK>>
+  *loai : VARCHAR(15)
+  *soTien : BIGINT
+  *phuongThuc : VARCHAR(30)
+  maGiaoDichCong : VARCHAR(40)
+  *trangThai : VARCHAR(15)
+  *thoiDiem : DATETIME
+}
+entity KhuyenMai <<G2>> {
+  * maKhuyenMai <<PK>>
+}
+entity NhanVien <<G1>> {
+  * maNhanVien <<PK>>
+}
+entity SanPham <<G2>> {
+  * maSanPham <<PK>>
+}
+entity TaiKhoan <<G1>> {
+  * maTaiKhoan <<PK>>
+}
+TaiKhoan ||--o{ KhachHang
+KhachHang ||--o{ DiaChiGiaoHang
+KhachHang |o--o{ DonHang
+KhuyenMai |o--o{ DonHang
+NhanVien |o--o{ DonHang
+DonHang ||--o{ ChiTietDonHang
+SanPham ||--o{ ChiTietDonHang
+DonHang ||--o{ GiaoDichThanhToan
+@enduml

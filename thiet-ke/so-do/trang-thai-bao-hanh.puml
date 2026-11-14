@@ -1,0 +1,20 @@
+@startuml trang-thai-bao-hanh
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+
+state "Đã tiếp nhận" as TN
+state "Đã gửi hãng" as GH
+state "Đã nhận về" as NV
+state "Đã trả khách" as TK
+
+[*] --> TN : nhân viên bán hàng lập phiếu\n(UC-KB-06)
+TN --> GH : thủ kho gửi trung tâm\nbảo hành hãng
+GH --> NV : thủ kho nhận máy đã sửa
+TN --> TK : xử lý tại cửa hàng\n(lỗi do lắp đặt)
+NV --> TK : nhân viên bán hàng\ntrả máy cho khách
+TK --> [*]
+@enduml

@@ -1,0 +1,41 @@
+@startuml lop-tk-g1
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+class VaiTro {
+  - maVaiTro : String
+  - tenVaiTro : String
+  --
+}
+class TaiKhoan {
+  - maTaiKhoan : long
+  - tenDangNhap : String
+  - matKhau : String
+  - trangThai : TrangThaiTaiKhoan
+  - ngayTao : LocalDateTime
+  - soLanSaiLienTiep : int
+  - khoaDenLuc : LocalDateTime
+  - phaiDoiMatKhau : boolean
+  --
+  + kiemTraMatKhau(matKhau : String) : boolean
+  + khoa() : void
+  + moKhoa() : void
+  + ghiSaiMatKhau() : void
+  + doiMatKhau(matKhauMoi : String) : void
+  + coVai(maVaiTro : String) : boolean
+}
+class NhanVien {
+  - maNhanVien : long
+  - hoTen : String
+  - soDienThoai : String
+  --
+  + capNhatThongTin(hoTen : String, soDienThoai : String) : void
+}
+VaiTro "*" -- "*" TaiKhoan : vaiTro
+TaiKhoan "1" -- "0..1" NhanVien : taiKhoan
+@enduml

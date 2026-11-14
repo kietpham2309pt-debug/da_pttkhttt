@@ -1,0 +1,39 @@
+@startuml kien-truc-3-tang
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam packageStyle rectangle
+
+actor "Khách vãng lai,\nkhách hàng" as K
+actor "Nhân viên\n(6 vai)" as N
+
+package "Tầng giao diện" as GD {
+  component "Trang Thymeleaf\n(templates/khach, templates/quan-tri)" as TPL
+  component "Controller\n(web.khach, web.quantri.g1…g5)" as CTL
+}
+package "Tầng nghiệp vụ" as NV {
+  component "Lớp BUS\n(DonHangBUS, SerialBUS, TaiKhoanBUS,\nGioHang, …BUS của từng phân hệ)" as BUS
+  component "Spring Security\n(đăng nhập, phân quyền theo vai)" as SEC
+}
+package "Tầng truy cập dữ liệu" as DL {
+  component "Lớp DAO\n(khodulieu: …DAO, Spring Data JPA)" as DAO
+}
+package "Lớp thực thể" as TT {
+  component "27 lớp thực thể JPA\n(thucthe)" as ENT
+}
+database "MySQL 8\n31 bảng" as DB
+cloud "Cổng thanh toán\n(mô phỏng)" as CTT
+
+K --> TPL : trình duyệt
+N --> TPL : trình duyệt
+TPL --> CTL
+CTL --> BUS
+SEC ..> CTL : chặn theo vai
+BUS --> DAO
+DAO --> ENT
+DAO --> DB : JDBC
+BUS ..> CTT : thanh toán
+@enduml

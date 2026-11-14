@@ -1,0 +1,84 @@
+@startuml lop-tk-g4
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+class LichSuTrangThaiDon {
+  - maLichSu : long
+  - trangThaiCu : TrangThaiDonHang
+  - trangThaiMoi : TrangThaiDonHang
+  - thoiDiem : LocalDateTime
+  - ghiChu : String
+  --
+}
+class PhieuGiaoHang {
+  - maPhieuGiao : long
+  - loaiViec : LoaiViecGiao
+  - donViVanChuyen : String
+  - maVanDon : String
+  - ngayHen : LocalDate
+  - gioBatDau : LocalTime
+  - gioKetThuc : LocalTime
+  - lyDoTrungLich : String
+  - trangThai : TrangThaiPhieuGiao
+  - lyDoKhongThanhCong : String
+  - tienThuKhiGiao : long
+  - thoiDiemXacNhanTien : LocalDateTime
+  --
+  + trungLichVoi(khac : PhieuGiaoHang) : boolean
+  + baoDaGiao(tienThu : long) : void
+  + baoKhongThanhCong(lyDo : String) : void
+  + xacNhanTienThu(keToan : NhanVien) : void
+}
+class PhieuLapDat {
+  - maPhieuLapDat : long
+  - ketQuaChayThu : String
+  - tinhTrangCongTrinh : String
+  - phatSinh : String
+  - phiLapDat : long
+  - phiVatTu : long
+  - khachDaKy : boolean
+  - ngayLap : LocalDateTime
+  --
+  + tongPhi() : long
+}
+class YeuCauDoiTra {
+  - maYeuCau : long
+  - ngayYeuCau : LocalDateTime
+  - loaiLyDo : LoaiLyDoDoiTra
+  - lyDo : String
+  - hinhThuc : HinhThucDoiTra
+  - tinhTrangMay : String
+  - conSeal : boolean
+  - phiKhauTru : long
+  - soTienHoan : long
+  - laNgoaiLe : boolean
+  - ghiChuYKienChu : String
+  - trangThai : TrangThaiDoiTra
+  - ngayDuyet : LocalDateTime
+  - lyDoTuChoi : String
+  --
+  + trongHanDoiTra(ngay : LocalDate) : boolean
+  + duyet(quanLy : NhanVien) : void
+  + tuChoi(quanLy : NhanVien, lyDo : String) : void
+  + hoanTien(soTien : long) : void
+}
+class DonHang <<G3>>
+class NhanVien <<G1>>
+class SanPhamSerial <<G5>>
+DonHang "1" *-- "*" LichSuTrangThaiDon : donHang
+NhanVien "0..1" -- "*" LichSuTrangThaiDon : nhanVien
+DonHang "1" -- "*" PhieuGiaoHang : donHang
+NhanVien "0..1" -- "*" PhieuGiaoHang : nhanVienGiao
+NhanVien "0..1" -- "*" PhieuGiaoHang : keToanXacNhan
+NhanVien "1" -- "*" PhieuGiaoHang : nguoiPhanCong
+PhieuGiaoHang "1" -- "0..1" PhieuLapDat : phieuGiao
+DonHang "1" -- "*" YeuCauDoiTra : donHang
+NhanVien "1" -- "*" YeuCauDoiTra : nhanVienTiepNhan
+NhanVien "0..1" -- "*" YeuCauDoiTra : nguoiDuyet
+SanPhamSerial "*" -- "*" YeuCauDoiTra : serial
+@enduml
