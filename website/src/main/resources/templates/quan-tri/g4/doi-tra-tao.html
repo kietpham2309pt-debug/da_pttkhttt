@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Tạo yêu cầu đổi trả')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link rel="stylesheet" href="/css/g4.css">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Tạo yêu cầu đổi trả')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('doi-tra')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Tạo yêu cầu đổi trả</h1>
+                            <p th:text="'Tìm đơn theo mã đơn, số điện thoại hoặc số serial. Đổi ý: trong ' + ${hanDoiY} + ' ngày, còn seal, chưa lắp; lỗi nhà sản xuất: trong ' + ${hanLoi} + ' ngày; không đúng mô tả: luôn nhận.'"></p>
+                        </div>
+                        <div class="qt-dau__nut"><a class="nut nut--nho" th:href="@{/quan-tri/doi-tra}">Về danh sách</a></div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="thanh-loc">
+                        <form th:action="@{/quan-tri/doi-tra/tao}" method="get">
+                            <input type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Mã đơn, số điện thoại hoặc serial">
+                            <button class="nut nut--nho" type="submit">Tìm đơn</button>
+                        </form>
+                    </div>
+
+                    <div class="khoi" th:if="${ketQua != null}">
+                        <div class="khoi__dau"><h2>Kết quả tìm</h2></div>
+                        <p th:if="${#lists.isEmpty(ketQua)}">Không tìm thấy đơn nào.</p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(ketQua)}">
+                            <table class="bang-dl">
+                                <thead><tr><th>Đơn</th><th>Người nhận</th><th>Trạng thái</th><th>Máy</th><th class="canh-phai">Thao tác</th></tr></thead>
+                                <tbody>
+                                <tr th:each="k : ${ketQua}">
+                                    <td class="ma-mo" th:text="${@dd.maDon(k.don.maDonHang)}"></td>
+                                    <td th:text="${k.don.hoTenNguoiNhan} + ' · ' + ${k.don.soDienThoaiNhan}"></td>
+                                    <td th:text="${k.don.trangThai.nhan}"></td>
+                                    <td class="o-dai"><span th:each="m, i : ${k.may}" th:text="${m.serial.soSerial} + ' (' + ${m.serial.trangThai.nhan} + ')' + (${i.last} ? '' : '; ')"></span></td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho nut--dac" th:if="${k.don.trangThai.name() == 'HOAN_THANH'}" th:href="@{/quan-tri/doi-tra/tao(don=${k.don.maDonHang})}">Tạo yêu cầu đổi trả</a>
+                                            <span class="g4-nho" th:unless="${k.don.trangThai.name() == 'HOAN_THANH'}">Chỉ đơn Hoàn thành</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi" th:if="${dd != null}">
+                        <div class="khoi__dau"><h2 th:text="'Đơn ' + ${@dd.maDon(dd.don.maDonHang)} + ' · ' + ${dd.don.hoTenNguoiNhan} + ' · ' + ${dd.don.soDienThoaiNhan}">Đơn</h2></div>
+
+                        <div class="canh-bao" th:if="${khongDat != null and !#lists.isEmpty(khongDat)}">
+                            <b>Điều kiện không đạt:</b>
+                            <ul class="g4-ds"><li th:each="k : ${khongDat}" th:text="${k}"></li></ul>
+                        </div>
+
+                        <form th:action="@{/quan-tri/doi-tra/tao}" method="post">
+                            <input type="hidden" name="don" th:value="${dd.don.maDonHang}">
+                            <div class="cuon-ngang">
+                                <table class="bang-dl">
+                                    <thead><tr><th>Chọn</th><th>Sản phẩm</th><th>Model</th><th>Serial</th><th>Ngày bán</th><th class="canh-phai">Số ngày</th><th>Đã lắp</th><th>Trạng thái</th></tr></thead>
+                                    <tbody>
+                                    <tr th:each="m : ${dd.may}">
+                                        <td><input type="checkbox" name="serial" th:value="${m.serial.soSerial}"
+                                                   th:disabled="${m.serial.trangThai.name() != 'DA_BAN'}"
+                                                   th:checked="${nhap['serial'] != null and #lists.contains(nhap['serial'], m.serial.soSerial)}"></td>
+                                        <td data-nhan="Sản phẩm" th:text="${m.serial.sanPham.tenSanPham}"></td>
+                                        <td th:text="${m.serial.sanPham.model}"></td>
+                                        <td th:text="${m.serial.soSerial}"></td>
+                                        <td th:text="${@dd.ngay(m.serial.ngayBan)}"></td>
+                                        <td class="canh-phai" th:text="${m.soNgay}"></td>
+                                        <td th:text="${m.daLap} ? 'Đã lắp' : 'Chưa lắp'"></td>
+                                        <td th:text="${m.serial.trangThai.nhan}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="hang-form">
+                                <div class="o-nhap">
+                                    <label for="hinhThuc">Hình thức</label>
+                                    <select id="hinhThuc" name="hinhThuc" required>
+                                        <option value="">Chọn</option>
+                                        <option th:each="h : ${dsHinhThuc}" th:value="${h.name()}" th:text="${h.nhan}" th:selected="${nhap['hinhThuc'] == h.name()}"></option>
+                                    </select>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="loaiLyDo">Loại lý do</label>
+                                    <select id="loaiLyDo" name="loaiLyDo" required>
+                                        <option value="">Chọn</option>
+                                        <option th:each="l : ${dsLoaiLyDo}" th:value="${l.name()}" th:text="${l.nhan}" th:selected="${nhap['loaiLyDo'] == l.name()}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="lyDo">Lý do khách nêu</label>
+                                <textarea id="lyDo" name="lyDo" rows="3" maxlength="500" th:text="${nhap['lyDo']}"></textarea>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="benNgoai">Tình trạng bên ngoài của máy</label>
+                                <input type="text" id="benNgoai" name="benNgoai" maxlength="150" th:value="${nhap['benNgoai']}" placeholder="Hộp còn nguyên, đủ phụ kiện, không trầy xước">
+                            </div>
+                            <label class="g4-o-tick"><input type="checkbox" name="conSeal" value="true" th:checked="${nhap['conSeal'] == true}"> Máy còn seal</label>
+                            <label class="g4-o-tick"><input type="checkbox" name="daLap" value="true" th:checked="${nhap['daLap'] == true}"> Máy đã lắp (đơn có biên bản lắp đặt thì hệ thống tự tính là đã lắp)</label>
+                            <label class="g4-o-tick" th:if="${khongDat != null and !#lists.isEmpty(khongDat)}"><input type="checkbox" name="xinNgoaiLe" value="true"> Khách xin xét ngoại lệ (gửi duyệt, đánh dấu Ngoại lệ)</label>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Gửi duyệt</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

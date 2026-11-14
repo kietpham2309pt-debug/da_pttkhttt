@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Giao hàng, lắp đặt')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link rel="stylesheet" href="/css/g4.css">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Giao hàng, lắp đặt')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('giao-hang')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Giao hàng, lắp đặt</h1>
+                            <p>Xếp lịch giao lắp cho đơn đã xác nhận, theo dõi lịch từng nhân viên và cập nhật kết quả giao.</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="khoi" th:if="${giaoHang}">
+                        <div class="khoi__dau"><h2>Việc của tôi</h2></div>
+                        <p th:if="${#lists.isEmpty(viecCuaToi)}">Chưa có việc được phân công.</p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(viecCuaToi)}">
+                            <table class="bang-dl">
+                                <thead><tr><th>Ngày hẹn</th><th>Giờ</th><th>Đơn</th><th>Người nhận</th><th>Địa chỉ</th><th>Loại việc</th><th class="canh-phai">Thao tác</th></tr></thead>
+                                <tbody>
+                                <tr th:each="p : ${viecCuaToi}">
+                                    <td th:text="${@dd.ngay(p.ngayHen)}"></td>
+                                    <td th:text="${p.gioBatDau} + '–' + ${p.gioKetThuc}"></td>
+                                    <td class="ma-mo" th:text="${@dd.maDon(p.donHang.maDonHang)}"></td>
+                                    <td th:text="${p.donHang.hoTenNguoiNhan} + ' · ' + ${p.donHang.soDienThoaiNhan}"></td>
+                                    <td class="o-dai" th:text="${p.donHang.diaChiGiao}"></td>
+                                    <td th:text="${p.loaiViec.nhan}"></td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho nut--dac" th:href="@{/quan-tri/giao-hang/phieu/{m}(m=${p.maPhieuGiao})}">Cập nhật</a></div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <th:block th:unless="${#lists.isEmpty(viecDaXong)}">
+                            <h3 class="g4-nho g4-tieu-de">Đã xong trong 7 ngày qua</h3>
+                            <div class="cuon-ngang">
+                                <table class="bang-dl">
+                                    <thead><tr><th>Ngày hẹn</th><th>Đơn</th><th>Loại việc</th><th>Kết quả</th><th class="canh-phai">Tiền thu</th><th>Kế toán</th></tr></thead>
+                                    <tbody>
+                                    <tr th:each="p : ${viecDaXong}">
+                                        <td th:text="${@dd.ngay(p.ngayHen)}"></td>
+                                        <td><a class="ma-mo" th:href="@{/quan-tri/giao-hang/phieu/{m}(m=${p.maPhieuGiao})}" th:text="${@dd.maDon(p.donHang.maDonHang)}"></a></td>
+                                        <td th:text="${p.loaiViec.nhan}"></td>
+                                        <td th:text="${p.trangThai.nhan}"></td>
+                                        <td class="canh-phai" th:text="${@dd.tien(p.tienThuKhiGiao)}"></td>
+                                        <td th:text="${p.keToanXacNhan != null ? 'Đã nhận' : (p.tienThuKhiGiao > 0 ? 'Chưa nhận' : '')}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </th:block>
+                    </div>
+
+                    <div class="khoi" th:if="${quanLy}">
+                        <div class="khoi__dau"><h2>Đơn chờ phân công</h2></div>
+                        <p th:if="${#lists.isEmpty(donCho)}">Không có đơn nào chờ xếp lịch.</p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(donCho)}">
+                            <table class="bang-dl">
+                                <thead><tr><th>Đơn</th><th>Trạng thái</th><th>Địa chỉ</th><th>Khu vực</th><th>Máy cần lắp</th><th>Ghi chú</th><th class="canh-phai">Thao tác</th></tr></thead>
+                                <tbody>
+                                <tr th:each="c : ${donCho}">
+                                    <td><a class="ma-mo" th:href="@{/quan-tri/don-hang/{m}(m=${c.don.maDonHang})}" th:text="${@dd.maDon(c.don.maDonHang)}"></a></td>
+                                    <td th:text="${c.don.trangThai.nhan}"></td>
+                                    <td class="o-dai" th:text="${c.don.diaChiGiao}"></td>
+                                    <td th:text="${c.don.noiThanh} ? 'Nội thành' : 'Tỉnh'"></td>
+                                    <td class="o-dai" th:text="${#lists.isEmpty(c.mayCanLap)} ? 'Không' : ${#strings.listJoin(c.mayCanLap, '; ')}"></td>
+                                    <td class="o-dai">
+                                        <span class="g4-ghi-chu" th:text="${c.don.ghiChu}"></span>
+                                        <span class="g4-nho" th:each="p : ${c.phieuCu}" th:text="' PG' + ${p.maPhieuGiao} + ' ' + ${p.loaiViec.nhan} + ': ' + ${p.trangThai.nhan}"></span>
+                                    </td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho nut--dac" th:href="@{/quan-tri/giao-hang/phan-cong(don=${c.don.maDonHang})}">Phân công</a></div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi" th:if="${banHang}">
+                        <div class="khoi__dau"><h2>Đơn gửi đơn vị vận chuyển chờ kết quả</h2></div>
+                        <p th:if="${#lists.isEmpty(vanChuyen)}">Không có đơn nào đang gửi vận chuyển.</p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(vanChuyen)}">
+                            <table class="bang-dl">
+                                <thead><tr><th>Ngày gửi</th><th>Đơn</th><th>Đơn vị vận chuyển</th><th>Mã vận đơn</th><th>Người nhận</th><th class="canh-phai">Thao tác</th></tr></thead>
+                                <tbody>
+                                <tr th:each="p : ${vanChuyen}">
+                                    <td th:text="${@dd.ngay(p.ngayHen)}"></td>
+                                    <td class="ma-mo" th:text="${@dd.maDon(p.donHang.maDonHang)}"></td>
+                                    <td th:text="${p.donViVanChuyen}"></td>
+                                    <td th:text="${p.maVanDon}"></td>
+                                    <td th:text="${p.donHang.hoTenNguoiNhan} + ' · ' + ${p.donHang.soDienThoaiNhan}"></td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" th:href="@{/quan-tri/giao-hang/phieu/{m}(m=${p.maPhieuGiao})}">Cập nhật</a></div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau"><h2>Lịch giao lắp theo ngày</h2></div>
+                        <div class="thanh-loc">
+                            <form th:action="@{/quan-tri/giao-hang}" method="get">
+                                <input type="date" name="ngay" th:value="${ngay}">
+                                <select name="nv">
+                                    <option value="">Tất cả nhân viên, vận chuyển</option>
+                                    <option th:each="n : ${dsNhanVien}" th:value="${n.maNhanVien}" th:text="${n.hoTen}" th:selected="${nv == n.maNhanVien}"></option>
+                                </select>
+                                <button class="nut nut--nho" type="submit">Xem lịch</button>
+                            </form>
+                        </div>
+                        <p th:if="${#lists.isEmpty(lich)}" th:text="'Không có việc nào ngày ' + ${@dd.ngay(ngay)} + '.'"></p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(lich)}">
+                            <table class="bang-dl">
+                                <thead><tr><th>Người phụ trách</th><th>Giờ</th><th>Đơn</th><th>Địa chỉ</th><th>Loại việc</th><th>Trạng thái</th><th>Lý do trùng giờ</th><th class="canh-phai">Thao tác</th></tr></thead>
+                                <tbody>
+                                <tr th:each="p : ${lich}">
+                                    <td th:text="${p.nhanVienGiao != null ? p.nhanVienGiao.hoTen : 'Vận chuyển: ' + p.donViVanChuyen}"></td>
+                                    <td th:text="${p.gioBatDau} + '–' + ${p.gioKetThuc}"></td>
+                                    <td class="ma-mo" th:text="${@dd.maDon(p.donHang.maDonHang)}"></td>
+                                    <td class="o-dai" th:text="${p.donHang.diaChiGiao}"></td>
+                                    <td th:text="${p.loaiViec.nhan}"></td>
+                                    <td><span class="the-nhan" th:classappend="${p.trangThai.name() == 'DA_GIAO'} ? 'the-nhan--ok' : (${p.trangThai.name() == 'KHONG_THANH_CONG'} ? 'the-nhan--do' : 'the-nhan--vang')" th:text="${p.trangThai.nhan}"></span></td>
+                                    <td class="o-dai" th:text="${p.lyDoTrungLich}"></td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" th:href="@{/quan-tri/giao-hang/phieu/{m}(m=${p.maPhieuGiao})}">Xem</a>
+                                            <a class="nut nut--nho" th:if="${quanLy and p.trangThai.name() == 'DA_PHAN_CONG'}" th:href="@{/quan-tri/giao-hang/phieu/{m}/doi-lich(m=${p.maPhieuGiao})}">Đổi lịch</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

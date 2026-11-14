@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Yêu cầu đổi trả')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main th:with="y=${ct.yeuCau}, d=${ct.don}, tt=${ct.yeuCau.trangThai.name()}">
+    <link rel="stylesheet" href="/css/g4.css">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Yêu cầu đổi trả')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('doi-tra')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="'Yêu cầu đổi trả #' + ${y.maYeuCau}">Yêu cầu</h1>
+                            <p>
+                                <span class="the-nhan" th:classappend="${tt == 'CHO_DUYET'} ? 'the-nhan--vang' : (${tt == 'TU_CHOI'} ? 'the-nhan--do' : (${tt == 'HOAN_TAT'} ? 'the-nhan--ok' : ''))" th:text="${y.trangThai.nhan}"></span>
+                                <span class="the-nhan the-nhan--vang" th:if="${y.laNgoaiLe}">Ngoại lệ</span>
+                            </p>
+                        </div>
+                        <div class="qt-dau__nut"><a class="nut nut--nho" th:href="@{/quan-tri/doi-tra}">Về danh sách</a></div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="g4-hai-cot">
+                        <div class="khoi">
+                            <div class="khoi__dau"><h2>Yêu cầu</h2></div>
+                            <dl class="g4-tt">
+                                <dt>Ngày tiếp nhận</dt><dd th:text="${@dd.ngayGio(y.ngayYeuCau)} + ' · ' + ${y.nhanVienTiepNhan.hoTen}"></dd>
+                                <dt>Loại lý do</dt><dd th:text="${y.loaiLyDo.nhan}"></dd>
+                                <dt>Lý do khách nêu</dt><dd th:text="${y.lyDo}"></dd>
+                                <dt>Hình thức</dt><dd th:text="${y.hinhThuc.nhan}"></dd>
+                                <dt>Tình trạng máy</dt><dd th:text="${y.tinhTrangMay}"></dd>
+                                <dt>Đối chiếu điều kiện</dt>
+                                <dd>
+                                    <span th:if="${#lists.isEmpty(ct.khongDat)}" class="the-nhan the-nhan--ok">Đủ điều kiện</span>
+                                    <ul class="g4-ds" th:unless="${#lists.isEmpty(ct.khongDat)}"><li th:each="k : ${ct.khongDat}" th:text="${k}"></li></ul>
+                                </dd>
+                                <dt>Phí khấu trừ</dt><dd th:text="${@dd.tien(y.phiKhauTru)}"></dd>
+                                <dt>Số tiền hoàn</dt><dd th:text="${@dd.tien(y.soTienHoan)}"></dd>
+                                <dt th:if="${y.ghiChuYKienChu != null}">Ý kiến chủ cửa hàng</dt><dd th:if="${y.ghiChuYKienChu != null}" th:text="${y.ghiChuYKienChu}"></dd>
+                                <dt>Người duyệt</dt><dd th:text="${y.nguoiDuyet != null ? y.nguoiDuyet.hoTen + ' lúc ' + @dd.ngayGio(y.ngayDuyet) : 'Chưa duyệt'}"></dd>
+                                <dt th:if="${y.lyDoTuChoi != null}">Lý do từ chối</dt><dd th:if="${y.lyDoTuChoi != null}" th:text="${y.lyDoTuChoi}"></dd>
+                            </dl>
+                        </div>
+                        <div class="khoi">
+                            <div class="khoi__dau"><h2>Hoá đơn</h2><a class="nut nut--nho" sec:authorize="hasAnyRole('NV_BAN_HANG','QUAN_LY')" th:href="@{/quan-tri/don-hang/{m}(m=${d.maDonHang})}">Xem đơn</a></div>
+                            <dl class="g4-tt">
+                                <dt>Đơn</dt><dd th:text="${@dd.maDon(d.maDonHang)} + ' · ' + ${d.trangThai.nhan}"></dd>
+                                <dt>Khách</dt><dd th:text="${d.hoTenNguoiNhan} + ' · ' + ${d.soDienThoaiNhan}"></dd>
+                                <dt>Số hoá đơn</dt><dd th:text="${d.soHoaDon != null ? d.soHoaDon : 'Chưa lập'}"></dd>
+                                <dt>Ngày đặt</dt><dd th:text="${@dd.ngayGio(d.ngayDat)}"></dd>
+                                <dt>Tổng tiền đơn</dt><dd th:text="${@dd.tien(d.tongTien)}"></dd>
+                                <dt>Cách khách đã trả</dt><dd th:text="${#strings.setJoin(ct.cachDaTra, ', ')}"></dd>
+                                <dt>Trạng thái thanh toán</dt><dd th:text="${d.trangThaiThanhToan.nhan}"></dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau"><h2>Chiếc máy khách mang lại</h2></div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead><tr><th>Sản phẩm</th><th>Serial</th><th>Ngày bán</th><th class="canh-phai">Số ngày đến lúc yêu cầu</th><th>Đã lắp</th><th class="canh-phai">Giá lúc bán</th><th>Trạng thái máy</th></tr></thead>
+                                <tbody>
+                                <tr th:each="m : ${ct.may}">
+                                    <td data-nhan="Sản phẩm" th:text="${m.serial.sanPham.tenSanPham}"></td>
+                                    <td th:text="${m.serial.soSerial}"></td>
+                                    <td th:text="${@dd.ngay(m.serial.ngayBan)}"></td>
+                                    <td class="canh-phai" th:text="${m.soNgay}"></td>
+                                    <td th:text="${m.daLap} ? 'Đã lắp' : 'Chưa lắp'"></td>
+                                    <td class="canh-phai" th:text="${@dd.tien(m.gia)}"></td>
+                                    <td th:text="${m.serial.trangThai.nhan}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h3 class="g4-nho g4-tieu-de">Các lần bảo hành của máy</h3>
+                        <p th:if="${#lists.isEmpty(ct.baoHanh)}">Chưa bảo hành lần nào.</p>
+                        <ul class="g4-ds" th:unless="${#lists.isEmpty(ct.baoHanh)}">
+                            <li th:each="b : ${ct.baoHanh}" th:text="'Lần ' + ${b.lanThu} + ' · ' + ${@dd.ngay(b.ngayNhan)} + ' · ' + ${b.moTaLoi} + ' · ' + ${b.trangThai.nhan}"></li>
+                        </ul>
+                    </div>
+
+                    <div class="khoi" th:if="${quanLy and tt == 'CHO_DUYET'}">
+                        <div class="khoi__dau"><h2>Duyệt yêu cầu</h2></div>
+                        <div class="canh-bao" th:if="${y.laNgoaiLe}">Yêu cầu ngoại lệ: xin ý kiến chủ cửa hàng rồi ghi ý kiến vào ô bên dưới, duyệt hoặc từ chối theo ý chủ.</div>
+                        <form th:action="@{/quan-tri/doi-tra/{m}/duyet(m=${y.maYeuCau})}" method="post">
+                            <input type="hidden" name="trangThaiLucMo" th:value="${tt}">
+                            <div class="hang-form">
+                                <div class="o-nhap">
+                                    <label for="hinhThucDuyet">Hướng xử lý</label>
+                                    <select id="hinhThucDuyet" name="hinhThuc">
+                                        <option th:each="h : ${dsHinhThuc}" th:value="${h.name()}" th:text="${h.nhan}" th:selected="${y.hinhThuc == h}"></option>
+                                    </select>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="phiKhauTru">Phí khấu trừ (đồng)</label>
+                                    <input type="number" min="0" step="1000" id="phiKhauTru" name="phiKhauTru" th:value="${y.phiKhauTru}">
+                                    <span class="goi-y" th:text="'Mức chủ cửa hàng đặt: khách đổi ý trả hàng trừ 10% giá máy (gợi ý ' + ${@dd.tien(ct.phiGoiY)} + '); lỗi nhà sản xuất, không đúng mô tả không trừ.'"></span>
+                                </div>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="yKienChuDuyet">Ý kiến chủ cửa hàng (bắt buộc với yêu cầu ngoại lệ)</label>
+                                <input type="text" id="yKienChuDuyet" name="yKienChu" maxlength="255">
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Duyệt</button>
+                            </div>
+                        </form>
+                        <p class="goi-y" th:if="${y.loaiLyDo.name() == 'KHONG_DUNG_MO_TA'}">Hàng không đúng mô tả bắt buộc nhận lại: không có nút Từ chối, chỉ chọn đổi máy hoặc trả hàng theo ý khách.</p>
+                        <form th:unless="${y.loaiLyDo.name() == 'KHONG_DUNG_MO_TA'}" th:action="@{/quan-tri/doi-tra/{m}/tu-choi(m=${y.maYeuCau})}" method="post">
+                            <input type="hidden" name="trangThaiLucMo" th:value="${tt}">
+                            <div class="hang-form">
+                                <div class="o-nhap">
+                                    <label for="lyDoTuChoi">Lý do từ chối</label>
+                                    <input type="text" id="lyDoTuChoi" name="lyDoTuChoi" maxlength="255">
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="yKienChuTuChoi">Ý kiến chủ cửa hàng (bắt buộc với yêu cầu ngoại lệ)</label>
+                                    <input type="text" id="yKienChuTuChoi" name="yKienChu" maxlength="255">
+                                </div>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--do" type="submit">Từ chối</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="khoi" th:if="${keToan and tt == 'DA_DUYET' and y.hinhThuc.name() == 'TRA_HANG'}">
+                        <div class="khoi__dau"><h2>Hoàn tiền</h2></div>
+                        <p th:text="'Số tiền phải hoàn: ' + ${@dd.tien(y.soTienHoan)} + ' (giá máy ' + ${@dd.tien(ct.tongGia)} + ' trừ phí khấu trừ ' + ${@dd.tien(y.phiKhauTru)} + '). Hoàn theo cách khách đã trả: ' + ${#strings.setJoin(ct.cachDaTra, ', ')} + '.'"></p>
+                        <form th:action="@{/quan-tri/doi-tra/{m}/hoan-tien(m=${y.maYeuCau})}" method="post">
+                            <input type="hidden" name="trangThaiLucMo" th:value="${tt}">
+                            <div class="hang-form">
+                                <div class="o-nhap">
+                                    <label for="cachHoan">Cách hoàn</label>
+                                    <select id="cachHoan" name="cachHoan">
+                                        <option value="">Chọn</option>
+                                        <option th:each="c : ${dsCachHoan}" th:value="${c}" th:text="${c}"></option>
+                                    </select>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="maGiaoDich">Mã giao dịch hoặc ghi chú</label>
+                                    <input type="text" id="maGiaoDich" name="maGiaoDich" maxlength="40">
+                                </div>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Đã hoàn tiền</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="khoi" th:if="${tt == 'DA_DUYET' and y.hinhThuc.name() == 'DOI_MAY'}">
+                        <div class="khoi__dau"><h2>Đổi máy</h2></div>
+                        <p>Đã ghi chú cho thủ kho xuất một máy cùng mẫu cho đơn (module kho lập phiếu xuất). Máy khách trả đang ở trạng thái Trả về kho.</p>
+                        <p th:if="${#lists.isEmpty(ct.phieuXuatMayDoi)}">Chưa có phiếu xuất máy đổi.</p>
+                        <ul class="g4-ds" th:unless="${#lists.isEmpty(ct.phieuXuatMayDoi)}">
+                            <li th:each="x : ${ct.phieuXuatMayDoi}">
+                                <span th:text="'PX' + ${x.maPhieuXuat} + ' · ' + ${@dd.ngayGio(x.ngayXuat)} + ': '"></span>
+                                <span th:each="s, i : ${x.serial}" th:text="${s.soSerial} + ' (' + ${s.trangThai.nhan} + ')' + (${i.last} ? '' : ', ')"></span>
+                            </li>
+                        </ul>
+                        <form th:if="${banHang}" th:action="@{/quan-tri/doi-tra/{m}/giao-may-doi(m=${y.maYeuCau})}" method="post">
+                            <input type="hidden" name="trangThaiLucMo" th:value="${tt}">
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Đã giao máy đổi</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

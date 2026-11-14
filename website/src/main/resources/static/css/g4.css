@@ -1,0 +1,21 @@
+.g4-tab{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px}
+.g4-tab a{padding:8px 14px; border:1px solid var(--vien); font-size:13.5px; color:var(--chu-nhat)}
+.g4-tab a:hover{border-color:var(--vien-sang); color:var(--chu)}
+.g4-tab a.dang-chon{border-color:var(--dong); color:var(--dong)}
+.g4-tab b{margin-left:6px; font-weight:var(--dam-nhan)}
+.g4-hai-cot{display:grid; gap:18px}
+@media (min-width:980px){.g4-hai-cot{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.g4-hai-cot > .khoi + .khoi{margin-top:0}
+.g4-tt{display:grid; grid-template-columns:minmax(120px,38%) 1fr; gap:8px 14px; font-size:14px}
+.g4-tt dt{color:var(--chu-mo)}
+.g4-tt dd{margin:0; color:var(--chu)}
+.g4-ghi-chu{white-space:pre-wrap}
+.g4-noi td{background:rgba(203,170,125,.08)}
+.g4-ds{margin:0; padding-left:18px; font-size:14px; line-height:1.7}
+.o-nhap input[type="date"],.o-nhap input[type="time"]{width:100%; padding:13px 16px; border:1px solid var(--vien); background:var(--nen); color:var(--chu); font:inherit; font-size:15px; color-scheme:dark}
+.g4-o-tick{display:flex; align-items:center; gap:10px; margin-top:14px; font-size:14px; color:var(--chu-nhat)}
+.g4-o-tick input{width:18px; height:18px; accent-color:var(--dong)}
+.thanh-loc input[type="date"]{padding:10px 12px; border:1px solid var(--vien); background:var(--nen); color:var(--chu); font:inherit; font-size:14.5px; color-scheme:dark}
+.khoi form + form{margin-top:18px}
+.g4-nho{font-size:12.5px; color:var(--chu-mo)}
+.g4-tieu-de{margin:18px 0 8px}

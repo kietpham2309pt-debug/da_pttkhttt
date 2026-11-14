@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Đơn hàng')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link rel="stylesheet" href="/css/g4.css">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Đơn hàng')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('don-hang')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Đơn hàng</h1>
+                            <p>Gọi khách xác nhận đơn mới trong 30 phút, rồi xác nhận hoặc huỷ kèm lý do.</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="g4-tab">
+                        <a th:each="t : ${dsTrangThai}" th:href="@{/quan-tri/don-hang(trangThai=${t.name()})}"
+                           th:classappend="${chon == t.name()} ? 'dang-chon'">
+                            <span th:text="${t.nhan}">Chờ xác nhận</span><b th:text="${dem[t.name()]}">0</b>
+                        </a>
+                        <a th:href="@{/quan-tri/don-hang(trangThai='TAT_CA')}" th:classappend="${chon == 'TAT_CA'} ? 'dang-chon'">Tất cả</a>
+                    </div>
+
+                    <div class="thanh-loc">
+                        <form th:action="@{/quan-tri/don-hang}" method="get">
+                            <input type="hidden" name="trangThai" th:value="${chon}">
+                            <input type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Mã đơn (DH000012) hoặc số điện thoại">
+                            <button class="nut nut--nho" type="submit">Tìm</button>
+                            <a class="nut nut--nho" th:if="${tuKhoa != null and !#strings.isEmpty(tuKhoa)}" th:href="@{/quan-tri/don-hang(trangThai=${chon})}">Bỏ tìm</a>
+                        </form>
+                    </div>
+
+                    <div class="khoi">
+                        <p th:if="${#lists.isEmpty(ds) and chon == 'CHO_XAC_NHAN'}">Không có đơn chờ xác nhận.</p>
+                        <p th:if="${#lists.isEmpty(ds) and chon != 'CHO_XAC_NHAN'}">Không có đơn nào phù hợp.</p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(ds)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Người nhận</th>
+                                    <th>Số điện thoại</th>
+                                    <th class="canh-phai">Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th>Đã chờ</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="r : ${ds}" th:classappend="${r.treHan} ? 'g4-noi'">
+                                    <td class="ma-mo" th:text="${@dd.maDon(r.don.maDonHang)}">DH000001</td>
+                                    <td th:text="${@dd.ngayGio(r.don.ngayDat)}">07/10/2026 09:15</td>
+                                    <td th:text="${r.don.hoTenNguoiNhan}">Người nhận</td>
+                                    <td th:text="${r.don.soDienThoaiNhan}">0900000000</td>
+                                    <td class="canh-phai" th:text="${@dd.tien(r.don.tongTien)}">0 ₫</td>
+                                    <td>
+                                        <span class="the-nhan"
+                                              th:classappend="${r.don.trangThai.name() == 'CHO_XAC_NHAN'} ? 'the-nhan--vang' : (${r.don.trangThai.name() == 'HOAN_THANH'} ? 'the-nhan--ok' : (${r.don.trangThai.name() == 'DA_HUY' or r.don.trangThai.name() == 'GIAO_KHONG_THANH_CONG' or r.don.trangThai.name() == 'DA_TRA_HANG'} ? 'the-nhan--do' : ''))"
+                                              th:text="${r.don.trangThai.nhan}">Chờ xác nhận</span>
+                                    </td>
+                                    <td>
+                                        <th:block th:if="${r.don.trangThai.name() == 'CHO_XAC_NHAN'}">
+                                            <span th:classappend="${r.treHan} ? 'the-nhan the-nhan--do'" th:text="${r.phutCho} + ' phút'">5 phút</span>
+                                            <span class="g4-nho" th:if="${r.soLanGoi > 0}" th:text="' · gọi ' + ${r.soLanGoi} + ' lần'"></span>
+                                        </th:block>
+                                    </td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" th:href="@{/quan-tri/don-hang/{m}(m=${r.don.maDonHang})}">Chi tiết</a></div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

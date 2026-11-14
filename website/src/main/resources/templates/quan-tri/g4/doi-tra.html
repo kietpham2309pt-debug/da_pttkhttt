@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Đổi trả')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link rel="stylesheet" href="/css/g4.css">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Đổi trả')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('doi-tra')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Đổi trả</h1>
+                            <p>Nhân viên bán hàng tiếp nhận, quản lý cửa hàng duyệt, kế toán ghi hoàn tiền theo cách khách đã trả.</p>
+                        </div>
+                        <div class="qt-dau__nut" th:if="${banHang}">
+                            <a class="nut nut--dac nut--nho" th:href="@{/quan-tri/doi-tra/tao}">Tạo yêu cầu đổi trả</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="g4-tab">
+                        <a th:each="t : ${dsTrangThai}" th:href="@{/quan-tri/doi-tra(trangThai=${t.name()})}"
+                           th:classappend="${chon == t.name()} ? 'dang-chon'">
+                            <span th:text="${t.nhan}">Chờ duyệt</span><b th:text="${dem[t.name()]}">0</b>
+                        </a>
+                        <a th:href="@{/quan-tri/doi-tra(trangThai='TAT_CA')}" th:classappend="${chon == 'TAT_CA'} ? 'dang-chon'">Tất cả</a>
+                    </div>
+
+                    <div class="khoi">
+                        <p th:if="${#lists.isEmpty(ds)}">Không có yêu cầu đổi trả nào.</p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(ds)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Yêu cầu</th>
+                                    <th>Ngày</th>
+                                    <th>Đơn</th>
+                                    <th>Máy (serial)</th>
+                                    <th>Lý do</th>
+                                    <th>Hình thức</th>
+                                    <th>Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="y : ${ds}">
+                                    <td class="ma-mo" th:text="'#' + ${y.maYeuCau}"></td>
+                                    <td th:text="${@dd.ngayGio(y.ngayYeuCau)}"></td>
+                                    <td class="ma-mo" th:text="${@dd.maDon(y.donHang.maDonHang)}"></td>
+                                    <td class="o-dai"><span th:each="s, i : ${y.serial}" th:text="${s.sanPham.model} + ' · ' + ${s.soSerial} + (${i.last} ? '' : '; ')"></span></td>
+                                    <td>
+                                        <span th:text="${y.loaiLyDo.nhan}"></span>
+                                        <span class="the-nhan the-nhan--vang" th:if="${y.laNgoaiLe}">Ngoại lệ</span>
+                                    </td>
+                                    <td th:text="${y.hinhThuc.nhan}"></td>
+                                    <td><span class="the-nhan" th:classappend="${y.trangThai.name() == 'CHO_DUYET'} ? 'the-nhan--vang' : (${y.trangThai.name() == 'TU_CHOI'} ? 'the-nhan--do' : (${y.trangThai.name() == 'HOAN_TAT'} ? 'the-nhan--ok' : ''))" th:text="${y.trangThai.nhan}"></span></td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" th:href="@{/quan-tri/doi-tra/{m}(m=${y.maYeuCau})}">Chi tiết</a></div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>
