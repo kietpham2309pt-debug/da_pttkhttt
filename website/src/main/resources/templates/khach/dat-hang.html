@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Đặt hàng')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section class="hero-sp hero-sp--dm" id="banner">
+        <img class="hero-sp__anh" src="/assets/img/banner-gio-hang.jpg" alt="">
+        <span class="hero-sp__phu" aria-hidden="true"></span>
+        <div class="hero-sp__chu">
+            <div class="khung">
+                <h1>Đặt hàng</h1>
+                <p>Điền địa chỉ nhận hàng, nhân viên sẽ gọi xác nhận trước khi giao.</p>
+            </div>
+        </div>
+        <div class="hero-sp__duoi">
+            <div class="khung">
+                <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                    <a href="/">Trang chủ</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <a href="/gio-hang">Giỏ hàng</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <span aria-current="page">Đặt hàng</span>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+            <div class="kh-the" th:if="${bang.coLoi}" style="margin-bottom:18px">
+                <h2>Có mẫu máy không đặt được</h2>
+                <ul class="dat__ds">
+                    <li th:each="d : ${bang.dong}" th:if="${d.loi != null}">
+                        <span class="dat__ten"><span th:text="${d.the.ten}">Tên</span> – <b class="kh-chu-do" th:text="${d.loi}">lỗi</b></span>
+                        <form method="post" th:action="@{/gio-hang/xoa}">
+                            <input type="hidden" name="maSanPham" th:value="${d.the.ma}">
+                            <input type="hidden" name="ve" value="dat-hang">
+                            <button type="submit" class="nut nut--nho">Bỏ khỏi đơn</button>
+                        </form>
+                    </li>
+                </ul>
+                <p class="kh-dong-nut"><a class="nut" href="/gio-hang">Quay lại giỏ hàng</a></p>
+            </div>
+
+            <form method="post" th:action="@{/dat-hang}" th:object="${phieu}">
+                <div class="gio__bo-cuc">
+                    <div class="gio__ds">
+                        <th:block th:if="${daDangNhap and !soDiaChi.isEmpty()}">
+                            <h2 class="dat__nhom">Sổ địa chỉ của bạn</h2>
+                            <div class="o-chon__ds">
+                                <label class="o-chon" th:each="dc : ${soDiaChi}">
+                                    <input type="radio" name="maDiaChi" th:value="${dc.maDiaChi}" th:checked="${phieu.maDiaChi == dc.maDiaChi}">
+                                    <span class="o-chon__o" aria-hidden="true"></span>
+                                    <span class="o-chon__chu">
+                                        <b th:text="|${dc.hoTenNguoiNhan} · ${dc.soDienThoai}|">Tên</b>
+                                        <span th:text="|${dc.diaChi} (${dc.noiThanh ? 'nội thành' : 'đi tỉnh'})${dc.macDinh ? ' · mặc định' : ''}|">Địa chỉ</span>
+                                    </span>
+                                </label>
+                                <label class="o-chon">
+                                    <input type="radio" name="maDiaChi" value="" th:checked="${phieu.maDiaChi == null}">
+                                    <span class="o-chon__o" aria-hidden="true"></span>
+                                    <span class="o-chon__chu"><b>Giao tới địa chỉ khác</b><span>Nhập thông tin người nhận và địa chỉ ở các ô dưới đây.</span></span>
+                                </label>
+                            </div>
+                        </th:block>
+
+                        <h2 class="dat__nhom">Thông tin nhận hàng</h2>
+                        <div class="o-doi">
+                            <div class="o-nhap">
+                                <label for="hoTen">Họ và tên người nhận</label>
+                                <input id="hoTen" th:field="*{hoTen}" autocomplete="name" maxlength="60">
+                                <span class="loi-nhap" th:if="${loiO['hoTen'] != null}" th:text="${loiO['hoTen']}"></span>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="soDienThoai">Số điện thoại</label>
+                                <input id="soDienThoai" th:field="*{soDienThoai}" type="tel" inputmode="numeric" autocomplete="tel" maxlength="10">
+                                <span class="loi-nhap" th:if="${loiO['soDienThoai'] != null}" th:text="${loiO['soDienThoai']}"></span>
+                            </div>
+                        </div>
+                        <div class="o-nhap">
+                            <label for="email">Email</label>
+                            <input id="email" th:field="*{email}" type="email" autocomplete="email" maxlength="100">
+                            <span class="o-nhap__goi">Không bắt buộc. Điền thì chúng tôi gửi xác nhận đơn qua email.</span>
+                            <span class="loi-nhap" th:if="${loiO['email'] != null}" th:text="${loiO['email']}"></span>
+                        </div>
+                        <div class="o-doi">
+                            <div class="o-nhap">
+                                <label for="tinhThanh">Tỉnh / Thành phố</label>
+                                <input id="tinhThanh" th:field="*{tinhThanh}" autocomplete="address-level1" maxlength="50">
+                                <span class="loi-nhap" th:if="${loiO['tinhThanh'] != null}" th:text="${loiO['tinhThanh']}"></span>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="quanHuyen">Quận / Huyện</label>
+                                <input id="quanHuyen" th:field="*{quanHuyen}" autocomplete="address-level2" maxlength="50">
+                                <span class="loi-nhap" th:if="${loiO['quanHuyen'] != null}" th:text="${loiO['quanHuyen']}"></span>
+                            </div>
+                        </div>
+                        <div class="o-nhap">
+                            <label for="diaChi">Địa chỉ cụ thể</label>
+                            <input id="diaChi" th:field="*{diaChi}" autocomplete="street-address" maxlength="160">
+                            <span class="o-nhap__goi">Số nhà, tên đường, phường xã.</span>
+                            <span class="loi-nhap" th:if="${loiO['diaChi'] != null}" th:text="${loiO['diaChi']}"></span>
+                        </div>
+                        <label class="kh-o-tich" th:if="${daDangNhap}">
+                            <input type="checkbox" name="luuDiaChi" value="true" th:checked="*{luuDiaChi}">
+                            <span>Lưu địa chỉ này vào sổ địa chỉ</span>
+                        </label>
+
+                        <h2 class="dat__nhom">Khu vực giao hàng</h2>
+                        <div class="o-chon__ds">
+                            <label class="o-chon">
+                                <input type="radio" name="noiThanh" value="true" th:checked="${phieu.noiThanh == null or phieu.noiThanh}">
+                                <span class="o-chon__o" aria-hidden="true"></span>
+                                <span class="o-chon__chu"><b>Nội thành TP. Hồ Chí Minh</b><span>Cửa hàng tự giao và lắp đặt.</span></span>
+                            </label>
+                            <label class="o-chon">
+                                <input type="radio" name="noiThanh" value="false" th:checked="${phieu.noiThanh != null and !phieu.noiThanh}">
+                                <span class="o-chon__o" aria-hidden="true"></span>
+                                <span class="o-chon__chu"><b>Tỉnh khác</b><span>Đơn gửi đơn vị vận chuyển, cửa hàng không lắp đặt.</span></span>
+                            </label>
+                        </div>
+
+                        <th:block th:if="${bang.coMonCanLap}">
+                            <h2 class="dat__nhom">Lắp đặt</h2>
+                            <p class="goi-y" th:if="${!bang.noiThanh}">Đơn đi tỉnh không lắp đặt, các lựa chọn dưới đây không được tính.</p>
+                            <label class="kh-o-tich" th:each="d : ${bang.dong}" th:if="${d.canLap}">
+                                <input type="checkbox" name="lapDat" th:value="${d.the.ma}" th:checked="${phieu.lapDat.contains(d.the.ma)}">
+                                <span th:text="|Lắp đặt ${d.the.ten}|">Lắp</span>
+                            </label>
+                            <p class="goi-y">Miễn phí lắp nội thành cho đơn từ 5.000.000 ₫, đơn nhỏ hơn thu 250.000 ₫ một đơn.</p>
+                        </th:block>
+
+                        <div class="o-nhap">
+                            <label for="ghiChu">Ghi chú cho người giao</label>
+                            <textarea id="ghiChu" th:field="*{ghiChu}" rows="3" maxlength="300"></textarea>
+                            <span class="loi-nhap" th:if="${loiO['ghiChu'] != null}" th:text="${loiO['ghiChu']}"></span>
+                        </div>
+
+                        <h2 class="dat__nhom">Cách thanh toán</h2>
+                        <div class="o-chon__ds">
+                            <label class="o-chon">
+                                <input type="radio" name="phuongThuc" value="TIEN_MAT_KHI_NHAN" th:checked="*{phuongThuc == 'TIEN_MAT_KHI_NHAN'}">
+                                <span class="o-chon__o" aria-hidden="true"></span>
+                                <span class="o-chon__chu"><b>Tiền mặt khi nhận hàng</b><span>Trả tiền cho nhân viên giao sau khi đã kiểm hàng.</span></span>
+                            </label>
+                            <label class="o-chon">
+                                <input type="radio" name="phuongThuc" value="CONG_THANH_TOAN" th:checked="*{phuongThuc == 'CONG_THANH_TOAN'}">
+                                <span class="o-chon__o" aria-hidden="true"></span>
+                                <span class="o-chon__chu"><b>Thanh toán trực tuyến</b><span>Chuyển khoản, quét QR hoặc thẻ qua cổng thanh toán ngay sau khi đặt.</span></span>
+                            </label>
+                        </div>
+                        <span class="loi-nhap" th:if="${loiO['phuongThuc'] != null}" th:text="${loiO['phuongThuc']}"></span>
+                        <p class="goi-y" th:if="${bang.tienCoc > 0}" th:text="|Đơn từ 10.000.000 ₫ cần đặt cọc 10% (${@dd.tien(bang.tienCoc)}) trực tuyến, phần còn lại trả theo cách bạn chọn.|">Cọc</p>
+
+                        <h2 class="dat__nhom">Mã giảm giá</h2>
+                        <div class="o-doi">
+                            <div class="o-nhap">
+                                <label for="maGiamGia">Nhập mã (mỗi đơn một mã)</label>
+                                <input id="maGiamGia" th:field="*{maGiamGia}" maxlength="30">
+                                <span class="loi-nhap" th:if="${loiO['maGiamGia'] != null}" th:text="${loiO['maGiamGia']}"></span>
+                                <span class="goi-y" th:if="${bang.maGiam != null}" th:text="|Đang áp mã ${bang.maGiam.maCode}: ${bang.maGiam.tenKhuyenMai}|">Mã</span>
+                            </div>
+                            <div class="o-nhap">
+                                <label>&nbsp;</label>
+                                <button type="submit" name="nut" value="apMa" class="nut">Áp dụng mã</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <aside class="tong" aria-label="Tóm tắt đơn hàng">
+                        <h2>Đơn hàng</h2>
+                        <ul class="dat__ds">
+                            <li th:each="d : ${bang.dong}">
+                                <span class="dat__ten" th:text="${d.the.ten}">Tên</span>
+                                <span class="dat__sl" th:text="|×${d.soLuong}|">×1</span>
+                                <span class="dat__tien" th:text="${@dd.tien(d.thanhTien)}">0 ₫</span>
+                            </li>
+                        </ul>
+                        <dl class="tong__ds">
+                            <div><dt th:text="|Tiền hàng (${bang.soMon} món)|">Tiền hàng</dt><dd th:text="${@dd.tien(bang.tienHang)}">0</dd></div>
+                            <div th:if="${bang.giamSanPham > 0}"><dt>Khuyến mãi sản phẩm</dt><dd th:text="|-${@dd.tien(bang.giamSanPham)}|">0</dd></div>
+                            <div th:if="${bang.giamMa > 0}"><dt th:text="|Mã ${bang.maGiam.maCode}|">Mã</dt><dd th:text="|-${@dd.tien(bang.giamMa)}|">0</dd></div>
+                            <div><dt>Phí giao hàng</dt><dd><span class="tong__mien">Miễn phí</span></dd></div>
+                            <div>
+                                <dt>Phí lắp đặt</dt>
+                                <dd>
+                                    <span class="tong__mien" th:if="${bang.phiLapDat == 0}" th:text="${bang.coLapDat} ? 'Miễn phí' : 'Không lắp'">0</span>
+                                    <span th:if="${bang.phiLapDat > 0}" th:text="${@dd.tien(bang.phiLapDat)}">0</span>
+                                </dd>
+                            </div>
+                        </dl>
+                        <p class="tong__cong"><span>Tổng cộng</span><b th:text="${@dd.tien(bang.tongTien)}">0 ₫</b></p>
+                        <p class="tong__ghi" th:if="${bang.tienCoc > 0}" th:text="|Tiền cọc phải trả trực tuyến: ${@dd.tien(bang.tienCoc)}|">Cọc</p>
+                        <button type="submit" name="nut" value="xemLai" class="nut nut--dac tong__dat" th:disabled="${bang.coLoi}">Xem lại đơn</button>
+                        <p class="tong__ghi">Tổng tiền tính lại theo khu vực và lựa chọn lắp đặt khi bạn bấm “Xem lại đơn”. Giá đã gồm VAT.</p>
+                    </aside>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

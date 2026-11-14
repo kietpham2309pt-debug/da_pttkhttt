@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Tra cứu đơn hàng')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section th:replace="~{khach/manh :: hero('/assets/img/banner-tai-khoan.jpg', 'Tra cứu đơn hàng', 'Nhập số điện thoại đã dùng khi đặt và mã đơn để xem đơn đang ở bước nào.')}"></section>
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <div class="the-tk">
+                <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                <p class="thong-bao thong-bao--loi" th:if="${khoaDen != null and loi == null}" th:text="|Tra cứu đang tạm khoá tới ${@dd.ngayGio(khoaDen)} vì nhập sai 5 lần.|">Khoá</p>
+                <form method="post" th:action="@{/tra-cuu-don}">
+                    <div class="o-nhap">
+                        <label for="soDienThoai">Số điện thoại người nhận</label>
+                        <input id="soDienThoai" name="soDienThoai" type="tel" inputmode="numeric" maxlength="10" th:value="${soDienThoai}" autocomplete="tel">
+                        <span class="loi-nhap" th:if="${loiO['soDienThoai'] != null}" th:text="${loiO['soDienThoai']}"></span>
+                    </div>
+                    <div class="o-nhap">
+                        <label for="maDon">Mã đơn</label>
+                        <input id="maDon" name="maDon" maxlength="14" th:value="${maDon}" placeholder="Ví dụ DH000012 hoặc 12">
+                        <span class="loi-nhap" th:if="${loiO['maDon'] != null}" th:text="${loiO['maDon']}"></span>
+                    </div>
+                    <button type="submit" class="nut nut--dac the-tk__gui" th:disabled="${khoaDen != null}">Tra cứu</button>
+                </form>
+                <p class="the-tk__doi" sec:authorize="hasRole('KHACH_HANG')">Bạn đã đăng nhập: xem <a href="/tai-khoan#don-cua-toi">đơn hàng của tôi</a>.</p>
+                <p class="the-tk__doi">Cần hỗ trợ? Gọi <a href="tel:0339999999">0339 999 999</a>.</p>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

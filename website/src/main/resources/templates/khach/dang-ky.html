@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Đăng ký')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section th:replace="~{khach/manh :: hero('/assets/img/banner-tai-khoan.jpg', 'Đăng ký', 'Tạo tài khoản để lưu địa chỉ và xem lại đơn cũ. Mua hàng không bắt buộc có tài khoản.')}"></section>
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <div class="the-tk">
+                <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                <form method="post" th:action="@{/dang-ky}" th:object="${f}">
+                    <div class="o-nhap">
+                        <label for="hoTen">Họ và tên</label>
+                        <input id="hoTen" th:field="*{hoTen}" autocomplete="name" maxlength="60">
+                        <span class="loi-nhap" th:if="${loiO['hoTen'] != null}" th:text="${loiO['hoTen']}"></span>
+                    </div>
+                    <div class="o-doi">
+                        <div class="o-nhap">
+                            <label for="email">Email</label>
+                            <input id="email" th:field="*{email}" type="email" autocomplete="email" placeholder="Huit@edu.com.vn" maxlength="100">
+                            <span class="loi-nhap" th:if="${loiO['email'] != null}" th:text="${loiO['email']}"></span>
+                        </div>
+                        <div class="o-nhap">
+                            <label for="soDienThoai">Số điện thoại</label>
+                            <input id="soDienThoai" th:field="*{soDienThoai}" type="tel" inputmode="numeric" autocomplete="tel" maxlength="10">
+                            <span class="loi-nhap" th:if="${loiO['soDienThoai'] != null}" th:text="${loiO['soDienThoai']}"></span>
+                        </div>
+                    </div>
+                    <div class="o-nhap">
+                        <label for="tenDangNhap">Tên đăng nhập</label>
+                        <input id="tenDangNhap" th:field="*{tenDangNhap}" autocomplete="username" maxlength="50">
+                        <span class="o-nhap__goi">Từ 4 tới 50 ký tự: chữ không dấu, số, dấu chấm, gạch dưới.</span>
+                        <span class="loi-nhap" th:if="${loiO['tenDangNhap'] != null}" th:text="${loiO['tenDangNhap']}"></span>
+                    </div>
+                    <div class="o-doi">
+                        <div class="o-nhap">
+                            <label for="matKhau">Mật khẩu</label>
+                            <input id="matKhau" name="matKhau" type="password" autocomplete="new-password" maxlength="50">
+                            <span class="o-nhap__goi">Ít nhất 6 ký tự</span>
+                            <span class="loi-nhap" th:if="${loiO['matKhau'] != null}" th:text="${loiO['matKhau']}"></span>
+                        </div>
+                        <div class="o-nhap">
+                            <label for="nhapLai">Nhập lại mật khẩu</label>
+                            <input id="nhapLai" name="nhapLai" type="password" autocomplete="new-password" maxlength="50">
+                            <span class="loi-nhap" th:if="${loiO['nhapLai'] != null}" th:text="${loiO['nhapLai']}"></span>
+                        </div>
+                    </div>
+                    <label class="o-tich o-tich--dieu-khoan">
+                        <input type="checkbox" name="dongY" value="true" th:checked="*{dongY}">
+                        <span class="o-tich__o" aria-hidden="true"></span>
+                        <span>Tôi đã đọc và đồng ý với <a href="/chinh-sach/dieu-khoan">Điều khoản sử dụng</a> và
+                            <a href="/chinh-sach/bao-mat">Chính sách bảo mật</a> của Bep Nè.</span>
+                    </label>
+                    <span class="loi-nhap" th:if="${loiO['dongY'] != null}" th:text="${loiO['dongY']}"></span>
+                    <button type="submit" class="nut nut--dac the-tk__gui">Tạo tài khoản</button>
+                </form>
+                <p class="the-tk__doi">Đã có tài khoản? <a href="/dang-nhap">Đăng nhập</a></p>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

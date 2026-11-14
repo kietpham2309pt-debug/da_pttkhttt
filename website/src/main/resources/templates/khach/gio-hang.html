@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Giỏ hàng')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section th:replace="~{khach/manh :: hero('/assets/img/banner-gio-hang.jpg', 'Giỏ hàng', 'Xem lại các món đã chọn trước khi đặt hàng.')}"></section>
+    <section class="muc muc--sat-banner gio">
+        <div class="khung">
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+            <div class="trong" th:if="${bang.trong}">
+                <svg class="ic ic--to" aria-hidden="true"><use xlink:href="#ic-gio-hang"/></svg>
+                <p>Giỏ hàng đang trống.</p>
+                <a class="nut nut--dac" href="/san-pham">Xem sản phẩm</a>
+            </div>
+            <div class="gio__bo-cuc" th:unless="${bang.trong}">
+                <div class="gio__ds">
+                    <div class="cuon-ngang">
+                    <table class="bang-dl">
+                        <thead>
+                        <tr>
+                            <th scope="col" colspan="2">Sản phẩm</th>
+                            <th scope="col">Đơn giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Thành tiền</th>
+                            <th scope="col"><span class="an-nhin">Bỏ khỏi giỏ</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="d : ${bang.dong}">
+                            <td class="bang-dl__anh">
+                                <a th:href="@{/san-pham/{m}(m=${d.the.ma})}">
+                                    <span class="sp__anh"><img th:src="${d.the.anh}" alt=""></span>
+                                </a>
+                            </td>
+                            <td data-nhan="Sản phẩm">
+                                <span class="gio__hieu" th:text="${d.the.hieu}">Hãng</span>
+                                <a class="gio__ten" th:href="@{/san-pham/{m}(m=${d.the.ma})}" th:text="${d.the.ten}">Tên</a>
+                                <span class="loi-nhap" th:if="${d.loi != null}" th:text="${d.loi}">Lỗi</span>
+                                <span class="goi-y" th:if="${d.the.khuyenMai != null}"
+                                      th:text="|${d.the.khuyenMai.tenKhuyenMai}: -${@dd.tien(d.the.giamMoiChiec)}/chiếc|">KM</span>
+                                <form method="post" th:action="@{/gio-hang/lap-dat}" th:if="${d.canLap}" class="kh-o-chon-nho">
+                                    <input type="hidden" name="maSanPham" th:value="${d.the.ma}">
+                                    <input type="hidden" name="co" th:value="${!d.lapDat}">
+                                    <span th:text="${d.lapDat} ? 'Có lắp đặt' : 'Không lắp đặt'">Có lắp đặt</span>
+                                    <button type="submit" class="nut nut--nho" th:text="${d.lapDat} ? 'Bỏ lắp đặt' : 'Chọn lắp đặt'">Đổi</button>
+                                </form>
+                            </td>
+                            <td data-nhan="Đơn giá" th:text="${@dd.tien(d.donGia)}">0 ₫</td>
+                            <td data-nhan="Số lượng">
+                                <form method="post" th:action="@{/gio-hang/sua}">
+                                    <input type="hidden" name="maSanPham" th:value="${d.the.ma}">
+                                    <span class="dem">
+                                        <button type="submit" name="thayDoi" value="-1" class="dem__nut" th:attr="aria-label=|Bớt một ${d.the.ten}|">&minus;</button>
+                                        <span class="dem__so" th:text="${d.soLuong}">1</span>
+                                        <button type="submit" name="thayDoi" value="1" class="dem__nut" th:attr="aria-label=|Thêm một ${d.the.ten}|">+</button>
+                                    </span>
+                                </form>
+                            </td>
+                            <td data-nhan="Thành tiền" class="gio__tien" th:text="${@dd.tien(d.thanhTien)}">0 ₫</td>
+                            <td class="bang-dl__cuoi">
+                                <form method="post" th:action="@{/gio-hang/xoa}">
+                                    <input type="hidden" name="maSanPham" th:value="${d.the.ma}">
+                                    <button type="submit" class="gio__bo" th:attr="aria-label=|Bỏ ${d.the.ten} khỏi giỏ hàng|">
+                                        <svg class="ic" aria-hidden="true"><use xlink:href="#ic-dong"/></svg>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <a class="nut gio__tiep" href="/san-pham">
+                        <svg class="ic" aria-hidden="true"><use xlink:href="#ic-mui-ten-phai"/></svg>
+                        Tiếp tục mua hàng
+                    </a>
+                </div>
+                <aside class="tong" aria-label="Tổng tiền">
+                    <h2>Tạm tính</h2>
+                    <dl class="tong__ds">
+                        <div>
+                            <dt th:text="|Tiền hàng (${bang.soMon} món)|">Tiền hàng</dt>
+                            <dd th:text="${@dd.tien(bang.tienHang)}">0 ₫</dd>
+                        </div>
+                        <div th:if="${bang.giamSanPham > 0}">
+                            <dt>Giảm theo khuyến mãi</dt>
+                            <dd th:text="|-${@dd.tien(bang.giamSanPham)}|">0 ₫</dd>
+                        </div>
+                        <div>
+                            <dt>Phí giao hàng</dt>
+                            <dd><span class="tong__mien">Miễn phí</span></dd>
+                        </div>
+                        <div>
+                            <dt>Phí lắp đặt (nội thành)</dt>
+                            <dd>
+                                <span class="tong__mien" th:if="${bang.phiLapDat == 0}" th:text="${bang.coLapDat} ? 'Miễn phí' : 'Không lắp'">Miễn phí</span>
+                                <span th:if="${bang.phiLapDat > 0}" th:text="${@dd.tien(bang.phiLapDat)}">0 ₫</span>
+                            </dd>
+                        </div>
+                    </dl>
+                    <p class="tong__cong">
+                        <span>Tổng cộng</span>
+                        <b th:text="${@dd.tien(bang.tongTien)}">0 ₫</b>
+                    </p>
+                    <p class="tong__ghi" th:if="${bang.tienCoc > 0}"
+                       th:text="|Đơn từ ${@dd.tien(nguongCoc)} cần đặt cọc 10%: ${@dd.tien(bang.tienCoc)}, trả trực tuyến sau khi đặt.|">Cọc</p>
+                    <p class="loi-nhap" th:if="${bang.coLoi}">Có mẫu máy hết hàng hoặc ngừng bán, bạn bỏ khỏi giỏ hoặc giảm số lượng trước khi đặt.</p>
+                    <a class="nut nut--dac tong__dat" href="/dat-hang" th:unless="${bang.coLoi}">Tiến hành đặt hàng</a>
+                    <p class="tong__ghi">Giá đã gồm VAT. Lắp đặt nội thành miễn phí cho đơn từ
+                        <span th:text="${@dd.tien(nguongMienPhiLap)}">5.000.000 ₫</span>, đơn nhỏ hơn thu
+                        <span th:text="${@dd.tien(phiLapDonNho)}">250.000 ₫</span>; đơn đi tỉnh không lắp đặt.
+                        Nhân viên sẽ gọi xác nhận trước khi giao.</p>
+                </aside>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

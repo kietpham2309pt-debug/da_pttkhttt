@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau(${t.ten})}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main th:with="sp=${t.sanPham}, dangBan=${t.sanPham.trangThai.name() == 'DANG_BAN' and t.giaBan != null}">
+    <link th:replace="~{khach/manh :: css}">
+    <section class="muc muc--dau-trang ct">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="/">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a href="/san-pham">Sản phẩm</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/san-pham(danhMuc=${sp.danhMuc.maDanhMuc})}" th:text="${sp.danhMuc.tenDanhMuc}">Danh mục</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${t.ten}">Tên</span>
+            </nav>
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+            <div class="ct__tren">
+                <div class="gal">
+                    <div class="gal__to">
+                        <img id="anh-to" th:src="${ct.anh[0]}" th:alt="${t.ten}">
+                        <span class="sp__giam" th:if="${t.phanTramGiam > 0}" th:text="|-${t.phanTramGiam}%|">-10%</span>
+                    </div>
+                    <div class="gal__ds" role="group" aria-label="Chọn ảnh" th:if="${ct.anh.size() > 1}">
+                        <button type="button" th:each="a, i : ${ct.anh}" class="gal__nho" th:classappend="${i.first} ? 'dang-chon'"
+                                th:attr="data-anh=${a},aria-label=|Ảnh ${i.count}|">
+                            <img th:src="${a}" alt="">
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ct__mua">
+                    <span class="ct__nhan" th:if="${t.khuyenMai != null}">Đang giảm giá</span>
+                    <p class="ct__hieu" th:text="${t.hieu}">Hãng</p>
+                    <h1 class="ct__ten" th:text="${t.ten}">Tên</h1>
+                    <p class="chu-phu">Model: <span th:text="${sp.model}">model</span></p>
+                    <div class="ct__gia" th:if="${t.giaBan != null}">
+                        <b th:text="${@dd.tien(t.giaHienTai)}">0 ₫</b>
+                        <del th:if="${t.giaGach != null}" th:text="${@dd.tien(t.giaGach)}">0 ₫</del>
+                        <span class="ct__bot" th:if="${t.giaGach != null}" th:text="|Tiết kiệm ${@dd.tien(t.giaGach - t.giaHienTai)}|">Tiết kiệm</span>
+                    </div>
+                    <p class="ct__con" th:unless="${dangBan}">Tình trạng: <b class="kh-chu-do">Ngừng bán</b></p>
+                    <p class="ct__con" th:if="${dangBan}">Tình trạng:
+                        <b th:if="${t.conHang}" class="kh-chu-xanh" th:text="|Còn hàng (${t.tonKhaDung} chiếc)|">Còn hàng</b>
+                        <b th:unless="${t.conHang}" class="kh-chu-do">Tạm hết hàng</b>
+                    </p>
+                    <ul class="ct__noi-bat">
+                        <li th:text="|Bảo hành chính hãng ${sp.thoiHanBaoHanh} tháng|">Bảo hành</li>
+                        <li th:if="${sp.canLapDat}">Máy cần lắp đặt: miễn phí lắp nội thành cho đơn từ 5.000.000 ₫, đơn nhỏ hơn thu 250.000 ₫</li>
+                        <li th:unless="${sp.canLapDat}">Không cần lắp đặt, dùng ngay khi nhận</li>
+                        <li th:if="${t.khuyenMai != null}">
+                            Khuyến mãi <b th:text="${t.khuyenMai.tenKhuyenMai}">tên</b>:
+                            giảm <span th:text="${@dd.tien(t.giamMoiChiec)}">0</span> mỗi chiếc, tới hết ngày
+                            <span th:text="${@dd.ngay(t.khuyenMai.ngayKetThuc)}">ngày</span><th:block th:if="${t.khuyenMai.quaTang != null}">; tặng
+                            <span th:text="${t.khuyenMai.quaTang}">quà</span></th:block>
+                        </li>
+                    </ul>
+
+                    <form class="ct__dat" method="post" th:action="@{/gio-hang/them}" th:if="${dangBan and t.conHang}">
+                        <input type="hidden" name="maSanPham" th:value="${t.ma}">
+                        <div class="dem" role="group" aria-label="Số lượng">
+                            <button type="button" class="dem__nut" data-dem="-1" aria-label="Bớt một">&minus;</button>
+                            <input type="number" id="so-luong" name="soLuong" value="1" min="1" th:max="${t.tonKhaDung < 20 ? t.tonKhaDung : 20}"
+                                   inputmode="numeric" aria-label="Số lượng">
+                            <button type="button" class="dem__nut" data-dem="1" aria-label="Thêm một">+</button>
+                        </div>
+                        <button type="submit" class="nut nut--dac ct__them">Thêm vào giỏ hàng</button>
+                        <button type="submit" class="nut ct__goi" name="muaNgay" value="1">Mua ngay</button>
+                        <label class="kh-o-chon-nho" th:if="${sp.canLapDat}">
+                            <input type="checkbox" name="lapDat" value="true" checked>
+                            Lắp đặt tại nhà (chỉ áp dụng nội thành)
+                        </label>
+                    </form>
+                    <p th:if="${dangBan and !t.conHang}" class="chu-phu">Mẫu này tạm hết hàng. Gọi <a href="tel:0339999999">0339 999 999</a> để hỏi ngày có hàng.</p>
+
+                    <div class="kh-dong-nut">
+                        <form method="post" th:action="@{/so-sanh/them}">
+                            <input type="hidden" name="ma" th:value="${t.ma}">
+                            <button type="submit" class="nut nut--nho" th:text="${dangSoSanh.contains(t.ma)} ? 'Đã có trong so sánh' : 'Thêm vào so sánh'">So sánh</button>
+                        </form>
+                        <a class="nut nut--nho" href="/so-sanh" th:if="${!dangSoSanh.isEmpty()}" th:text="|Xem so sánh (${dangSoSanh.size()})|">Xem so sánh</a>
+                    </div>
+
+                    <ul class="cam-ket">
+                        <li>
+                            <svg class="ic"><use xlink:href="#ic-bao-hanh"/></svg>
+                            <span th:text="|Bảo hành chính hãng ${sp.thoiHanBaoHanh} tháng|">Bảo hành</span>
+                        </li>
+                        <li th:if="${sp.canLapDat}">
+                            <svg class="ic"><use xlink:href="#ic-lap-dat"/></svg>
+                            <span>Lắp đặt tại nhà khu vực nội thành</span>
+                        </li>
+                        <li>
+                            <svg class="ic"><use xlink:href="#ic-giao-hang"/></svg>
+                            <span>Giao hàng toàn quốc</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc muc--vien tab">
+        <div class="khung">
+            <div class="tab__nav" role="tablist" aria-label="Nội dung sản phẩm">
+                <button type="button" class="tab__nut dang-chon" role="tab" aria-selected="true" aria-controls="tab-mo-ta">Mô tả sản phẩm</button>
+                <button type="button" class="tab__nut" role="tab" aria-selected="false" aria-controls="tab-thong-so">Thông số kỹ thuật</button>
+                <button type="button" class="tab__nut" role="tab" aria-selected="false" aria-controls="tab-danh-gia"
+                        th:text="|Đánh giá (${ct.danhGia.size()})|">Đánh giá</button>
+            </div>
+            <div class="tab__o hien" id="tab-mo-ta" role="tabpanel" tabindex="0">
+                <h2>Mô tả sản phẩm</h2>
+                <p th:each="doan : ${ct.doanMoTa}" th:text="${doan}">Mô tả</p>
+            </div>
+            <div class="tab__o" id="tab-thong-so" role="tabpanel" tabindex="0">
+                <h2>Thông số kỹ thuật</h2>
+                <table class="bang-ts">
+                    <tbody>
+                    <tr><th scope="row">Thương hiệu</th><td th:text="${t.hieu}">Hãng</td></tr>
+                    <tr><th scope="row">Nhóm hàng</th><td th:text="${sp.danhMuc.tenDanhMuc}">Nhóm</td></tr>
+                    <tr><th scope="row">Model</th><td th:text="${sp.model}">Model</td></tr>
+                    <tr th:each="ts : ${ct.thongSo}"><th scope="row" th:text="${ts.tenThongSo}">Tên</th><td th:text="${ts.giaTri}">Giá trị</td></tr>
+                    <tr><th scope="row">Bảo hành</th><td th:text="|${sp.thoiHanBaoHanh} tháng chính hãng|">Bảo hành</td></tr>
+                    <tr><th scope="row">Cần lắp đặt</th><td th:text="${sp.canLapDat} ? 'Có' : 'Không'">Có</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab__o" id="tab-danh-gia" role="tabpanel" tabindex="0">
+                <h2>Đánh giá của khách đã mua</h2>
+                <p th:if="${ct.diemTrungBinh != null}">Điểm trung bình: <b class="kh-sao" th:text="|${ct.diemTrungBinh}/5|">5/5</b></p>
+                <p th:if="${ct.danhGia.isEmpty()}" class="chu-phu">Chưa có đánh giá cho mẫu máy này.</p>
+                <div class="kh-dg" th:each="dg : ${ct.danhGia}">
+                    <b th:text="${dg.khachHang.hoTen}">Tên</b>
+                    <span class="kh-sao" th:text="${#strings.repeat('★', dg.soSao) + #strings.repeat('☆', 5 - dg.soSao)}">★★★★★</span>
+                    <span class="chu-phu" th:text="${@dd.ngay(dg.ngayDanhGia)}">ngày</span>
+                    <p th:if="${dg.noiDung != null}" th:text="${dg.noiDung}">Nội dung</p>
+                </div>
+                <p class="kh-dong-nut" th:if="${coTheDanhGia}">
+                    <a class="nut nut--dac" th:href="@{/danh-gia(maSanPham=${t.ma})}">Viết đánh giá</a>
+                </p>
+                <p class="chu-phu" th:unless="${coTheDanhGia}">Chỉ khách hàng đã nhận hàng (đơn hoàn thành) mới đánh giá được, mỗi đơn một lần.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc muc--vien" th:if="${!ct.cungNhom.isEmpty()}">
+        <div class="khung">
+            <h2 class="tieu-de-muc">Sản phẩm cùng nhóm</h2>
+            <div class="luoi-sp">
+                <th:block th:each="c : ${ct.cungNhom}"><a th:replace="~{khach/manh :: theSp(${c})}"></a></th:block>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

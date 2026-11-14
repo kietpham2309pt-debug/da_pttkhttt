@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Đánh giá sản phẩm')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section th:replace="~{khach/manh :: hero('/assets/img/banner-tai-khoan.jpg', 'Đánh giá sản phẩm', 'Chỉ khách đã nhận hàng mới đánh giá được, mỗi đơn một lần cho mỗi mẫu máy.')}"></section>
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+            <div class="trong" th:if="${canDanhGia.isEmpty()}">
+                <p>Chưa có sản phẩm nào chờ bạn đánh giá. Sản phẩm hiện ở đây sau khi đơn hàng hoàn thành.</p>
+                <a class="nut" href="/tai-khoan#don-cua-toi">Về đơn hàng của tôi</a>
+            </div>
+            <form class="kh-the" method="post" th:action="@{/danh-gia}" th:each="x : ${canDanhGia}">
+                <h2 th:text="${x.tenSanPham}">Tên</h2>
+                <p class="chu-phu" th:text="|Đơn ${@dd.maDon(x.maDon)}, hoàn thành ${@dd.ngayGio(x.ngayHoanThanh)}|">Đơn</p>
+                <input type="hidden" name="maDon" th:value="${x.maDon}">
+                <input type="hidden" name="maSanPham" th:value="${x.maSanPham}">
+                <div class="o-nhap">
+                    <label th:for="|sao-${x.maDon}-${x.maSanPham}|">Số sao</label>
+                    <select th:id="|sao-${x.maDon}-${x.maSanPham}|" name="soSao">
+                        <option value="5">★★★★★ Rất hài lòng</option>
+                        <option value="4">★★★★☆ Hài lòng</option>
+                        <option value="3">★★★☆☆ Bình thường</option>
+                        <option value="2">★★☆☆☆ Chưa hài lòng</option>
+                        <option value="1">★☆☆☆☆ Không hài lòng</option>
+                    </select>
+                </div>
+                <div class="o-nhap">
+                    <label th:for="|nd-${x.maDon}-${x.maSanPham}|">Nhận xét</label>
+                    <textarea th:id="|nd-${x.maDon}-${x.maSanPham}|" name="noiDung" rows="3" maxlength="1000"></textarea>
+                </div>
+                <button type="submit" class="nut nut--dac">Gửi đánh giá</button>
+            </form>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('So sánh sản phẩm')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section th:replace="~{khach/manh :: hero('/assets/img/hero-san-pham.jpg', 'So sánh sản phẩm', 'Đặt 2 tới 3 mẫu máy cạnh nhau để so giá và thông số kỹ thuật.')}"></section>
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+            <div class="trong" th:if="${dsSoSanh.size() < 2}">
+                <p th:if="${dsSoSanh.isEmpty()}">Chưa có mẫu máy nào để so sánh.</p>
+                <p th:if="${dsSoSanh.size() == 1}">Cần ít nhất 2 mẫu máy. Bạn mở thêm một sản phẩm và bấm “Thêm vào so sánh”.</p>
+                <a class="nut nut--dac" href="/san-pham">Chọn sản phẩm</a>
+            </div>
+            <div class="cuon-ngang" th:if="${!dsSoSanh.isEmpty()}">
+                <table class="kh-bang-ss">
+                    <thead>
+                    <tr>
+                        <th scope="col">Mẫu máy</th>
+                        <th scope="col" th:each="t : ${dsSoSanh}">
+                            <a th:href="@{/san-pham/{m}(m=${t.ma})}">
+                                <img th:src="${t.anh}" th:alt="${t.ten}">
+                                <span th:text="${t.ten}">Tên</span>
+                            </a>
+                            <form method="post" th:action="@{/so-sanh/bo}" style="margin-top:8px">
+                                <input type="hidden" name="ma" th:value="${t.ma}">
+                                <button type="submit" class="nut nut--nho">Bỏ khỏi so sánh</button>
+                            </form>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">Giá bán</th>
+                        <td th:each="t : ${dsSoSanh}">
+                            <b th:text="${@dd.tien(t.giaHienTai)}">0</b>
+                            <del th:if="${t.giaGach != null}" th:text="${@dd.tien(t.giaGach)}">0</del>
+                        </td>
+                    </tr>
+                    <tr><th scope="row">Thương hiệu</th><td th:each="t : ${dsSoSanh}" th:text="${t.hieu}">Hãng</td></tr>
+                    <tr><th scope="row">Nhóm hàng</th><td th:each="t : ${dsSoSanh}" th:text="${t.sanPham.danhMuc.tenDanhMuc}">Nhóm</td></tr>
+                    <tr><th scope="row">Model</th><td th:each="t : ${dsSoSanh}" th:text="${t.sanPham.model}">Model</td></tr>
+                    <tr><th scope="row">Bảo hành</th><td th:each="t : ${dsSoSanh}" th:text="|${t.sanPham.thoiHanBaoHanh} tháng|">36 tháng</td></tr>
+                    <tr><th scope="row">Cần lắp đặt</th><td th:each="t : ${dsSoSanh}" th:text="${t.sanPham.canLapDat} ? 'Có' : 'Không'">Có</td></tr>
+                    <tr><th scope="row">Tình trạng</th><td th:each="t : ${dsSoSanh}" th:text="${t.conHang} ? 'Còn hàng' : 'Tạm hết hàng'">Còn hàng</td></tr>
+                    <tr th:each="ten : ${tenThongSo}">
+                        <th scope="row" th:text="${ten}">Thông số</th>
+                        <td th:each="t : ${dsSoSanh}" th:text="${t.thongSo(ten)}">—</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

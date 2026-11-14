@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Thanh toán trực tuyến')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section th:replace="~{khach/manh :: hero('/assets/img/banner-gio-hang.jpg', 'Thanh toán trực tuyến', 'Trả tiền cọc hoặc toàn bộ đơn qua cổng thanh toán.')}"></section>
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+            <div class="kh-the">
+                <dl class="kh-thong-tin">
+                    <dt>Mã đơn</dt><dd><b th:text="${@dd.maDon(don.maDonHang)}">DH</b></dd>
+                    <dt>Tổng tiền đơn</dt><dd th:text="${@dd.tien(don.tongTien)}">0</dd>
+                    <dt>Đã trả</dt><dd th:text="${@dd.tien(tt.daTra)}">0</dd>
+                    <dt>Còn phải trả</dt><dd th:text="${@dd.tien(tt.conLai)}">0</dd>
+                    <dt>Trạng thái</dt><dd th:text="|${don.trangThai.nhan} · ${don.trangThaiThanhToan.nhan}|">Trạng thái</dd>
+                </dl>
+            </div>
+
+            <div class="kh-the" th:if="${khongCan}">
+                <h2>Đơn không cần thanh toán</h2>
+                <p class="chu-phu">Đơn đã huỷ, đã trả đủ hoặc trả tiền mặt khi nhận hàng nên không cần thanh toán trực tuyến.</p>
+                <p class="kh-dong-nut"><a class="nut nut--dac" th:href="@{/tra-cuu-don/{m}(m=${don.maDonHang})}">Xem đơn hàng</a></p>
+            </div>
+
+            <form class="kh-cong" method="post" th:action="@{/thanh-toan/{m}(m=${don.maDonHang})}" th:unless="${khongCan}" style="margin-top:16px">
+                <span class="kh-cong__nhan">CỔNG THANH TOÁN (MÔ PHỎNG)</span>
+                <p class="chu-phu">Đây là trang mô phỏng cổng thanh toán dùng cho đồ án. Không có tiền thật nào bị trừ, website không lưu số thẻ;
+                    bạn bấm một trong hai nút dưới để giả lập kết quả cổng gửi về.</p>
+                <input type="hidden" name="maCong" th:value="${yc.maCong}">
+                <p class="goi-y" th:text="|Mã giao dịch: ${yc.maCong} · hiệu lực tới ${@dd.ngayGio(yc.hetHan)}|">Mã giao dịch</p>
+
+                <h2 class="dat__nhom">Số tiền</h2>
+                <div class="o-chon__ds">
+                    <label class="o-chon" th:if="${tt.phaiCoc and tienCoc < tienHet}">
+                        <input type="radio" name="traHet" value="false" checked>
+                        <span class="o-chon__o" aria-hidden="true"></span>
+                        <span class="o-chon__chu"><b th:text="|Trả tiền cọc ${@dd.tien(tienCoc)}|">Cọc</b><span>Phần còn lại trả khi nhận hàng.</span></span>
+                    </label>
+                    <label class="o-chon">
+                        <input type="radio" name="traHet" value="true" th:checked="${!(tt.phaiCoc and tienCoc < tienHet)}">
+                        <span class="o-chon__o" aria-hidden="true"></span>
+                        <span class="o-chon__chu"><b th:text="|Trả toàn bộ ${@dd.tien(tienHet)}|">Toàn bộ</b><span>Không phải trả thêm khi nhận hàng.</span></span>
+                    </label>
+                </div>
+
+                <h2 class="dat__nhom">Cách trả</h2>
+                <div class="o-chon__ds">
+                    <label class="o-chon">
+                        <input type="radio" name="cachTra" th:value="${cachChuyenKhoan}" checked>
+                        <span class="o-chon__o" aria-hidden="true"></span>
+                        <span class="o-chon__chu"><b>Chuyển khoản hoặc quét QR</b><span>Quét mã QR bằng ứng dụng ngân hàng.</span></span>
+                    </label>
+                    <label class="o-chon">
+                        <input type="radio" name="cachTra" th:value="${cachThe}">
+                        <span class="o-chon__o" aria-hidden="true"></span>
+                        <span class="o-chon__chu"><b>Thẻ ATM, Visa, Mastercard</b><span>Nhập thẻ trên trang của cổng thanh toán.</span></span>
+                    </label>
+                </div>
+
+                <div class="kh-dong-nut">
+                    <button type="submit" name="ketQua" value="THANH_CONG" class="nut nut--dac">Thanh toán thành công</button>
+                    <button type="submit" name="ketQua" value="THAT_BAI" class="nut nut--do">Thanh toán thất bại</button>
+                    <a class="nut" th:href="@{/tra-cuu-don/{m}(m=${don.maDonHang})}">Để sau</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<link th:fragment="css" rel="stylesheet" href="/css/khach.css">
+
+<section th:fragment="hero(anh, tieuDe, moTa)" class="hero-sp hero-sp--dm" id="banner">
+    <img class="hero-sp__anh" th:src="${anh}" alt="">
+    <span class="hero-sp__phu" aria-hidden="true"></span>
+    <div class="hero-sp__chu">
+        <div class="khung">
+            <h1 th:text="${tieuDe}">Tiêu đề</h1>
+            <p th:text="${moTa}">Mô tả</p>
+        </div>
+    </div>
+    <div class="hero-sp__duoi">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a href="/">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${tieuDe}">Tiêu đề</span>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<a th:fragment="theSp(t)" class="sp" th:href="@{/san-pham/{m}(m=${t.ma})}">
+    <span class="sp__anh">
+        <img th:src="${t.anh}" th:alt="${t.ten}" loading="lazy">
+        <span class="sp__giam" th:if="${t.phanTramGiam > 0}" th:text="|-${t.phanTramGiam}%|">-10%</span>
+    </span>
+    <span class="sp__hieu" th:text="${t.hieu}">Hãng</span>
+    <span class="sp__ten" th:text="${t.ten}">Tên sản phẩm</span>
+    <span class="sp__gia">
+        <b th:text="${@dd.tien(t.giaHienTai)}">0 ₫</b>
+        <del th:if="${t.giaGach != null}" th:text="${@dd.tien(t.giaGach)}">0 ₫</del>
+    </span>
+    <span class="sp__het" th:unless="${t.conHang}">Tạm hết hàng</span>
+</a>
+
+<span th:fragment="nhanDon(tt)" th:class="${tt.name() == 'HOAN_THANH'} ? 'the-nhan the-nhan--ok'
+        : (${tt.name() == 'DA_HUY' or tt.name() == 'GIAO_KHONG_THANH_CONG'} ? 'the-nhan the-nhan--do'
+        : (${tt.name() == 'CHO_XAC_NHAN'} ? 'the-nhan the-nhan--vang'
+        : (${tt.name() == 'DA_TRA_HANG'} ? 'the-nhan the-nhan--tat' : 'the-nhan')))" th:text="${tt.nhan}">Trạng thái</span>
+
+</body>
+</html>

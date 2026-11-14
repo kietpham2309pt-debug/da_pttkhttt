@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Tài khoản')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section th:replace="~{khach/manh :: hero('/assets/img/banner-tai-khoan.jpg', 'Tài khoản', 'Hồ sơ, sổ địa chỉ và các đơn hàng của bạn.')}"></section>
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+            <div class="kh-luoi-2">
+                <div>
+                    <form class="kh-the" method="post" th:action="@{/tai-khoan/ho-so}">
+                        <h2>Hồ sơ</h2>
+                        <div class="o-nhap">
+                            <label for="hoTen">Họ và tên</label>
+                            <input id="hoTen" name="hoTen" th:value="${kh.hoTen}" maxlength="60" required>
+                        </div>
+                        <div class="o-nhap">
+                            <label for="sdt">Số điện thoại</label>
+                            <input id="sdt" name="soDienThoai" type="tel" th:value="${kh.soDienThoai}" maxlength="10" required>
+                        </div>
+                        <div class="o-nhap">
+                            <label for="email">Email</label>
+                            <input id="email" name="email" type="email" th:value="${kh.email}" maxlength="100">
+                        </div>
+                        <div class="kh-dong-nut">
+                            <button type="submit" class="nut nut--dac">Lưu hồ sơ</button>
+                            <a class="nut" href="/doi-mat-khau">Đổi mật khẩu</a>
+                        </div>
+                    </form>
+                    <form class="kh-the" method="post" th:action="@{/dang-xuat}">
+                        <h2>Phiên đăng nhập</h2>
+                        <button type="submit" class="nut">Đăng xuất</button>
+                    </form>
+                </div>
+
+                <div id="so-dia-chi">
+                    <div class="kh-the">
+                        <h2>Sổ địa chỉ</h2>
+                        <p class="chu-phu" th:if="${soDiaChi.isEmpty()}">Chưa có địa chỉ nào.</p>
+                        <div class="kh-dg" th:each="dc : ${soDiaChi}">
+                            <b th:text="|${dc.hoTenNguoiNhan} · ${dc.soDienThoai}|">Tên</b>
+                            <span class="the-nhan the-nhan--ok" th:if="${dc.macDinh}">Mặc định</span>
+                            <p th:text="|${dc.diaChi} (${dc.noiThanh ? 'nội thành' : 'đi tỉnh'})|">Địa chỉ</p>
+                            <div class="hang-thao-tac">
+                                <a class="nut nut--nho" th:href="@{/tai-khoan(suaDiaChi=${dc.maDiaChi})}">Sửa</a>
+                                <form method="post" th:action="@{/tai-khoan/dia-chi/{m}/mac-dinh(m=${dc.maDiaChi})}" th:unless="${dc.macDinh}">
+                                    <button type="submit" class="nut nut--nho">Đặt mặc định</button>
+                                </form>
+                                <form method="post" th:action="@{/tai-khoan/dia-chi/{m}/xoa(m=${dc.maDiaChi})}">
+                                    <button type="submit" class="nut nut--nho nut--do">Xoá</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="kh-the" method="post"
+                          th:action="${diaChiSua != null} ? @{/tai-khoan/dia-chi/{m}(m=${diaChiSua.maDiaChi})} : @{/tai-khoan/dia-chi}">
+                        <h2 th:text="${diaChiSua != null} ? 'Sửa địa chỉ' : 'Thêm địa chỉ'">Thêm địa chỉ</h2>
+                        <div class="o-doi">
+                            <div class="o-nhap">
+                                <label for="dcTen">Họ tên người nhận</label>
+                                <input id="dcTen" name="hoTenNguoiNhan" maxlength="60" required
+                                       th:value="${diaChiSua != null} ? ${diaChiSua.hoTenNguoiNhan} : ${kh.hoTen}">
+                            </div>
+                            <div class="o-nhap">
+                                <label for="dcSdt">Số điện thoại</label>
+                                <input id="dcSdt" name="soDienThoai" type="tel" maxlength="10" required
+                                       th:value="${diaChiSua != null} ? ${diaChiSua.soDienThoai} : ${kh.soDienThoai}">
+                            </div>
+                        </div>
+                        <div class="o-nhap">
+                            <label for="dcDiaChi">Địa chỉ đầy đủ</label>
+                            <input id="dcDiaChi" name="diaChi" maxlength="255" required th:value="${diaChiSua != null} ? ${diaChiSua.diaChi} : ''"
+                                   placeholder="Số nhà, đường, phường, quận, tỉnh">
+                        </div>
+                        <div class="o-nhap">
+                            <label for="dcKv">Khu vực</label>
+                            <select id="dcKv" name="noiThanh">
+                                <option value="true" th:selected="${diaChiSua == null or diaChiSua.noiThanh}">Nội thành TP. Hồ Chí Minh</option>
+                                <option value="false" th:selected="${diaChiSua != null and !diaChiSua.noiThanh}">Tỉnh khác</option>
+                            </select>
+                        </div>
+                        <label class="kh-o-tich">
+                            <input type="checkbox" name="macDinh" value="true" th:checked="${diaChiSua != null and diaChiSua.macDinh}">
+                            <span>Đặt làm địa chỉ mặc định</span>
+                        </label>
+                        <div class="kh-dong-nut">
+                            <button type="submit" class="nut nut--dac" th:text="${diaChiSua != null} ? 'Lưu địa chỉ' : 'Thêm địa chỉ'">Thêm</button>
+                            <a class="nut" href="/tai-khoan#so-dia-chi" th:if="${diaChiSua != null}">Huỷ sửa</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="khoi" id="don-cua-toi" style="margin-top:24px">
+                <div class="khoi__dau">
+                    <h2>Đơn hàng của tôi</h2>
+                    <a class="nut nut--nho" href="/danh-gia" th:if="${!canDanhGia.isEmpty()}" th:text="|Viết đánh giá (${canDanhGia.size()})|">Đánh giá</a>
+                </div>
+                <p class="chu-phu" th:if="${dsDon.isEmpty()}">Bạn chưa có đơn nào gắn với tài khoản.</p>
+                <div class="cuon-ngang" th:unless="${dsDon.isEmpty()}">
+                    <table class="bang-dl">
+                        <thead>
+                        <tr><th scope="col">Mã đơn</th><th scope="col">Ngày đặt</th><th scope="col">Tổng tiền</th><th scope="col">Thanh toán</th><th scope="col">Trạng thái</th><th scope="col"></th></tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="d : ${dsDon}">
+                            <td data-nhan="Mã đơn"><b th:text="${@dd.maDon(d.maDonHang)}">DH</b></td>
+                            <td data-nhan="Ngày đặt" th:text="${@dd.ngayGio(d.ngayDat)}">ngày</td>
+                            <td data-nhan="Tổng tiền" th:text="${@dd.tien(d.tongTien)}">0</td>
+                            <td data-nhan="Thanh toán" th:text="${d.trangThaiThanhToan.nhan}">TT</td>
+                            <td data-nhan="Trạng thái"><span th:replace="~{khach/manh :: nhanDon(${d.trangThai})}"></span></td>
+                            <td><a class="nut nut--nho" th:href="@{/tra-cuu-don/{m}(m=${d.maDonHang})}">Xem</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

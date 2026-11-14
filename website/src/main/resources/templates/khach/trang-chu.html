@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/khung :: dau('Trang chủ')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link th:replace="~{khach/manh :: css}">
+    <section class="banner" id="banner">
+        <img class="banner__anh hien" src="/assets/img/banner-1.jpg"
+             alt="Căn bếp tối màu với máy hút mùi, bếp từ và máy rửa chén">
+        <img class="banner__anh" src="/assets/img/banner-2.jpg"
+             alt="Gian bếp có tủ rượu và bếp từ mặt đá" loading="lazy">
+        <span class="banner__cuon" aria-hidden="true">
+            <span class="banner__chuot"><i></i></span>
+            <span class="banner__vach"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </span>
+        <div class="banner__cham">
+            <button type="button" aria-label="Ảnh 1"></button>
+            <button type="button" aria-label="Ảnh 2"></button>
+        </div>
+    </section>
+
+    <section class="muc muc--sp">
+        <div class="khung">
+            <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+            <div class="thong-bao thong-bao--ok" th:if="${param.daDangXuat}" role="status">Bạn đã đăng xuất.</div>
+            <div class="dau-sp">
+                <span class="nhan">Sản phẩm nổi bật</span>
+                <h2 class="dau-sp__td">Bep Nè Thiết bị nhà bếp chính hãng</h2>
+                <p class="dau-sp__mt">Chúng tôi không chạy theo mẫu mã nhất thời. Sáu nhóm hàng
+                    dưới đây đều chọn theo cùng một tiêu chí: bền, dễ vệ sinh, và lắp vừa
+                    với căn bếp Việt.</p>
+            </div>
+        </div>
+        <div class="dong-sp" id="dong-sp"
+             th:with="moTa=${ {'bep-dien-tu':'Ghép vùng từ với vùng hồng ngoại, dùng được cả nồi đất lẫn nồi nhôm.',
+                              'bep-hong-ngoai':'Nhiệt tỏa đều, giữ lửa ổn định. Hợp món kho và món hầm lâu.',
+                              'rua-chen':'Âm tủ 14 bộ, sấy bằng khoáng zeolite nên chén cất được ngay.',
+                              'hut-mui':'Hút mạnh mà chạy êm dưới 45 dB. Lưới lọc mỡ tháo rời, dễ rửa.',
+                              'lo-nuong':'Nướng đối lưu nhiều tầng, nhiệt đều, có chế độ tự vệ sinh.',
+                              'lo-vi-song':'Vi sóng kèm thanh nhiệt nướng, hâm nhanh mà vỏ vẫn giòn.'} }">
+            <div class="dong-sp__nen" aria-hidden="true">
+                <img th:each="dm, i : ${dsDanhMuc}" class="dong-sp__anh" th:classappend="${i.first} ? 'hien'"
+                     th:src="|/assets/img/sp-${dm.maDanhMuc}.jpg|" alt="" loading="lazy">
+            </div>
+            <span class="dong-sp__phu" aria-hidden="true"></span>
+            <div class="dong-sp__luoi">
+                <a class="o-sp" th:each="dm, i : ${dsDanhMuc}" th:attr="data-anh=${i.index}"
+                   th:href="@{/san-pham(danhMuc=${dm.maDanhMuc})}">
+                    <span class="o-sp__noi">
+                        <span class="o-sp__ten" th:text="${dm.tenDanhMuc}">Danh mục</span>
+                        <span class="o-sp__mo-ta" th:text="${moTa[dm.maDanhMuc]}">Mô tả</span>
+                        <span class="o-sp__xem">
+                            Xem sản phẩm
+                            <svg class="ic ic--nho"><use xlink:href="#ic-mui-ten-phai"/></svg>
+                        </span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc muc--vien" th:if="${!spKhuyenMai.isEmpty()}">
+        <div class="khung">
+            <div class="kh-dau">
+                <h2>Đang khuyến mãi</h2>
+                <a href="/san-pham">Xem tất cả sản phẩm</a>
+            </div>
+            <div class="luoi-sp">
+                <th:block th:each="t : ${spKhuyenMai}"><a th:replace="~{khach/manh :: theSp(${t})}"></a></th:block>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc muc--vien">
+        <div class="khung">
+            <div class="kh-dau">
+                <h2>Sản phẩm mới</h2>
+                <a href="/san-pham?sapXep=moi">Xem tất cả sản phẩm</a>
+            </div>
+            <div class="luoi-sp">
+                <th:block th:each="t : ${spMoi}"><a th:replace="~{khach/manh :: theSp(${t})}"></a></th:block>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc muc--dl">
+        <div class="khung">
+            <div class="dau-sp dau-sp--giua">
+                <h2 class="dau-sp__td">Hệ thống đại lý - đối tác</h2>
+                <p class="dau-sp__mt">Bep Nè là đại lý ủy quyền của các thương hiệu dưới đây.
+                    Mọi thiết bị bán ra đều có tem hãng và bảo hành chính hãng.</p>
+            </div>
+        </div>
+        <div class="dai-lo">
+            <div class="dai-lo__day">
+                <div class="dai-lo__luot" th:each="luot : ${ {1, 2} }" th:attr="aria-hidden=${luot == 2}">
+                    <span class="dai-lo__o"><img src="/assets/img/dt-bosch.svg" th:alt="${luot == 1} ? 'Bosch' : ''"></span>
+                    <span class="dai-lo__o"><img src="/assets/img/dt-kaff.png" th:alt="${luot == 1} ? 'KAFF' : ''"></span>
+                    <span class="dai-lo__o"><img src="/assets/img/dt-kocher.svg" th:alt="${luot == 1} ? 'Kocher' : ''"></span>
+                    <span class="dai-lo__o"><img src="/assets/img/dt-chefs.png" th:alt="${luot == 1} ? 'Chef’s' : ''"></span>
+                    <span class="dai-lo__o"><img src="/assets/img/dt-bosch.svg" alt=""></span>
+                    <span class="dai-lo__o"><img src="/assets/img/dt-kaff.png" alt=""></span>
+                    <span class="dai-lo__o"><img src="/assets/img/dt-kocher.svg" alt=""></span>
+                    <span class="dai-lo__o"><img src="/assets/img/dt-chefs.png" alt=""></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="banner-cuoi">
+        <img src="/assets/img/banner-cuoi.jpg" alt="Cooking with Bep Nè. Chảo cá hồi áp chảo trên bếp." loading="lazy">
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>
