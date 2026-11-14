@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Chi tiết đơn hàng')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main th:with="d=${ct.don}, tt=${ct.don.trangThai.name()}">
+    <link rel="stylesheet" href="/css/g4.css">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Chi tiết đơn hàng')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('don-hang')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Đơn <span th:text="${@dd.maDon(d.maDonHang)}">DH000001</span></h1>
+                            <p>Đặt lúc <span th:text="${@dd.ngayGio(d.ngayDat)}"></span> ·
+                                <span class="the-nhan"
+                                      th:classappend="${tt == 'CHO_XAC_NHAN'} ? 'the-nhan--vang' : (${tt == 'HOAN_THANH'} ? 'the-nhan--ok' : (${tt == 'DA_HUY' or tt == 'GIAO_KHONG_THANH_CONG' or tt == 'DA_TRA_HANG'} ? 'the-nhan--do' : ''))"
+                                      th:text="${d.trangThai.nhan}">Chờ xác nhận</span></p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--nho" th:href="@{/quan-tri/don-hang(trangThai=${tt})}">Về danh sách</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="canh-bao" th:if="${tt == 'CHO_XAC_NHAN' and ct.phutCho > phutToiDa}"
+                         th:text="'Đơn đã chờ ' + ${ct.phutCho} + ' phút, quá ' + ${phutToiDa} + ' phút phải gọi xác nhận.'"></div>
+                    <div class="canh-bao" th:if="${tt == 'CHO_XAC_NHAN' and ct.soLanGoi > 0}"
+                         th:text="'Đã gọi khách ' + ${ct.soLanGoi} + ' lần chưa được' + (${ct.soLanGoi >= soLanGoiToiDa} ? ': đủ số lần quy định, có thể huỷ với lý do Không liên lạc được.' : '.')"></div>
+                    <div class="canh-bao" th:if="${tt == 'CHO_XAC_NHAN' and ct.canXinCoc}"
+                         th:text="'Đơn từ 10 triệu: xin cọc 10–20% (' + ${@dd.tien(ct.cocTu)} + ' – ' + ${@dd.tien(ct.cocDen)} + '). Khách chuyển cọc qua cổng thanh toán thì đơn hiện số tiền cọc.'"></div>
+                    <div class="canh-bao" th:if="${tt == 'CHO_XAC_NHAN' and ct.thieuHang}">Có mẫu máy không đủ số lượng trong kho (xem cột Kho). Khách chờ thì ghi ngày dự kiến có hàng vào ghi chú; không chờ thì huỷ với lý do Hết hàng.</div>
+
+                    <div class="g4-hai-cot">
+                        <div class="khoi">
+                            <div class="khoi__dau"><h2>Người nhận, giao hàng</h2></div>
+                            <dl class="g4-tt">
+                                <dt>Người nhận</dt><dd th:text="${d.hoTenNguoiNhan}"></dd>
+                                <dt>Số điện thoại</dt><dd th:text="${d.soDienThoaiNhan}"></dd>
+                                <dt>Email</dt><dd th:text="${d.email != null ? d.email : 'Không có'}"></dd>
+                                <dt>Địa chỉ giao</dt><dd th:text="${d.diaChiGiao}"></dd>
+                                <dt>Khu vực</dt><dd th:text="${d.noiThanh} ? 'Nội thành (cửa hàng tự giao)' : 'Tỉnh (gửi đơn vị vận chuyển)'"></dd>
+                                <dt>Cần lắp đặt</dt><dd th:text="${d.canLapDat} ? 'Có' : 'Không'"></dd>
+                                <dt>Tài khoản khách</dt><dd th:text="${d.khachHang != null ? d.khachHang.hoTen : 'Khách vãng lai'}"></dd>
+                                <dt>Nhân viên duyệt</dt><dd th:text="${d.nhanVienDuyet != null ? d.nhanVienDuyet.hoTen : 'Chưa duyệt'}"></dd>
+                                <dt th:if="${d.lyDoHuy != null}">Lý do huỷ</dt><dd th:if="${d.lyDoHuy != null}" th:text="${d.lyDoHuy}"></dd>
+                                <dt>Ghi chú</dt><dd class="g4-ghi-chu" th:text="${d.ghiChu != null ? d.ghiChu : 'Không có'}"></dd>
+                            </dl>
+                        </div>
+                        <div class="khoi">
+                            <div class="khoi__dau"><h2>Tiền, thanh toán</h2></div>
+                            <dl class="g4-tt">
+                                <dt>Tiền hàng</dt><dd th:text="${@dd.tien(d.tienHang)}"></dd>
+                                <dt>Khuyến mãi</dt><dd th:text="${d.khuyenMai != null ? d.khuyenMai.tenKhuyenMai + ' (−' + @dd.tien(d.tienGiam) + ')' : 'Không có'}"></dd>
+                                <dt>Phí giao</dt><dd th:text="${@dd.tien(d.phiGiao)}"></dd>
+                                <dt>Phí lắp đặt</dt><dd th:text="${@dd.tien(d.phiLapDat)}"></dd>
+                                <dt>Tổng tiền</dt><dd><b th:text="${@dd.tien(d.tongTien)}"></b></dd>
+                                <dt>Tiền cọc đã nhận</dt><dd th:text="${@dd.tien(d.tienCoc)}"></dd>
+                                <dt>Cách thanh toán</dt><dd th:text="${d.phuongThucThanhToan.nhan}"></dd>
+                                <dt>Trạng thái thanh toán</dt><dd th:text="${d.trangThaiThanhToan.nhan}"></dd>
+                                <dt>Số hoá đơn</dt><dd th:text="${d.soHoaDon != null ? d.soHoaDon : 'Chưa lập'}"></dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau"><h2>Sản phẩm</h2></div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>Model</th>
+                                    <th class="canh-phai">Số lượng</th>
+                                    <th class="canh-phai">Đơn giá lúc đặt</th>
+                                    <th class="canh-phai">Thành tiền</th>
+                                    <th>Cần lắp</th>
+                                    <th>Kho</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="s : ${ct.sanPham}">
+                                    <td data-nhan="Sản phẩm" th:text="${s.ct.tenSanPhamLucBan}"></td>
+                                    <td th:text="${s.ct.sanPham.model}"></td>
+                                    <td class="canh-phai" th:text="${s.ct.soLuong}"></td>
+                                    <td class="canh-phai" th:text="${@dd.tien(s.ct.donGia)}"></td>
+                                    <td class="canh-phai" th:text="${@dd.tien(s.ct.donGia * s.ct.soLuong)}"></td>
+                                    <td th:text="${s.ct.sanPham.canLapDat} ? 'Có' : 'Không'"></td>
+                                    <td>
+                                        <span class="the-nhan" th:classappend="${s.du} ? 'the-nhan--ok' : 'the-nhan--do'"
+                                              th:text="'Còn ' + ${s.coTheBan} + ' máy'"></span>
+                                        <span class="g4-nho" th:text="'(trong kho ' + ${s.trongKho} + ', đơn khác đang giữ ' + ${s.dangGiu} + ')'"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi" th:if="${tt == 'CHO_XAC_NHAN' or tt == 'DA_XAC_NHAN'}">
+                        <div class="khoi__dau"><h2>Xử lý đơn</h2></div>
+                        <form th:action="@{/quan-tri/don-hang/{m}/ghi-chu(m=${d.maDonHang})}" method="post">
+                            <div class="o-nhap">
+                                <label for="diaChiGiao">Địa chỉ giao (sửa nếu khách đổi)</label>
+                                <input type="text" id="diaChiGiao" name="diaChiGiao" th:value="${d.diaChiGiao}" maxlength="255">
+                            </div>
+                            <label class="g4-o-tick"><input type="checkbox" name="noiThanh" value="true" th:checked="${d.noiThanh}"> Địa chỉ trong nội thành</label>
+                            <div class="o-nhap">
+                                <label for="ghiChu">Ghi chú (ngày giờ khách muốn nhận, ngày dự kiến có hàng…)</label>
+                                <textarea id="ghiChu" name="ghiChu" rows="3" maxlength="500" th:text="${d.ghiChu}"></textarea>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--nho" type="submit">Lưu ghi chú, địa chỉ</button>
+                            </div>
+                        </form>
+
+                        <div class="hang-nut" th:if="${tt == 'CHO_XAC_NHAN'}">
+                            <form th:action="@{/quan-tri/don-hang/{m}/xac-nhan(m=${d.maDonHang})}" method="post">
+                                <input type="hidden" name="trangThaiLucMo" th:value="${tt}">
+                                <button class="nut nut--dac" type="submit">Xác nhận đơn</button>
+                            </form>
+                            <form th:action="@{/quan-tri/don-hang/{m}/goi-lai(m=${d.maDonHang})}" method="post">
+                                <input type="hidden" name="trangThaiLucMo" th:value="${tt}">
+                                <button class="nut" type="submit">Gọi lại sau</button>
+                            </form>
+                        </div>
+
+                        <form th:if="${ct.coTheHuy}" th:action="@{/quan-tri/don-hang/{m}/huy(m=${d.maDonHang})}" method="post">
+                            <input type="hidden" name="trangThaiLucMo" th:value="${tt}">
+                            <div class="hang-form">
+                                <div class="o-nhap">
+                                    <label for="loaiLyDo">Lý do huỷ</label>
+                                    <select id="loaiLyDo" name="loaiLyDo" required>
+                                        <option value="">Chọn lý do</option>
+                                        <option th:each="l : ${lyDoHuy}" th:value="${l}" th:text="${l}"></option>
+                                    </select>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="chiTietLyDo">Chi tiết (bắt buộc khi chọn Khác)</label>
+                                    <input type="text" id="chiTietLyDo" name="chiTietLyDo" maxlength="200">
+                                </div>
+                            </div>
+                            <p class="goi-y" th:if="${d.tienCoc > 0}" th:text="'Đơn đã nhận cọc ' + ${@dd.tien(d.tienCoc)} + ': huỷ trước khi xuất kho thì hoàn đủ cọc cho khách.'"></p>
+                            <div class="hang-nut">
+                                <button class="nut nut--do" type="submit">Huỷ đơn</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau"><h2>Lịch sử trạng thái</h2></div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead><tr><th>Thời điểm</th><th>Từ</th><th>Sang</th><th>Người đổi</th><th>Ghi chú</th></tr></thead>
+                                <tbody>
+                                <tr th:each="l : ${ct.lichSu}">
+                                    <td th:text="${@dd.ngayGio(l.thoiDiem)}"></td>
+                                    <td th:text="${l.trangThaiCu != null ? l.trangThaiCu.nhan : '(mới)'}"></td>
+                                    <td th:text="${l.trangThaiMoi.nhan}"></td>
+                                    <td th:text="${l.nhanVien != null ? l.nhanVien.hoTen : 'Khách hàng'}"></td>
+                                    <td class="o-dai" th:text="${l.ghiChu}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau"><h2>Phiếu giao hàng</h2></div>
+                        <p th:if="${#lists.isEmpty(ct.phieuGiao)}">Chưa phân công giao hàng.</p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(ct.phieuGiao)}">
+                            <table class="bang-dl">
+                                <thead><tr><th>Phiếu</th><th>Loại việc</th><th>Người giao</th><th>Hẹn</th><th>Trạng thái</th><th class="canh-phai">Tiền thu</th><th class="canh-phai">Thao tác</th></tr></thead>
+                                <tbody>
+                                <tr th:each="p : ${ct.phieuGiao}">
+                                    <td class="ma-mo" th:text="'PG' + ${p.maPhieuGiao}"></td>
+                                    <td th:text="${p.loaiViec.nhan}"></td>
+                                    <td th:text="${p.nhanVienGiao != null ? p.nhanVienGiao.hoTen : p.donViVanChuyen + (p.maVanDon != null ? ' · ' + p.maVanDon : '')}"></td>
+                                    <td th:text="${@dd.ngay(p.ngayHen)} + ' ' + ${p.gioBatDau} + '–' + ${p.gioKetThuc}"></td>
+                                    <td th:text="${p.trangThai.nhan}"></td>
+                                    <td class="canh-phai" th:text="${@dd.tien(p.tienThuKhiGiao)}"></td>
+                                    <td><div class="hang-thao-tac"><a class="nut nut--nho" th:href="@{/quan-tri/giao-hang/phieu/{m}(m=${p.maPhieuGiao})}">Xem</a></div></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau"><h2>Phiếu xuất kho</h2></div>
+                        <p th:if="${#lists.isEmpty(ct.phieuXuat)}">Chưa xuất kho.</p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(ct.phieuXuat)}">
+                            <table class="bang-dl">
+                                <thead><tr><th>Phiếu</th><th>Ngày xuất</th><th>Lý do</th><th>Thủ kho</th><th>Máy (serial)</th></tr></thead>
+                                <tbody>
+                                <tr th:each="x : ${ct.phieuXuat}">
+                                    <td class="ma-mo" th:text="'PX' + ${x.maPhieuXuat}"></td>
+                                    <td th:text="${@dd.ngayGio(x.ngayXuat)}"></td>
+                                    <td th:text="${x.lyDoXuat}"></td>
+                                    <td th:text="${x.thuKho.hoTen}"></td>
+                                    <td class="o-dai"><span th:each="s, i : ${x.serial}" th:text="${s.sanPham.model} + ' · ' + ${s.soSerial} + ' (' + ${s.trangThai.nhan} + ')' + (${i.last} ? '' : '; ')"></span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="g4-hai-cot">
+                        <div class="khoi">
+                            <div class="khoi__dau"><h2>Giao dịch thanh toán</h2></div>
+                            <p th:if="${#lists.isEmpty(ct.giaoDich)}">Chưa có giao dịch.</p>
+                            <table class="bang-dl" th:unless="${#lists.isEmpty(ct.giaoDich)}">
+                                <thead><tr><th>Thời điểm</th><th>Loại</th><th>Cách</th><th class="canh-phai">Số tiền</th></tr></thead>
+                                <tbody>
+                                <tr th:each="g : ${ct.giaoDich}">
+                                    <td th:text="${@dd.ngayGio(g.thoiDiem)}"></td>
+                                    <td th:text="${g.loai.nhan}"></td>
+                                    <td th:text="${g.phuongThuc}"></td>
+                                    <td class="canh-phai" th:text="${@dd.tien(g.soTien)}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="khoi">
+                            <div class="khoi__dau"><h2>Yêu cầu đổi trả</h2></div>
+                            <p th:if="${#lists.isEmpty(ct.yeuCau)}">Không có.</p>
+                            <table class="bang-dl" th:unless="${#lists.isEmpty(ct.yeuCau)}">
+                                <thead><tr><th>Yêu cầu</th><th>Hình thức</th><th>Trạng thái</th><th></th></tr></thead>
+                                <tbody>
+                                <tr th:each="y : ${ct.yeuCau}">
+                                    <td class="ma-mo" th:text="'#' + ${y.maYeuCau}"></td>
+                                    <td th:text="${y.hinhThuc.nhan}"></td>
+                                    <td th:text="${y.trangThai.nhan}"></td>
+                                    <td><a class="nut nut--nho" th:href="@{/quan-tri/doi-tra/{m}(m=${y.maYeuCau})}">Xem</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

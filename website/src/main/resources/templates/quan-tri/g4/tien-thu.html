@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Tiền thu khi giao')}"></head>
+<body>
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <link rel="stylesheet" href="/css/g4.css">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Tiền thu khi giao')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('tien-thu')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Tiền thu khi giao</h1>
+                            <p>Đối chiếu tiền nhân viên giao hàng nộp trong ngày với từng phiếu giao đã giao xong, rồi xác nhận đã nhận.</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+
+                    <div class="khoi" th:if="${#lists.isEmpty(nhom)}">
+                        <p>Không có tiền thu khi giao nào chờ xác nhận.</p>
+                    </div>
+
+                    <div class="khoi" th:each="n : ${nhom}">
+                        <div class="khoi__dau">
+                            <h2 th:text="${@dd.ngay(n.ngay)} + ' · ' + ${n.nguoiNop}">Ngày · người nộp</h2>
+                            <span class="the-nhan the-nhan--vang" th:text="'Tổng ' + ${@dd.tien(n.tong)}"></span>
+                        </div>
+                        <form th:action="@{/quan-tri/tien-thu/xac-nhan}" method="post">
+                            <div class="cuon-ngang">
+                                <table class="bang-dl">
+                                    <thead><tr><th>Chọn</th><th>Phiếu</th><th>Đơn</th><th>Người nhận</th><th>Loại việc</th><th class="canh-phai">Tiền thu</th></tr></thead>
+                                    <tbody>
+                                    <tr th:each="p : ${n.phieu}">
+                                        <td><input type="checkbox" name="maPhieu" th:value="${p.maPhieuGiao}" checked></td>
+                                        <td class="ma-mo" th:text="'PG' + ${p.maPhieuGiao}"></td>
+                                        <td><a class="ma-mo" th:href="@{/quan-tri/giao-hang/phieu/{m}(m=${p.maPhieuGiao})}" th:text="${@dd.maDon(p.donHang.maDonHang)}"></a></td>
+                                        <td th:text="${p.donHang.hoTenNguoiNhan}"></td>
+                                        <td th:text="${p.loaiViec.nhan}"></td>
+                                        <td class="canh-phai" th:text="${@dd.tien(p.tienThuKhiGiao)}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="hang-form">
+                                <div class="o-nhap">
+                                    <label th:for="'soNop' + ${nStat.index}">Số tiền thực nhận (đồng)</label>
+                                    <input type="number" min="0" step="1000" th:id="'soNop' + ${nStat.index}" name="soNop" th:value="${n.tong}">
+                                </div>
+                                <div class="o-nhap">
+                                    <label th:for="'ghiChu' + ${nStat.index}">Ghi chú khoản lệch (bắt buộc nếu lệch)</label>
+                                    <input type="text" th:id="'ghiChu' + ${nStat.index}" name="ghiChu" maxlength="200">
+                                </div>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Xác nhận đã nhận</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="khoi">
+                        <div class="khoi__dau"><h2 th:text="'Đã xác nhận trong ' + ${soNgay} + ' ngày qua'">Đã xác nhận</h2></div>
+                        <p th:if="${#lists.isEmpty(daXacNhan)}">Chưa có.</p>
+                        <div class="cuon-ngang" th:unless="${#lists.isEmpty(daXacNhan)}">
+                            <table class="bang-dl">
+                                <thead><tr><th>Phiếu</th><th>Đơn</th><th>Người nộp</th><th class="canh-phai">Tiền thu</th><th>Kế toán</th><th>Lúc</th></tr></thead>
+                                <tbody>
+                                <tr th:each="p : ${daXacNhan}">
+                                    <td class="ma-mo" th:text="'PG' + ${p.maPhieuGiao}"></td>
+                                    <td class="ma-mo" th:text="${@dd.maDon(p.donHang.maDonHang)}"></td>
+                                    <td th:text="${p.nhanVienGiao != null ? p.nhanVienGiao.hoTen : p.donViVanChuyen}"></td>
+                                    <td class="canh-phai" th:text="${@dd.tien(p.tienThuKhiGiao)}"></td>
+                                    <td th:text="${p.keToanXacNhan.hoTen}"></td>
+                                    <td th:text="${@dd.ngayGio(p.thoiDiemXacNhanTien)}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>
