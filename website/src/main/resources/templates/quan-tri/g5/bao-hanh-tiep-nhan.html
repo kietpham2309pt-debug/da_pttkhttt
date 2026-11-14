@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Tiếp nhận bảo hành')}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Tiếp nhận bảo hành')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('bao-hanh')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Lập phiếu tiếp nhận bảo hành</h1>
+                            <p th:text="${m.may().sanPham.tenSanPham} + ' · serial ' + ${m.may().soSerial}">Máy</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div th:if="${canhBao != null}" class="canh-bao" th:classappend="${m.quaSoLan()} ? 'canh-bao--do'" th:text="${canhBao}" role="alert">Cảnh báo</div>
+                    <div th:unless="${m.conHan()}" class="canh-bao canh-bao--do" role="alert"
+                         th:text="'Hết hạn bảo hành từ ngày ' + ${@dd.ngay(m.hanBaoHanh().plusDays(1))} + '. Chỉ nhận sửa có phí theo báo giá của trung tâm bảo hành hãng khi khách đồng ý.'">Hết hạn</div>
+
+                    <div class="khoi">
+                        <dl class="thong-tin-luoi">
+                            <div><dt>Model</dt><dd th:text="${m.may().sanPham.model}">M</dd></div>
+                            <div><dt>Đơn mua</dt><dd th:text="${@dd.maDon(m.don().maDonHang)}">DH</dd></div>
+                            <div><dt>Người mua</dt><dd th:text="${m.don().hoTenNguoiNhan} + ' · ' + ${m.don().soDienThoaiNhan}">Tên</dd></div>
+                            <div><dt>Ngày bán</dt><dd th:text="${@dd.ngay(m.ngayBan())}">27/10</dd></div>
+                            <div><dt>Thời hạn bảo hành</dt><dd th:text="${m.may().sanPham.thoiHanBaoHanh} + ' tháng'">36 tháng</dd></div>
+                            <div><dt>Hạn bảo hành</dt><dd th:text="${@dd.ngay(m.hanBaoHanh())} + (${m.soNgayOHang() > 0} ? ' (đã cộng ' + ${m.soNgayOHang()} + ' ngày ở hãng)' : '')">27/10/2029</dd></div>
+                            <div><dt>Số lần đã bảo hành</dt><dd th:text="${m.soLanDaBaoHanh()} + ' · lần này là lần ' + ${m.lanTiepTheo()}">0</dd></div>
+                        </dl>
+                    </div>
+
+                    <div class="khoi" th:if="${m.duocTiepNhan()}">
+                        <form th:action="@{/quan-tri/bao-hanh/tiep-nhan}" method="post">
+                            <input type="hidden" name="serial" th:value="${m.may().soSerial}">
+                            <div class="hang-form">
+                                <div class="o-nhap">
+                                    <label for="hoTen">Họ tên khách</label>
+                                    <input type="text" id="hoTen" name="hoTen" maxlength="100" required th:value="${hoTen}">
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="soDienThoai">Số điện thoại khách</label>
+                                    <input type="tel" id="soDienThoai" name="soDienThoai" maxlength="15" required th:value="${soDienThoai}">
+                                </div>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="moTaLoi">Mô tả lỗi (lời khách)</label>
+                                <textarea id="moTaLoi" name="moTaLoi" rows="3" maxlength="400" required th:text="${moTaLoi}"></textarea>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="tinhTrang">Tình trạng bên ngoài (trầy, móp, thiếu phụ kiện)</label>
+                                <input type="text" id="tinhTrang" name="tinhTrang" maxlength="255" required th:value="${tinhTrang}">
+                            </div>
+                            <div class="hang-form">
+                                <div class="o-nhap">
+                                    <label for="loaiXuLy">Loại lỗi, hình thức</label>
+                                    <select id="loaiXuLy" name="loaiXuLy">
+                                        <option value="GUI_HANG" th:selected="${loaiXuLy == 'GUI_HANG'}">Lỗi của máy: gửi trung tâm bảo hành hãng</option>
+                                        <option value="LAP_DAT" th:selected="${loaiXuLy == 'LAP_DAT'}">Lỗi do lắp đặt: kỹ thuật cửa hàng xử lý</option>
+                                        <option value="TAI_NHA" th:selected="${loaiXuLy == 'TAI_NHA'}">Máy âm tủ, cồng kềnh: hãng bảo hành tại nhà</option>
+                                    </select>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="ngayHenTra">Ngày hẹn trả</label>
+                                    <input type="date" id="ngayHenTra" name="ngayHenTra" required th:min="${homNay}" th:value="${ngayHenTra}">
+                                    <span class="goi-y" th:text="'Hãng thường sửa 7–15 ngày: nên hẹn từ ' + ${henSomNhat} + ' đến ' + ${henMuonNhat} + '.'">7–15 ngày</span>
+                                </div>
+                            </div>
+                            <div class="o-nhap" th:unless="${m.conHan()}">
+                                <label><input type="checkbox" name="dongYCoPhi" value="true" th:checked="${dongYCoPhi}"> Khách đồng ý sửa có phí theo báo giá của hãng</label>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu phiếu tiếp nhận</button>
+                                <a class="nut" href="/quan-tri/bao-hanh">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="khoi" th:unless="${m.duocTiepNhan()}">
+                        <p th:if="${m.quaSoLan()}">Máy đã sửa bảo hành từ 3 lần trở lên mà vẫn lỗi: không gửi hãng nữa. <a href="/quan-tri/doi-tra">Chuyển sang đổi trả</a> để đổi máy mới hoặc hoàn tiền.</p>
+                        <p th:unless="${m.quaSoLan()}" th:text="'Máy đang ở trạng thái ' + ${m.may().trangThai.nhan} + ', không tiếp nhận bảo hành được.'">Không nhận</p>
+                        <div class="hang-nut"><a class="nut" href="/quan-tri/bao-hanh">Quay lại</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

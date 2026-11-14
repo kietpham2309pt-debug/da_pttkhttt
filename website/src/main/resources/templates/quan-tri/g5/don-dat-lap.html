@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Lập đề xuất đặt hàng')}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Lập đề xuất đặt hàng')}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('don-dat')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Lập đề xuất đặt hàng</h1>
+                            <p th:text="'Hệ thống điền sẵn số lượng gợi ý cho các mẫu máy chỉ còn ' + ${tonToiThieu} + ' máy Trong kho trở xuống. Sửa số lượng, để trống mẫu không đặt.'">Gợi ý</p>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <form th:action="@{/quan-tri/kho/don-dat/lap}" method="post">
+                        <div class="khoi">
+                            <div class="hang-form">
+                                <div class="o-nhap">
+                                    <label for="maNhaCungCap">Nhà cung cấp</label>
+                                    <select id="maNhaCungCap" name="maNhaCungCap" required>
+                                        <option value="">Chọn nhà cung cấp</option>
+                                        <option th:each="n : ${dsNcc}" th:value="${n.maNhaCungCap}" th:text="${n.tenNhaCungCap}"
+                                                th:selected="${n.maNhaCungCap == maNcc}">NCC</option>
+                                    </select>
+                                    <span class="goi-y">Chỉ hiện nhà cung cấp đang hợp tác.</span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="ghiChu">Ghi chú (lý do đặt, mẫu khách cần…)</label>
+                                    <input type="text" id="ghiChu" name="ghiChu" maxlength="200" th:value="${ghiChu}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="khoi">
+                            <div class="khoi__dau"><h2>Mẫu máy và số lượng đặt</h2></div>
+                            <div class="cuon-ngang">
+                                <table class="bang-dl bang-nhap">
+                                    <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Model</th>
+                                        <th>Danh mục</th>
+                                        <th class="canh-phai">Trong kho</th>
+                                        <th>Cảnh báo</th>
+                                        <th class="canh-phai">Số lượng đặt</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="t : ${ton}" th:classappend="${t.duoiToiThieu()} ? 'hang-canh-bao'">
+                                        <td th:text="${t.tenSanPham()}">Bếp</td>
+                                        <td class="ma-mo" th:text="${t.model()}">M</td>
+                                        <td th:text="${t.danhMuc()}">DM</td>
+                                        <td class="canh-phai" th:text="${t.trongKho()}">2</td>
+                                        <td><span th:if="${t.duoiToiThieu()}" class="the-nhan the-nhan--vang">Dưới tồn tối thiểu</span></td>
+                                        <td class="canh-phai"><input class="o-so-nho" type="number" min="0" max="999"
+                                                                     th:name="'sl_' + ${t.maSanPham()}" th:value="${soLuong.get(t.maSanPham())}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu đề xuất</button>
+                                <a class="nut" href="/quan-tri/kho/don-dat">Quay lại</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

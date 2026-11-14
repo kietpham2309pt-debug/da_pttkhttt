@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/khung :: dau('Đơn đặt hàng #' + ${x.don().maDonDat})}"></head>
+<body>
+<link rel="stylesheet" href="/css/g5.css">
+<th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
+<main th:with="d=${x.don()}, deXuat=${x.don().trangThai.name() == 'DE_XUAT'}">
+    <section class="muc muc--dau-trang">
+        <div class="khung khung--rong">
+            <nav th:replace="~{layout/quan-tri :: duongDan('Đơn đặt hàng #' + ${x.don().maDonDat})}"></nav>
+            <div class="qt">
+                <nav th:replace="~{layout/quan-tri :: menu('don-dat')}"></nav>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="'Đơn đặt hàng #' + ${d.maDonDat}">Đơn đặt hàng #1</h1>
+                            <p>
+                                <span class="the-nhan"
+                                      th:classappend="${deXuat} ? 'the-nhan--vang' : (${d.trangThai.name() == 'DA_NHAN'} ? 'the-nhan--ok' : (${d.trangThai.name() == 'DA_HUY'} ? 'the-nhan--do' : ''))"
+                                      th:text="${d.trangThai.nhan}">Đề xuất</span>
+                            </p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a sec:authorize="hasRole('THU_KHO')" th:if="${d.trangThai.name() == 'DA_GUI'}" class="nut nut--dac"
+                               th:href="@{/quan-tri/kho/phieu-nhap/lap(donDat=${d.maDonDat})}">Lập phiếu nhập cho đơn này</a>
+                            <a class="nut" href="/quan-tri/kho/don-dat">Danh sách đơn đặt</a>
+                        </div>
+                    </div>
+                    <th:block th:replace="~{layout/khung :: thongBao}"></th:block>
+                    <div class="khoi">
+                        <dl class="thong-tin-luoi">
+                            <div><dt>Nhà cung cấp</dt><dd th:text="${d.nhaCungCap.tenNhaCungCap}">NCC</dd></div>
+                            <div><dt>Điện thoại NCC</dt><dd th:text="${d.nhaCungCap.soDienThoai}">028</dd></div>
+                            <div><dt>Ngày lập</dt><dd th:text="${@dd.ngayGio(d.ngayLap)}">01/11</dd></div>
+                            <div><dt>Người lập</dt><dd th:text="${d.nguoiLap.hoTen}">Thủ kho</dd></div>
+                            <div><dt>Người gửi nhà cung cấp</dt><dd th:text="${d.nguoiGui != null} ? ${d.nguoiGui.hoTen} : 'Chưa gửi'">QL</dd></div>
+                            <div><dt>Ghi chú</dt><dd th:text="${d.ghiChu}">ghi chú</dd></div>
+                        </dl>
+                    </div>
+
+                    <form th:action="@{/quan-tri/kho/don-dat/{m}/gui(m=${d.maDonDat})}" method="post" id="formGui">
+                    <div class="khoi">
+                        <div class="khoi__dau"><h2>Mẫu máy đặt</h2></div>
+                        <div class="cuon-ngang">
+                            <table class="bang-dl bang-nhap">
+                                <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>Model</th>
+                                    <th class="canh-phai">Trong kho hiện tại</th>
+                                    <th class="canh-phai">Số lượng đặt</th>
+                                    <th class="canh-phai">Đã nhập</th>
+                                    <th class="canh-phai">Còn thiếu</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="r : ${x.dong()}">
+                                    <td th:text="${r.tenSanPham()}">Bếp</td>
+                                    <td class="ma-mo" th:text="${r.model()}">M</td>
+                                    <td class="canh-phai" th:text="${r.trongKho()}">1</td>
+                                    <td class="canh-phai">
+                                        <th:block sec:authorize="hasRole('QUAN_LY')" th:if="${deXuat}">
+                                            <input class="o-so-nho" type="number" min="0" max="999" th:name="'sl_' + ${r.maSanPham()}" th:value="${r.soLuong()}">
+                                        </th:block>
+                                        <th:block sec:authorize="!hasRole('QUAN_LY')"><span th:text="${r.soLuong()}">3</span></th:block>
+                                        <th:block sec:authorize="hasRole('QUAN_LY')" th:unless="${deXuat}"><span th:text="${r.soLuong()}">3</span></th:block>
+                                    </td>
+                                    <td class="canh-phai" th:text="${r.daNhap()}">0</td>
+                                    <td class="canh-phai" th:text="${r.conThieu()}">3</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi" sec:authorize="hasRole('QUAN_LY')" th:if="${deXuat}">
+                        <div class="khoi__dau"><h2>Duyệt và gửi nhà cung cấp</h2></div>
+                        <p class="goi-y">Quản lý xem số tồn, chỉnh số lượng (để 0 để bỏ mẫu), chọn nhà cung cấp, ghi ý kiến của chủ cửa hàng rồi gửi. Đơn chưa có ý kiến chủ thì không gửi được.</p>
+                        <div class="hang-form">
+                            <div class="o-nhap">
+                                <label for="maNhaCungCap">Nhà cung cấp</label>
+                                <select id="maNhaCungCap" name="maNhaCungCap">
+                                    <option th:each="n : ${dsNcc}" th:value="${n.maNhaCungCap}" th:text="${n.tenNhaCungCap}"
+                                            th:selected="${n.maNhaCungCap == d.nhaCungCap.maNhaCungCap}">NCC</option>
+                                </select>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="yKienChu">Ý kiến chủ cửa hàng</label>
+                                <input type="text" id="yKienChu" name="yKienChu" maxlength="150" required placeholder="Chủ đồng ý ngày …, giao trước …">
+                            </div>
+                        </div>
+                        <div class="hang-nut">
+                            <button class="nut nut--dac" type="submit">Gửi nhà cung cấp</button>
+                        </div>
+                    </div>
+                    </form>
+
+                    <div class="khoi" th:if="${deXuat or (d.trangThai.name() == 'DA_GUI' and #lists.isEmpty(x.dong().?[daNhap() > 0]))}">
+                        <div class="khoi__dau"><h2>Huỷ đơn đặt hàng</h2></div>
+                        <form th:action="@{/quan-tri/kho/don-dat/{m}/huy(m=${d.maDonDat})}" method="post" class="form-dong">
+                            <div class="o-nhap">
+                                <label for="lyDo">Lý do huỷ</label>
+                                <input type="text" id="lyDo" name="lyDo" maxlength="150" required>
+                            </div>
+                            <button class="nut nut--do" type="submit">Huỷ đơn</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<th:block th:replace="~{layout/khung :: chanTrang}"></th:block>
+</body>
+</html>

@@ -1,0 +1,24 @@
+.bang-dl tr.hang-qua-han td{color:var(--do)}
+.bang-dl tr.hang-canh-bao td:first-child{border-left:3px solid var(--dong)}
+.bang-nhap input[type="text"],
+.bang-nhap input[type="number"],
+.bang-nhap input[type="date"],
+.bang-nhap select,
+.bang-nhap textarea{width:100%; min-width:70px; padding:8px 10px; border:1px solid var(--vien); background:var(--nen); color:var(--chu); font:inherit; font-size:14px}
+.bang-nhap textarea{min-height:90px; font-family:ui-monospace,Consolas,monospace; font-size:13px; resize:vertical}
+.bang-nhap td{vertical-align:top}
+.o-so-nho{max-width:110px}
+.ds-serial{display:grid; gap:6px 14px; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); margin-top:8px}
+.ds-serial label{display:flex; gap:8px; align-items:center; font-size:13.5px; font-family:ui-monospace,Consolas,monospace}
+.serial-ma{font-family:ui-monospace,Consolas,monospace; font-size:13px}
+.canh-bao--do{border-color:var(--do); color:var(--do)}
+.thong-tin-luoi{display:grid; gap:10px 24px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.thong-tin-luoi dt{font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--chu-mo)}
+.thong-tin-luoi dd{margin:4px 0 0}
+.form-dong{display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end}
+.form-dong .o-nhap{margin:0}
+.form-dong .o-nhap + .o-nhap{margin-top:0}
+@media print{
+    .qt-ben,.duong-dan,.chan,.dau,header,.hang-nut,.khong-in{display:none !important}
+    .qt{display:block}
+}
