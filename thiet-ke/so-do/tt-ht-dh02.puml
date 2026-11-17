@@ -1,0 +1,50 @@
+@startuml tt-ht-dh02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Quản lý__\n__cửa hàng__" as QL
+boundary "__: phan-cong__\n__.html__" as TR
+boundary "__: GiaoHang__\n__Controller__" as CTL
+control "__: GiaoHang__\n__BUS__" as BUS
+participant "__: DonHang__\n__TruyVan__\n__G4__" as DHD <<DAO>>
+participant "__: NhanVien__\n__TruyVan__\n__G4__" as NVD <<DAO>>
+participant "__: PhieuGiao__\n__TruyVan__\n__G4__" as PGD <<DAO>>
+
+QL -> TR : 1: Chọn đơn,\nbấm Phân công
+activate TR
+TR -> CTL ++ : 2: formPhanCong\n(don)
+CTL -> BUS ++ : 3: formMoi\n(maDon)
+BUS -> DHD ++ : 4: layDayDu(ma)
+DHD --> BUS -- : 5: DonHang
+BUS --> CTL -- : 6: PhanCongForm\n(gợi ý cách giao,\nloại việc)
+CTL --> TR -- : 7: "phan-cong"
+QL -> TR : 8: Chọn ngày, giờ,\nngười, bấm\nLưu lịch
+TR -> CTL ++ : 9: phanCong(f)
+CTL -> BUS ++ : 10: phanCong(f)
+BUS -> DHD ++ : 11: layDayDu\n(maDon)
+DHD --> BUS -- : 12: DonHang
+BUS -> BUS : 13: kiểm trạng thái\nđơn, ngày giờ,\nQĐ2 nội thành
+BUS -> NVD ++ : 14: theoVai\n("NV_GIAO_HANG")
+NVD --> BUS -- : 15: dsGiao
+BUS -> PGD ++ : 16: lichNgay\n(ngay, maNV)
+PGD --> BUS -- : 17: phiếu\ntrong ngày
+BUS -> BUS : 18: trungLich(…)
+alt trùng giờ và chưa có lý do
+  BUS -> BUS : 19: khungTrong\nGanNhat(…)
+  BUS --> CTL : 20: KetQuaPhanCong\n(daLuu = false,\ntrung, nguoiTrong)
+  CTL --> TR : 21: cảnh báo trùng,\ngợi ý người trống
+else không trùng hoặc có lý do
+  BUS -> PGD ++ : 22: save(phieu)\n[DA_PHAN_CONG,\nngười xếp]
+  deactivate PGD
+  BUS --> CTL : 23: KetQuaPhanCong\n(daLuu = true)
+  CTL --> TR : 24: "Đã lưu lịch\nphiếu PG…"
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

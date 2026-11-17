@@ -1,0 +1,40 @@
+@startuml hd-uc-sp-05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 220
+
+|Khách vãng lai|
+start
+:Gõ tên hoặc model vào ô tìm (Enter), hoặc chọn một danh mục ở menu Sản phẩm;
+|Hệ thống|
+if () then ([tìm theo từ khoá])
+  :Tìm mẫu máy Đang bán có tên hoặc model chứa từ khoá (để trống: lấy tất cả);
+else ([theo danh mục])
+  :Lấy mẫu máy Đang bán của danh mục;
+endif
+if () then ([không có kết quả])
+  :Báo "Không tìm thấy sản phẩm phù hợp", gợi ý danh mục, số điện thoại;
+  stop
+else ([có])
+  :Hiện thẻ sản phẩm: ảnh, tên, giá gồm VAT, giá gạch ngang, "Tạm hết hàng"; số kết quả, bộ lọc, chia trang;
+endif
+repeat
+  |Khách vãng lai|
+  :Chọn khoảng giá, thương hiệu, thông số, cách sắp xếp hoặc trang;
+  |Hệ thống|
+  :Đổi chỗ nếu giá "từ" lớn hơn giá "đến"; lọc, sắp lại theo mọi điều kiện;
+  if () then ([0 kết quả])
+    :Báo không có mẫu máy phù hợp, nút Bỏ lọc;
+  else ([có])
+    :Hiện kết quả mới, giữ điều kiện lọc khi chuyển trang;
+  endif
+repeat while () is ([lọc tiếp]) not ([chọn được mẫu máy])
+|Khách vãng lai|
+:Bấm một mẫu máy;
+|Hệ thống|
+:Mở trang chi tiết (UC-SP-06);
+stop
+@enduml

@@ -1,0 +1,46 @@
+@startuml hd-uc-kb-03
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 200
+
+|Thủ kho|
+start
+:Mở trang Nhập kho, bấm Lập phiếu nhập;
+|Hệ thống|
+if () then ([có đơn])
+else ([không có đơn])
+  :Báo không có đơn đặt hàng chờ nhập;
+  stop
+endif
+:Hiện đơn đặt hàng đã duyệt chưa nhập đủ;
+|Thủ kho|
+:Chọn đơn, nhập số hoá đơn, người giao;
+|Hệ thống|
+:Tạo phiếu nháp, chép mẫu máy, số lượng, đơn giá;
+|Thủ kho|
+repeat
+  :Nhập số chứng từ, số thực nhập, tình trạng hàng;
+  if () then ([thiếu, hư])
+    :Trả máy hư, ghi lý do vào tình trạng;
+  else ([đủ, tốt])
+  endif
+  :Quét serial từng chiếc máy thực nhập;
+  |Hệ thống|
+  :Kiểm tra serial chưa có, chưa trùng trên phiếu;
+  |Thủ kho|
+repeat while () is ([còn mẫu])
+-> [đã nhập hết];
+:Bấm Lưu phiếu nhập;
+|Hệ thống|
+if () then ([hợp lệ])
+else ([lỗi])
+  :Báo lỗi (thực nhập lớn hơn chứng từ, thiếu hoặc trùng serial), giữ phiếu nháp;
+  stop
+endif
+:Lưu phiếu nhập, tạo serial Trong kho, tăng tồn, khoá phiếu;
+:Cập nhật số đã nhập của đơn đặt hàng; hiện phiếu để in 2 liên;
+stop
+@enduml

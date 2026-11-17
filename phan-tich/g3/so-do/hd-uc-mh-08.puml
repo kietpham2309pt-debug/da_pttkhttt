@@ -1,0 +1,26 @@
+@startuml hd-uc-mh-08
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 220
+
+|Khách vãng lai|
+start
+:Nhập mã giảm giá trên trang đặt hàng, bấm "Áp dụng mã";
+|Hệ thống|
+:Lưu thông tin đã nhập vào bản nháp đơn;
+:Tìm mã giảm giá trùng mã đã nhập; kiểm tra trạng thái, ngày áp dụng, lượt dùng, giá trị đơn tối thiểu;
+if () then ([không có mã, tạm dừng, ngoài hạn, hết lượt, chưa đủ đơn tối thiểu])
+  :Báo lý do dưới ô mã, tính đơn không có mã;
+else ([hợp lệ])
+  :Tính tiền giảm (phần trăm có mức trần hoặc số tiền cố định);
+  :Thay mã cũ nếu đơn đã có mã;
+  :Tính lại tổng tiền, phí lắp, tiền cọc;
+endif
+:Hiện lại trang đặt hàng với tóm tắt đơn mới;
+|Khách vãng lai|
+:Tiếp tục bước 4 của UC-MH-04 Đặt hàng;
+stop
+@enduml

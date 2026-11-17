@@ -1,0 +1,66 @@
+@startuml lht-dh05
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "phieu-giao.html" as T1 <<boundary>> {
+  máy, serial theo phiếu xuất;
+  form biên bản lắp đặt
+}
+class GiaoHangController <<boundary>> {
+  + chiTietPhieu(ma, model, ra)
+  + bienBan(ma, ketQuaChayThu, …, ra)
+}
+class GiaoHangBUS <<control>> {
+  + chiTietPhieu(maPhieu) : ChiTietPhieu
+  + luuBienBan(maPhieu, ketQuaChayThu, …)
+  - phieuDuocCapNhat(maPhieu)
+  - canBienBan(p, don) : boolean
+}
+class TaiKhoanBUS <<control>> {
+  + nhanVienHienTai()
+  + coVai(vai) : boolean
+}
+class PhieuGiaoTruyVanG4 <<DAO>> {
+  + layDayDu(ma)
+}
+class PhieuXuatTruyVanG4 <<DAO>> {
+  + theoDon(don)
+}
+class PhieuLapDatTruyVanG4 <<DAO>> {
+  + theoPhieuGiao(ma)
+  + save(bb)
+}
+class PhieuGiaoHang <<entity>> {
+  - loaiViec : LoaiViecGiao
+  - nhanVienGiao : NhanVien
+}
+class PhieuLapDat <<entity>> {
+  - ketQuaChayThu : String
+  - tinhTrangCongTrinh : String
+  - phatSinh : String
+  - phiLapDat, phiVatTu : Long
+  - khachDaKy : Boolean
+  - ngayLap : LocalDateTime
+}
+class PhieuXuat <<entity>> {
+  - serial : List<SanPhamSerial>
+}
+
+T1 ..> GiaoHangController : POST /phieu/{ma}/bien-ban
+GiaoHangController ..> GiaoHangBUS
+GiaoHangBUS ..> TaiKhoanBUS
+GiaoHangBUS ..> PhieuGiaoTruyVanG4
+GiaoHangBUS ..> PhieuXuatTruyVanG4
+GiaoHangBUS ..> PhieuLapDatTruyVanG4
+PhieuGiaoTruyVanG4 ..> PhieuGiaoHang
+PhieuXuatTruyVanG4 ..> PhieuXuat
+PhieuLapDatTruyVanG4 ..> PhieuLapDat
+PhieuGiaoHang "1" -- "0..1" PhieuLapDat
+@enduml

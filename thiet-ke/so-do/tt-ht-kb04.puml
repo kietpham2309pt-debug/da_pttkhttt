@@ -1,0 +1,52 @@
+@startuml tt-ht-kb04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Thủ kho__" as TK
+boundary "__: phieu-xuat-__\n__lap.html__" as TR
+boundary "__: PhieuXuat__\n__Controller__" as CTL
+control "__: PhieuXuat__\n__BUS__" as BUS
+participant "__: DonHang__\n__TruyVanG5__" as DHD <<DAO>>
+participant "__: Serial__\n__TruyVanG5__" as SED <<DAO>>
+participant "__: PhieuXuat__\n__TruyVanG5__" as PXD <<DAO>>
+
+TK -> TR : 1: Chọn đơn,\nbấm Lập\nphiếu xuất
+activate TR
+TR -> CTL ++ : 2: lap(loai, ma)
+CTL -> BUS ++ : 3: taoPhieu\n(loai, ma)
+BUS -> DHD ++ : 4: kemChiTiet(ma),\ndaCoPhieuXuat(ma)
+DHD --> BUS -- : 5: đơn [DA_XAC\n_NHAN]
+loop mỗi mẫu máy trong đơn
+  BUS -> SED ++ : 6: theoMauVa\nTrangThai(ma,\nTRONG_KHO)
+  SED --> BUS -- : 7: serial có sẵn\n(máy giữ riêng\ncho đơn nếu có)
+end
+BUS --> CTL -- : 8: PhieuXuatNhap
+CTL --> TR -- : 9: "phieu-xuat-lap"\n(báo nếu thiếu máy)
+TK -> TR : 10: Quét, chọn\nserial; bấm Lưu
+TR -> CTL ++ : 11: luu(loai, ma, p)
+CTL -> BUS ++ : 12: luu(loai, ma,\nserialChon, nv)
+BUS -> BUS : 13: taoPhieu(loai,\nma), duMay()
+BUS -> SED ++ : 14: dayDuNhieu\n(chon)
+SED --> BUS -- : 15: các chiếc máy
+alt thiếu máy, serial trùng, sai mẫu,\nkhông TRONG_KHO, giữ cho đơn\nkhác hoặc số serial khác yêu cầu
+  BUS --> CTL : 16: LoiNghiepVu\n("Serial … không\nxuất được: …")
+  CTL --> TR : 17: "phieu-xuat-lap",\nbáo lỗi
+else hợp lệ
+  loop mỗi serial đã chọn
+    BUS -> BUS : 18: serialBUS.\ndoiTrangThai\n(s, DA_XUAT)
+  end
+  BUS -> PXD ++ : 19: save(p)
+  deactivate PXD
+  BUS -> BUS : 20: donHangBUS.\ndoiTrangThai(don,\nDANG_GIAO, nv, …)
+  BUS --> CTL : 21: maPhieu
+  CTL --> TR : 22: redirect /phieu-\nxuat/{ma}, "Phiếu\nđã khoá"
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

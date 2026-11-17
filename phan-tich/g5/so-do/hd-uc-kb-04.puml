@@ -1,0 +1,44 @@
+@startuml hd-uc-kb-04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 200
+
+|Thủ kho|
+start
+:Mở trang Xuất kho;
+|Hệ thống|
+:Hiện đơn Đã xác nhận chờ xuất, hẹn giao sớm ở đầu;
+|Thủ kho|
+:Chọn đơn, bấm Lập phiếu xuất;
+|Hệ thống|
+:Tạo phiếu nháp, chép mẫu máy, số lượng; hiện serial Trong kho (máy giữ riêng cho đơn nếu có);
+if () then ([đủ máy])
+else ([thiếu máy])
+  :Báo thiếu máy, không cho lưu;
+  stop
+endif
+|Thủ kho|
+repeat
+  :Quét hoặc chọn serial chiếc máy lấy trên kệ;
+  |Hệ thống|
+  if () then ([lỗi])
+    :Báo lý do (sai mẫu, không Trong kho, giữ cho đơn khác, trùng), bỏ serial đó;
+  else ([hợp lệ])
+  endif
+  |Thủ kho|
+repeat while () is ([còn máy])
+-> [đủ máy];
+:Bấm Lưu phiếu xuất;
+|Hệ thống|
+if () then ([hợp lệ])
+else ([lỗi])
+  :Báo lỗi (số serial khác yêu cầu, đơn đã đổi trạng thái), không lưu;
+  stop
+endif
+:Lưu phiếu xuất; máy sang Đã xuất, giảm tồn, khoá phiếu;
+:Chuyển đơn sang Đang giao, ghi lịch sử; hiện phiếu để in;
+stop
+@enduml

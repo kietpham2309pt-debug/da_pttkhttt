@@ -32,7 +32,10 @@ dau = dau.replace('<a class="dh-nut" href="{G}khach/dang-nhap.html">Đăng nhậ
                   '    <a class="dh-nut" href="/bao-hanh">Bảo hành</a>\n'
                   '    <a class="dh-nut" sec:authorize="!isAuthenticated()" href="/dang-nhap">Đăng nhập</a>\n'
                   '    <a class="dh-nut" sec:authorize="hasRole(\'KHACH_HANG\')" href="/tai-khoan">Tài khoản</a>\n'
-                  '    <a class="dh-nut" sec:authorize="isAuthenticated() and !hasRole(\'KHACH_HANG\')" href="/quan-tri">Quản trị</a>')
+                  '    <a class="dh-nut" sec:authorize="isAuthenticated() and !hasRole(\'KHACH_HANG\')" href="/quan-tri">Quản trị</a>\n'
+                  '    <form class="dh-dang-xuat" sec:authorize="isAuthenticated()" action="/dang-xuat" method="post">'
+                  '<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">'
+                  '<button class="dh-nut" type="submit" th:text="|Đăng xuất (${#authentication.name})|">Đăng xuất</button></form>')
 assert "/tra-cuu-don" in dau, "khong thay nut dang nhap"
 dau = re.sub(r'aria-label="Giỏ hàng, 3 sản phẩm">', 'th:aria-label="|Giỏ hàng, ${soLuongGio} sản phẩm|">', dau)
 dau = dau.replace('<span class="nut-tron__so">3</span>', '<span class="nut-tron__so" th:if="${soLuongGio > 0}" th:text="${soLuongGio}">0</span>')
@@ -40,6 +43,16 @@ assert "soLuongGio" in dau
 chan = doi(K["chan"])
 menu_nho = doi(K["menuNho"]).replace('href="/khach/dang-nhap.html"', 'href="/dang-nhap"')
 menu_nho = menu_nho.replace("{G}khach/dang-nhap.html", "/dang-nhap")
+menu_nho = menu_nho.replace('<a class="menu-nho__chinh" href="/dang-nhap">Đăng nhập</a>',
+                            '<a class="menu-nho__chinh" href="/tra-cuu-don">Tra cứu đơn</a>\n'
+                            '            <a class="menu-nho__chinh" href="/bao-hanh">Bảo hành</a>\n'
+                            '            <a class="menu-nho__chinh" sec:authorize="!isAuthenticated()" href="/dang-nhap">Đăng nhập</a>\n'
+                            '            <a class="menu-nho__chinh" sec:authorize="hasRole(\'KHACH_HANG\')" href="/tai-khoan">Tài khoản</a>\n'
+                            '            <a class="menu-nho__chinh" sec:authorize="isAuthenticated() and !hasRole(\'KHACH_HANG\')" href="/quan-tri">Quản trị</a>\n'
+                            '            <form class="dh-dang-xuat" sec:authorize="isAuthenticated()" action="/dang-xuat" method="post">'
+                            '<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">'
+                            '<button class="menu-nho__chinh" type="submit">Đăng xuất</button></form>')
+assert "/quan-tri" in menu_nho
 for x in (dau, chan, menu_nho):
     assert "{G}" not in x and ".html" not in x, re.findall(r'href="[^"]*\.html[^"]*"', x)[:3]
 

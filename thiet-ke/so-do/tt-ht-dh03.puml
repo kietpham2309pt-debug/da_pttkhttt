@@ -1,0 +1,52 @@
+@startuml tt-ht-dh03
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Nhân viên__\n__giao hàng –__\n__kỹ thuật__" as NV
+boundary "__: phieu-giao__\n__.html__" as TR
+boundary "__: GiaoHang__\n__Controller__" as CTL
+control "__: GiaoHang__\n__BUS__" as BUS
+participant "__: PhieuGiao__\n__TruyVan__\n__G4__" as PGD <<DAO>>
+participant "__: GiaoDich__\n__TruyVan__\n__G4__" as GDD <<DAO>>
+participant "__: PhieuXuat__\n__TruyVan__\n__G4__" as PXD <<DAO>>
+control "__: Serial__\n__BUS__" as SB
+control "__: DonHang__\n__BUS__" as DHB
+
+NV -> TR : 1: Nhập tiền thu,\nbấm Đã giao
+activate TR
+TR -> CTL ++ : 2: daGiao\n(ma, tienThu)
+CTL -> BUS ++ : 3: daGiao\n(ma, tienThu)
+BUS -> PGD ++ : 4: layDayDu(ma)
+PGD --> BUS -- : 5: PhieuGiaoHang
+BUS -> BUS : 6: phieuDuoc\nCapNhat(ma)
+BUS -> BUS : 7: canBienBan;\nbienBanDAO\n.theoPhieuGiao(ma)
+alt đơn chưa Đang giao, hoặc có lắp mà khách chưa ký
+  BUS --> CTL : 8: LoiNghiepVu
+  CTL --> TR : 9: báo lỗi
+else hợp lệ
+  BUS -> PGD ++ : 10: save(p)\n[DA_GIAO,\ntienThu]
+  deactivate PGD
+  opt tienThu > 0
+    BUS -> GDD ++ : 11: save(g)\n[THANH_TOAN]
+    deactivate GDD
+  end
+  BUS -> PXD ++ : 12: theoDon\n(don)
+  PXD --> BUS -- : 13: phiếu xuất
+  loop mỗi máy DA_XUAT
+    BUS -> SB ++ : 14: doiTrangThai\n(s, DA_BAN)
+    deactivate SB
+  end
+  BUS -> DHB ++ : 15: doiTrangThai\n(don, HOAN_THANH,\nnv, ghiChu)
+  deactivate DHB
+  BUS --> CTL : 16: "Đã ghi giao\nxong đơn …"
+  CTL --> TR : 17: thông báo
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

@@ -1,0 +1,35 @@
+@startuml hd-uc-sp-07
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 220
+
+|Khách hàng|
+start
+:Bấm Viết đánh giá ở trang chi tiết hoặc trang Tài khoản;
+|Hệ thống|
+if () then ([chưa đăng nhập])
+  :Chuyển tới trang đăng nhập (UC-HT-01); khách đăng nhập xong thì quay lại trang đánh giá;
+else ([đã đăng nhập])
+endif
+:Lấy đơn Hoàn thành của khách, giữ các cặp đơn, mẫu máy chưa đánh giá;
+if () then ([không còn mẫu máy chờ])
+  :Báo "Chưa có sản phẩm nào chờ bạn đánh giá";
+  stop
+else ([có])
+  :Hiện danh sách chờ đánh giá: tên mẫu máy, mã đơn, ô chọn sao, ô nhận xét;
+endif
+repeat
+  |Khách hàng|
+  :Chọn số sao, viết nhận xét, bấm Gửi đánh giá;
+  |Hệ thống|
+  :Kiểm tra số sao 1–5, nhận xét không quá 1000 ký tự;
+  :Kiểm tra đơn của khách, đơn Hoàn thành, mẫu máy có trong đơn, chưa đánh giá;
+backward :Báo lỗi;
+repeat while () is ([không hợp lệ]) not ([hợp lệ])
+:Lưu đánh giá kèm ngày giờ;
+:Báo "Cảm ơn bạn đã đánh giá", mở trang chi tiết mẫu máy;
+stop
+@enduml

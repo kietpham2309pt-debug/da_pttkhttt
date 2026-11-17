@@ -1,0 +1,59 @@
+@startuml lht-kb05
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "ton-kho.html" as T1 <<boundary>> {
+  tồn theo mẫu và trạng thái,
+  cảnh báo, cột Đếm thực tế,
+  kết quả kiểm kê
+}
+class TonKhoController <<boundary>> {
+  + xem(model) : String
+  + kiemKe(p, model) : String
+  + taiCsv(p) : ResponseEntity
+}
+class TonKhoBUS <<control>> {
+  + TON_TOI_THIEU = 2
+  + tonTheoMau() : List<DongTon>
+  + trongKhoTheoMau() : Map
+  + kiemKe(soDem) : List<DongKiemKe>
+}
+class DongTon <<control>> {
+  + trongKho() : long
+  + duoiToiThieu() : boolean
+}
+class DongKiemKe <<control>> {
+  + chenhLech() : Long
+}
+class SanPhamTruyVanG5 <<DAO>> {
+  + tatCaTheoDanhMuc()
+}
+class SerialTruyVanG5 <<DAO>> {
+  + demTheoMauVaTrangThai()
+}
+class SanPham <<entity>> {
+  - tenSanPham : String
+  - model : String
+}
+class SanPhamSerial <<entity>> {
+  - soSerial : String
+  - trangThai : TrangThaiSerial
+}
+
+T1 ..> TonKhoController : GET, POST /kiem-ke
+TonKhoController ..> TonKhoBUS
+TonKhoBUS ..> DongTon : tạo
+TonKhoBUS ..> DongKiemKe : tạo
+TonKhoBUS ..> SanPhamTruyVanG5
+TonKhoBUS ..> SerialTruyVanG5
+SanPhamTruyVanG5 ..> SanPham
+SerialTruyVanG5 ..> SanPhamSerial
+SanPhamSerial "*" --> "1" SanPham : thuộc mẫu
+@enduml

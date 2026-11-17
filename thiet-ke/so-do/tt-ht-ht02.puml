@@ -1,0 +1,54 @@
+@startuml tt-ht-ht02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Quản trị__\n__hệ thống__" as QT
+boundary "__: tai-khoan,__\n__tai-khoan-__\n__form.html__" as TR
+boundary "__: QuanTri__\n__TaiKhoan__\n__Controller__" as CTL
+control "__: QuanTri__\n__TaiKhoanBUS__" as BUS
+participant "__: TaiKhoan__\n__DAO__" as TKD <<DAO>>
+participant "__: NhanVien__\n__DAO__" as NVD <<DAO>>
+participant "__: NhanVien__\n__TruyVanG12__" as TV <<DAO>>
+
+QT -> TR : 1: Bấm Thêm\nnhân viên
+activate TR
+TR -> CTL ++ : 2: them(model)
+CTL -> BUS ++ : 3: vaiChoNhanVien()
+BUS --> CTL -- : 4: List<VaiTro>
+CTL --> TR -- : 5: biểu mẫu trống
+QT -> TR : 6: Nhập họ tên, số\nđiện thoại, tên đăng\nnhập, chọn vai, Lưu
+TR -> CTL ++ : 7: luu(bm)
+CTL -> BUS ++ : 8: themNhanVien(bm)
+BUS -> BUS : 9: kiemTra(bm, true)
+BUS -> TKD ++ : 10: existsByTen\nDangNhap(ten)
+TKD --> BUS -- : 11: true/false
+alt có lỗi ô nhập, tên trùng, chưa chọn vai
+  BUS --> CTL : 12: LoiNhapLieu(loiO)
+  CTL --> TR : 13: biểu mẫu kèm lỗi\ndưới từng ô
+else hợp lệ
+  BUS -> BUS : 14: sinhMatKhauTam()
+  BUS -> TKD ++ : 15: save(tk)\n[DANG_DUNG,\nphaiDoiMatKhau,\nmật khẩu đã băm]
+  deactivate TKD
+  BUS -> NVD ++ : 16: save(nv)
+  deactivate NVD
+  BUS --> CTL -- : 17: mật khẩu tạm
+  CTL --> TR -- : 18: chuyển tới danh sách,\nhiện mật khẩu tạm một lần
+end
+opt bấm Khoá trên dòng nhân viên
+  QT -> TR : 19: Bấm Khoá,\nxác nhận
+  TR -> CTL ++ : 20: khoa(ma)
+  CTL -> BUS ++ : 21: khoa(maNhanVien)
+  BUS -> TV ++ : 22: demQuanTriKhac\n(DANG_DUNG, ma)
+  TV --> BUS -- : 23: số quản trị khác
+  BUS -> TKD ++ : 24: save(tk) [DA_KHOA]\nnếu không tự khoá,\ncòn quản trị khác
+  deactivate TKD
+  BUS --> CTL -- : 25: tên đăng nhập\nhoặc LoiNghiepVu
+  CTL --> TR -- : 26: thông báo
+end
+deactivate TR
+@enduml

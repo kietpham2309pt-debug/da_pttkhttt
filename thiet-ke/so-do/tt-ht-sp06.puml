@@ -1,0 +1,55 @@
+@startuml tt-ht-sp06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__vãng lai__" as KH
+boundary "__: chi-tiet__\n__.html__" as CT
+boundary "__: SanPham__\n__Khach__\n__Controller__" as CTL
+participant "__: Phien__\n__Khach__" as PH
+control "__: SanPham__\n__KhachBUS__" as BUS
+control "__: GiaBUS__" as GIA
+participant "__: SanPham__\n__TruyVan__\n__Khach__" as SPD <<DAO>>
+participant "__: KhachHang__\n__TruyVan__\n__Khach__" as KHD <<DAO>>
+
+KH -> CT : 1: Bấm một\nmẫu máy
+activate CT
+CT -> CTL ++ : 2: chiTiet(ma,\nmodel)
+CTL -> BUS ++ : 3: chiTiet(ma)
+BUS -> SPD ++ : 4: theoMa([ma])
+SPD --> BUS -- : 5: List<SanPham>
+alt không có hoặc CHUA_MO_BAN
+  BUS --> CTL : 6: null
+  CTL --> CT : 7: 404 "Không tìm\nthấy trang"
+else có
+  BUS -> GIA ++ : 8: dongThe(ds)
+  GIA --> BUS -- : 9: TheSanPham (giá\nsau khuyến mãi,\ntồn khả dụng)
+  BUS -> KHD ++ : 10: danhGiaCua\nSanPham(ma)
+  KHD --> BUS -- : 11: List<DanhGia>
+  BUS -> SPD ++ : 12: cungNhom(dm,\nma, DANG_BAN, 4)
+  SPD --> BUS -- : 13: mẫu cùng\ndanh mục
+  BUS --> CTL -- : 14: ChiTietSanPham
+  CTL --> CT : 15: "khach/chi-tiet"
+end
+KH -> CT : 16: Bấm Thêm\nvào so sánh
+CT -> CTL : 17: themSoSanh\n(ma, ra)
+CTL -> PH ++ : 18: themSoSanh(ma)
+PH --> CTL -- : 19: false nếu\nđã đủ 3 mẫu
+CTL -> PH ++ : 20: getSoSanh()
+PH --> CTL -- : 21: dsMa
+CTL -> BUS ++ : 22: soSanh(dsMa)
+BUS -> SPD ++ : 23: theoMa(dsMa)
+SPD --> BUS -- : 24: List<SanPham>
+BUS -> GIA ++ : 25: dongThe(ds)
+GIA --> BUS -- : 26: List<TheSanPham>
+BUS --> CTL -- : 27: tối đa 3 mẫu
+CTL -> BUS ++ : 28: tenThongSo\nChung(sp)
+BUS --> CTL -- : 29: tên thông số
+CTL --> KH : 30: "khach/so-sanh":\nbảng so sánh, thiếu\nghi "—", dưới 2 mẫu\nthì nhắc thêm
+deactivate CTL
+deactivate CT
+@enduml

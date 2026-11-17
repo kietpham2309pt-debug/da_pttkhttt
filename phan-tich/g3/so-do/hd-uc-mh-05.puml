@@ -1,0 +1,43 @@
+@startuml hd-uc-mh-05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 190
+
+|Khách vãng lai|
+start
+:Bấm "Thanh toán ngay";
+|Hệ thống|
+:Tính số tiền còn phải trả của đơn;
+if () then ([đã huỷ hoặc đã trả đủ])
+  :Báo "Đơn không cần thanh toán";
+  stop
+else ([còn phải trả])
+endif
+:Hiện mã đơn, số tiền phải trả, cách trả;
+|Khách vãng lai|
+:Chọn trả cọc hoặc trả toàn bộ, chọn cách trả, bấm "Thanh toán";
+|Hệ thống|
+:Tạo yêu cầu thanh toán có hạn hiệu lực, chuyển sang cổng;
+|Cổng thanh toán|
+:Hiện trang quét QR hoặc nhập thẻ;
+|Khách vãng lai|
+:Quét QR hoặc nhập thẻ, xác nhận trả;
+|Cổng thanh toán|
+:Xử lý giao dịch, gửi kết quả về hệ thống;
+|Hệ thống|
+:Kiểm tra kết quả đúng cổng gửi, đúng mã đơn, số tiền, còn hạn;
+if () then ([thành công, xác minh được])
+  :Ghi giao dịch (mã giao dịch đã ghi thì bỏ qua), cộng số tiền đã trả;
+  -[dashed]->
+  :Giao dịch thanh toán; <<object>>
+  -[dashed]->
+  :Đổi trạng thái thanh toán: Đã đặt cọc hoặc Đã thanh toán;
+  :Hiện mã giao dịch, số đã trả, số còn phải trả;
+else ([bị từ chối, khách huỷ, sai số tiền hoặc quá hạn])
+  :Giữ nguyên đơn; lưu kết quả lạ để kế toán đối chiếu; báo khách, cho thử lại;
+endif
+stop
+@enduml

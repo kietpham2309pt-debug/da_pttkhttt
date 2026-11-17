@@ -1,0 +1,60 @@
+@startuml lht-dh04
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "tien-thu.html" as T1 <<boundary>> {
+  nhóm theo ngày, người nộp;
+  số thực nhận, ghi chú lệch
+}
+class TienThuController <<boundary>> {
+  + danhSach(model) : String
+  + xacNhan(maPhieu, soNop, ghiChu, ra)
+}
+class TienThuBUS <<control>> {
+  + SO_NGAY_DA_XAC_NHAN = 7
+  + chuaXacNhan() : List<Nhom>
+  + daXacNhanGanDay()
+  + xacNhan(maPhieu, soNop, ghiChu) : String
+}
+class TaiKhoanBUS <<control>> {
+  + batBuocNhanVien()
+}
+class G4Chung {
+  + noiGhiChu(don, them)
+  + tien(soTien) : String
+}
+class PhieuGiaoTruyVanG4 <<DAO>> {
+  + tienChuaXacNhan()
+  + tienDaXacNhan(tu)
+  + layDayDu(ma)
+  + save(p)
+}
+class DonHangTruyVanG4 <<DAO>> {
+  + save(don)
+}
+class PhieuGiaoHang <<entity>> {
+  - tienThuKhiGiao : Long
+  - keToanXacNhan : NhanVien
+  - thoiDiemXacNhanTien
+}
+class DonHang <<entity>> {
+  - ghiChu : String
+}
+
+T1 ..> TienThuController : /quan-tri/tien-thu
+TienThuController ..> TienThuBUS
+TienThuBUS ..> TaiKhoanBUS
+TienThuBUS ..> G4Chung
+TienThuBUS ..> PhieuGiaoTruyVanG4
+TienThuBUS ..> DonHangTruyVanG4
+PhieuGiaoTruyVanG4 ..> PhieuGiaoHang
+DonHangTruyVanG4 ..> DonHang
+DonHang "1" -- "0..*" PhieuGiaoHang
+@enduml

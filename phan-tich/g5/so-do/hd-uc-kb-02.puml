@@ -1,0 +1,48 @@
+@startuml hd-uc-kb-02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 200
+
+|Thủ kho|
+start
+:Bấm Lập đề xuất đặt hàng;
+|Hệ thống|
+:Hiện mẫu máy, số trong kho, gợi ý số lượng cho mẫu dưới tồn tối thiểu;
+|Thủ kho|
+:Chọn nhà cung cấp, nhập số lượng, ghi chú; bấm Lưu đề xuất;
+|Hệ thống|
+if () then ([hợp lệ])
+else ([lỗi])
+  :Báo lỗi, giữ số đã nhập;
+  stop
+endif
+:Lưu đơn đặt hàng trạng thái Đề xuất;
+|Quản lý cửa hàng|
+repeat
+  :Mở đơn, đối chiếu tồn, chỉnh số lượng, chọn nhà cung cấp;
+  :Xin ý kiến chủ cửa hàng;
+repeat while () is ([chưa đồng ý])
+-> [đồng ý];
+if () then ([gửi])
+else ([huỷ đơn])
+  :Ghi lý do huỷ;
+  |Hệ thống|
+  :Chuyển đơn sang Đã huỷ;
+  stop
+endif
+|Quản lý cửa hàng|
+:Ghi ý kiến chủ, ngày giao dự kiến; bấm Gửi nhà cung cấp;
+|Hệ thống|
+if () then ([hợp lệ])
+else ([lỗi])
+  :Báo lỗi, không gửi;
+  stop
+endif
+:Chuyển đơn sang Đã gửi, ghi người gửi; đưa vào danh sách chờ nhập;
+|Quản lý cửa hàng|
+:Gửi đơn cho nhà cung cấp (ngoài hệ thống);
+stop
+@enduml

@@ -1,0 +1,49 @@
+@startuml tt-ht-sp04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Quản lý__\n__cửa hàng__" as QL
+boundary "__: khuyen-mai-__\n__form.html__" as TR
+boundary "__: QuanTri__\n__KhuyenMai__\n__Controller__" as CTL
+control "__: QuanTri__\n__KhuyenMai__\n__BUS__" as BUS
+control "__: QuanTri__\n__SanPham__\n__BUS__" as SPB
+participant "__: KhuyenMai__\n__TruyVanG12__" as KMD <<DAO>>
+participant "__: SanPham__\n__TruyVanG12__" as SPD <<DAO>>
+
+QL -> TR : 1: Nhập thông tin,\nchọn sản phẩm,\nbấm Lưu
+activate TR
+TR -> CTL ++ : 2: luu(bm, kq,\nmodel, ra)
+CTL -> BUS ++ : 3: luu(bm,\nloiChuyenDoi)
+BUS -> BUS : 4: kiểm tra ô bắt\nbuộc, ngày, mức\ngiảm ≤ 100%
+alt loại MA_GIAM_GIA
+  BUS -> KMD ++ : 5: existsByMaCode\nIgnoreCaseAnd\nMaKhuyenMaiNot\n(maCode, ma)
+  KMD --> BUS -- : 6: boolean
+else loại GIAM_THEO_SAN_PHAM
+  BUS -> SPD ++ : 7: findAllById\n(dsMa)
+  SPD --> BUS -- : 8: List<SanPham>
+  BUS -> KMD ++ : 9: trungThoiGian(ds,\nloai, tu, den, tru)
+  KMD --> BUS -- : 10: chương trình\ntrùng
+  loop mỗi mẫu máy
+    BUS -> SPB ++ : 11: giaNhapGanNhat\n(maSanPham)
+    SPB --> BUS -- : 12: giá nhập
+  end
+end
+alt có lỗi, hoặc giá sau giảm dưới giá nhập mà lý do trống
+  BUS --> CTL : 13: LoiNhapLieu(loi)
+  CTL --> TR : 14: "khuyen-mai-form"\n(loiO)
+  TR --> QL : 15: Báo lỗi, chỗ trùng,\ncảnh báo dưới\ngiá nhập
+else hợp lệ
+  BUS -> KMD ++ : 16: save(km)\n[DANG_CHAY,\nnguoiTao]
+  KMD --> BUS -- : 17: KhuyenMai
+  BUS --> CTL : 18: KhuyenMai
+  CTL --> TR : 19: redirect\n/quan-tri/khuyen-mai\n"Đã lưu chương trình …"
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

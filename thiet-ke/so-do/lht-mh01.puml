@@ -1,0 +1,78 @@
+@startuml lht-mh01
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "dang-ky.html" as T1 <<boundary>> {
+  họ tên, số điện thoại, email,
+  tên đăng nhập, mật khẩu,
+  nhập lại, ô đồng ý
+}
+class "dang-nhap.html" as T2 <<boundary>> {
+  "Đăng ký xong, mời
+  bạn đăng nhập"
+}
+class TaiKhoanKhachController <<boundary>> {
+  + dangKy(model) : String
+  + dangKy(f, model) : String
+}
+class TaiKhoanBUS <<control>> {
+  + tenDangNhapHienTai() : Optional
+}
+class FormDangKy <<control>> {
+  + kiemTra() : Map
+}
+class TaiKhoanKhachBUS <<control>> {
+  + dangKy(f) : Map
+}
+class PasswordEncoder <<control>> {
+  + encode(matKhau) : String
+}
+class TaiKhoanDAO <<DAO>> {
+  + findByTenDangNhap(ten)
+  + save(tk) : TaiKhoan
+}
+class VaiTroDAO <<DAO>> {
+  + findById(maVaiTro)
+}
+class KhachHangTruyVanKhach <<DAO>> {
+  + existsBySoDienThoai(sdt)
+  + save(kh) : KhachHang
+}
+class TaiKhoan <<entity>> {
+  - tenDangNhap : String
+  - matKhau : String
+  - trangThai : TrangThaiTaiKhoan
+  - ngayTao : LocalDateTime
+}
+class VaiTro <<entity>> {
+  - maVaiTro : String
+  - tenVaiTro : String
+}
+class KhachHang <<entity>> {
+  - hoTen, soDienThoai
+  - email : String
+  - ngayDangKy : LocalDateTime
+}
+
+T1 ..> TaiKhoanKhachController : /dang-ky
+TaiKhoanKhachController ..> T2 : redirect
+TaiKhoanKhachController ..> TaiKhoanBUS
+TaiKhoanKhachController ..> TaiKhoanKhachBUS
+TaiKhoanKhachBUS ..> FormDangKy
+TaiKhoanKhachBUS ..> PasswordEncoder
+TaiKhoanKhachBUS ..> TaiKhoanDAO
+TaiKhoanKhachBUS ..> VaiTroDAO
+TaiKhoanKhachBUS ..> KhachHangTruyVanKhach
+TaiKhoanDAO ..> TaiKhoan
+VaiTroDAO ..> VaiTro
+KhachHangTruyVanKhach ..> KhachHang
+TaiKhoan "*" -- "1..*" VaiTro : có
+KhachHang "0..1" -- "1" TaiKhoan : dùng
+@enduml

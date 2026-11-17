@@ -1,0 +1,93 @@
+@startuml lht-mh06
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "tra-cuu-don.html" as T1 <<boundary>> {
+  số điện thoại, mã đơn
+}
+class "chi-tiet-don.html" as T2 <<boundary>> {
+  trạng thái, mốc, tiền,
+  hẹn giao, hoá đơn
+}
+class "tai-khoan.html" as T3 <<boundary>> {
+  Đơn hàng của tôi
+}
+class TraCuuDonController <<boundary>> {
+  + form(model) : String
+  + tra(soDienThoai, maDon, model)
+  + chiTiet(ma, model, ra) : String
+}
+class PhienKhach <<control>> {
+  + dangKhoaTra() : boolean
+  + ghiTraSai() : boolean
+  + ghiTraDung()
+  + choXemDon(maDon)
+}
+class QuyenDonKhach <<control>> {
+  + duocXem(maDon) : boolean
+}
+class DonHangKhachBUS <<control>> {
+  + timDon(sdt, maDon) : Optional
+  + thongTin(maDon) : ThongTinDon
+  + donCuaKhach(kh) : List
+}
+class DonHangBUS <<control>> {
+  + lichSu(don) : List
+}
+class DonHangTruyVanKhach <<DAO>> {
+  + findById(ma)
+  + layDayDu(maDon)
+  + cuaKhach(maKhachHang)
+}
+class GiaoDichTruyVanKhach <<DAO>> {
+  + findByDonHang_MaDonHang…(ma)
+}
+class HauMaiTruyVanKhach <<DAO>> {
+  + phieuGiao(maDonHang) : List
+}
+class LichSuTrangThaiDonDAO <<DAO>> {
+  + findByDonHangOrderBy…(don)
+}
+class DonHang <<entity>> {
+  - soDienThoaiNhan : String
+  - trangThai, trangThaiThanhToan
+  - tongTien, tienCoc : long
+  - soHoaDon : String
+}
+class LichSuTrangThaiDon <<entity>> {
+  - trangThaiMoi
+  - thoiDiem : LocalDateTime
+}
+class GiaoDichThanhToan <<entity>> {
+  - loai, soTien, trangThai
+}
+class PhieuGiaoHang <<entity>> {
+  - ngayHen, gioBatDau, gioKetThuc
+  - donViVanChuyen, maVanDon
+}
+
+T1 ..> TraCuuDonController : /tra-cuu-don
+T2 ..> TraCuuDonController : /tra-cuu-don/{ma}
+T3 ..> TraCuuDonController : Xem
+TraCuuDonController ..> PhienKhach
+TraCuuDonController ..> QuyenDonKhach
+TraCuuDonController ..> DonHangKhachBUS
+DonHangKhachBUS ..> DonHangBUS
+DonHangKhachBUS ..> DonHangTruyVanKhach
+DonHangKhachBUS ..> GiaoDichTruyVanKhach
+DonHangKhachBUS ..> HauMaiTruyVanKhach
+DonHangBUS ..> LichSuTrangThaiDonDAO
+DonHangTruyVanKhach ..> DonHang
+LichSuTrangThaiDonDAO ..> LichSuTrangThaiDon
+GiaoDichTruyVanKhach ..> GiaoDichThanhToan
+HauMaiTruyVanKhach ..> PhieuGiaoHang
+DonHang "1" -- "0..*" GiaoDichThanhToan
+PhieuGiaoHang "0..*" -up- "1" DonHang
+@enduml

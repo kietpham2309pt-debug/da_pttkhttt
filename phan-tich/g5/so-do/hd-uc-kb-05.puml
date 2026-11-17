@@ -1,0 +1,42 @@
+@startuml hd-uc-kb-05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 200
+
+|Thủ kho|
+start
+:Mở trang Tồn kho, kiểm kê;
+|Hệ thống|
+:Đếm serial theo mẫu và trạng thái; hiện bảng tồn;
+if () then ([có mẫu thấp])
+  :Tô nổi mẫu dưới tồn tối thiểu;
+  |Thủ kho|
+  if () then ([kiểm kê tiếp])
+  else ([cần đặt hàng])
+    :Bấm Lập đơn đặt cho mẫu sắp hết (UC-KB-02);
+    stop
+  endif
+else ([không có])
+endif
+|Thủ kho|
+:Đếm máy trên kệ, nhập số đếm thực tế; bấm So với hệ thống;
+|Hệ thống|
+if () then ([hợp lệ])
+else ([lỗi])
+  :Báo lỗi, giữ số đã nhập;
+  stop
+endif
+:So số đếm với số Trong kho, hiện bảng kết quả kiểm kê;
+|Thủ kho|
+if () then ([có mẫu lệch])
+  :Kiểm lại theo serial, phiếu nhập, xuất trong kỳ; lập biên bản báo quản lý;
+else ([khớp])
+endif
+:Bấm Tải kết quả kiểm kê;
+|Hệ thống|
+:Xuất tệp CSV biên bản kiểm kê;
+stop
+@enduml

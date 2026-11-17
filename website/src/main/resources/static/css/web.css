@@ -7,3 +7,14 @@
 .hang-form{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 .hang-thao-tac form{display:inline}
 .canh-bao{border:1px solid var(--dong);padding:10px 14px;border-radius:10px;margin:0 0 14px}
+.qt .bang-dl td.o-dai{min-width:140px}
+.qt .bang-dl .hang-thao-tac{flex-direction:column; align-items:flex-end; gap:6px}
+.qt .bang-dl thead th{white-space:normal}
+.o-so__gt{overflow-wrap:anywhere}
+.o-so-ds .o-so__gt{font-size:clamp(20px,2.2vw,30px)}
+.qt .bang-dl tbody td{white-space:normal}
+.qt .bang-dl tbody td.canh-phai, .qt .bang-dl .the-nhan, .qt .bang-dl .nut{white-space:nowrap}
+.qt .bang-dl thead th, .qt .bang-dl tbody td{padding-left:10px; padding-right:10px}
+.dh-dang-xuat{display:contents}
+.dh-dang-xuat button.dh-nut{background:none; border:0; font-family:inherit; cursor:pointer}
+.dh-dang-xuat button.menu-nho__chinh{display:block; width:100%; text-align:left; background:none; border:0; border-bottom:1px solid var(--vien); color:inherit; font-family:inherit; cursor:pointer}

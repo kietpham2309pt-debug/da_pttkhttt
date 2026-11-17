@@ -1,0 +1,55 @@
+@startuml hd-uc-dh-06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 190
+
+|Nhân viên bán hàng|
+start
+:Tìm đơn, bấm "Tạo yêu cầu đổi trả";
+|Hệ thống|
+:Hiện các máy của đơn, số ngày từ ngày bán;
+|Nhân viên bán hàng|
+:Chọn máy, hình thức, lý do, tình trạng; bấm "Gửi duyệt";
+|Hệ thống|
+:Kiểm serial thuộc đơn, Đã bán, chưa có yêu cầu chờ;
+if () then ([lỗi])
+  :Báo serial không khớp hoặc trùng yêu cầu;
+  stop
+else ([hợp lệ])
+endif
+:Đối chiếu hạn 7 ngày, 30 ngày, seal, đã lắp; không đạt thì đánh dấu Ngoại lệ; tạo yêu cầu Chờ duyệt;
+|Quản lý cửa hàng|
+:Mở yêu cầu, sửa phí khấu trừ nếu cần;
+if () then ([từ chối])
+  :Nhập lý do, bấm "Từ chối";
+  |Hệ thống|
+  :Yêu cầu sang Từ chối, máy giữ Đã bán;
+  stop
+else ([duyệt])
+endif
+|Quản lý cửa hàng|
+:Bấm "Duyệt";
+|Hệ thống|
+:Yêu cầu sang Đã duyệt, ghi người duyệt;
+|Nhân viên bán hàng|
+:Nhận lại máy, bấm "Đã nhận máy";
+|Hệ thống|
+:Máy sang Trả về kho;
+if () then ([đổi máy])
+  :Tạo yêu cầu xuất máy cùng mẫu (UC-KB-04);
+  |Nhân viên bán hàng|
+  :Giao máy mới, bấm "Đã giao máy đổi";
+  |Hệ thống|
+  :Máy mới sang Đã bán, đơn giữ Hoàn thành;
+  stop
+else ([trả hàng])
+endif
+|Kế toán|
+:Hoàn tiền theo cách khách đã trả, bấm "Đã hoàn tiền";
+|Hệ thống|
+:Lưu số tiền hoàn; trả cả đơn thì đơn sang Đã trả hàng;
+stop
+@enduml

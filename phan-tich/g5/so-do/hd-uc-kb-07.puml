@@ -1,0 +1,35 @@
+@startuml hd-uc-kb-07
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 200
+
+|Khách vãng lai|
+start
+:Mở trang Tra cứu bảo hành;
+|Hệ thống|
+:Hiện hai cách tra: theo serial, theo số điện thoại;
+|Khách vãng lai|
+:Chọn cách tra, nhập serial (hoặc số điện thoại, mã đơn); bấm Tra cứu;
+|Hệ thống|
+if () then ([hợp lệ])
+else ([sai])
+  :Báo lỗi dưới ô;
+  stop
+endif
+:Tìm chiếc máy theo serial hoặc theo số điện thoại;
+if () then ([tìm thấy])
+else ([không thấy])
+  :Báo không tìm thấy máy đã bán;
+  stop
+endif
+repeat
+  :Tính hạn = ngày bán + thời hạn + số ngày ở hãng;
+  :Lấy các lần bảo hành của máy;
+repeat while () is ([còn máy])
+-> [hết];
+:Hiện ngày bán, hạn, còn hạn hay hết, các lần bảo hành;
+stop
+@enduml

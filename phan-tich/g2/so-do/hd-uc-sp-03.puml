@@ -1,0 +1,33 @@
+@startuml hd-uc-sp-03
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 220
+
+|Quản lý cửa hàng|
+start
+:Lọc danh sách Sản phẩm theo Chưa mở bán, bấm Giá ở một mẫu máy;
+|Hệ thống|
+:Hiện giá hiện tại, giá niêm yết, giá nhập gần nhất, lịch sử giá;
+repeat
+  |Quản lý cửa hàng|
+  :Nhập giá bán mới (đã gồm VAT), giá niêm yết, lý do nếu có, bấm Lưu;
+  |Hệ thống|
+  :Kiểm tra giá lớn hơn 0, giá niêm yết không thấp hơn giá bán, giá mới khác giá hiện tại;
+  :So giá mới với giá nhập gần nhất;
+backward :Báo lỗi; dưới giá nhập thì cảnh báo, bắt ghi lý do;
+repeat while () is ([không hợp lệ]) not ([hợp lệ])
+:Ghi lịch sử giá: giá cũ, giá mới, người đổi, thời điểm, lý do, cờ dưới giá nhập;
+:Đổi giá bán của mẫu máy;
+:Báo "Đã cập nhật giá bán";
+|Quản lý cửa hàng|
+if () then ([mẫu máy Chưa mở bán])
+  :Bấm Mở bán ở danh sách;
+  |Hệ thống|
+  :Đổi trạng thái sang Đang bán, hiện ở trang khách;
+else ([đang bán])
+endif
+stop
+@enduml

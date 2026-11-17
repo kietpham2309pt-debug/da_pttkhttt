@@ -1,0 +1,58 @@
+@startuml tt-ht-kb02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Thủ kho__" as TK
+actor "__: Quản lý__\n__cửa hàng__" as QL
+boundary "__: don-dat*__\n__.html__" as TR
+boundary "__: DonDat__\n__Controller__" as CTL
+control "__: TonKho__\n__BUS__" as TON
+control "__: DonDat__\n__BUS__" as BUS
+control "__: NhaCungCap__\n__BUS__" as NCC
+participant "__: DonDat__\n__TruyVanG5__" as DAO <<DAO>>
+
+== Lập đề xuất ==
+TK -> TR : 1: Bấm Lập đề\nxuất đặt hàng
+TR -> CTL ++ : 2: lap(model)
+CTL -> TON ++ : 3: tonTheoMau()
+TON --> CTL -- : 4: List<DongTon>
+CTL -> CTL : 5: gợi ý số lượng\ncho mẫu dưới\nTON_TOI_THIEU
+CTL -> NCC ++ : 6: dangHopTac()
+NCC --> CTL -- : 7: nhà cung cấp
+CTL --> TR -- : 8: "don-dat-lap"
+TK -> TR : 9: Chọn nhà cung\ncấp, nhập số lượng,\nghi chú; bấm Lưu
+TR -> CTL ++ : 10: luu(p)
+CTL -> BUS ++ : 11: lapDeXuat(maNcc,\nsoLuong, ghiChu, nv)
+BUS -> NCC ++ : 12: tim(maNcc)
+NCC --> BUS -- : 13: NhaCungCap
+alt ngừng hợp tác, số lượng sai\nhoặc không mẫu nào
+  BUS --> CTL : 14: LoiNghiepVu
+  CTL --> TR : 15: "don-dat-lap",\nbáo lỗi
+else hợp lệ
+  BUS -> DAO ++ : 16: save(d)\n[DE_XUAT]
+  deactivate DAO
+  BUS --> CTL : 17: DonDatHangNCC
+  CTL --> TR : 18: redirect\n/don-dat/{ma}
+end
+deactivate BUS
+deactivate CTL
+== Duyệt và gửi nhà cung cấp ==
+QL -> TR : 19: Chỉnh số lượng,\nghi ý kiến chủ;\nbấm Gửi
+TR -> CTL ++ : 20: gui(ma, p)
+CTL -> BUS ++ : 21: guiNhaCung\nCap(ma, maNcc,\nsoLuong, yKienChu)
+BUS -> DAO ++ : 22: chiTiet(ma)
+DAO --> BUS -- : 23: đơn
+alt không còn Đề xuất, thiếu ý kiến\nchủ hoặc nhà cung cấp ngừng
+  BUS --> CTL : 24: LoiNghiepVu
+else hợp lệ
+  BUS -> DAO ++ : 25: save(d) [DA_GUI,\nnguoiGui, ý kiến chủ]
+  deactivate DAO
+end
+deactivate BUS
+CTL --> TR -- : 26: redirect\n/don-dat/{ma},\nthông báo
+@enduml

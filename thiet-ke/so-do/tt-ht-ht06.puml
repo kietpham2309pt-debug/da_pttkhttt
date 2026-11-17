@@ -1,0 +1,41 @@
+@startuml tt-ht-ht06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Người dùng__" as ND
+boundary "__: doi-mat-khau__\n__.html__" as TR
+boundary "__: Chung__\n__Controller__" as CC
+control "__: TaiKhoan__\n__BUS__" as BUS
+control "__: Password__\n__Encoder__\n__(BaoMat)__" as MH
+participant "__: TaiKhoan__\n__DAO__" as DAO <<DAO>>
+
+ND -> TR : 1: Chọn Đổi mật khẩu\n(hoặc bị chuyển tới\n?lanDau)
+activate TR
+TR -> CC ++ : 2: doiMatKhau()
+CC --> TR -- : 3: "doi-mat-khau"
+ND -> TR : 4: Nhập mật khẩu hiện\ntại, mật khẩu mới,\nnhập lại, bấm Đổi
+TR -> CC ++ : 5: doiMatKhau(matKhauCu,\nmatKhauMoi, nhapLai)
+CC -> BUS ++ : 6: tenDangNhap\nHienTai()
+BUS --> CC -- : 7: ten
+CC -> DAO ++ : 8: findByTen\nDangNhap(ten)
+DAO --> CC -- : 9: TaiKhoan
+CC -> MH ++ : 10: matches(matKhauCu,\ntk.matKhau)
+MH --> CC -- : 11: true/false
+alt sai mật khẩu hiện tại, mới dưới 6 ký tự,\nnhập lại khác, hoặc trùng mật khẩu cũ
+  CC --> TR : 12: "doi-mat-khau"\nkèm lỗi tương ứng
+else hợp lệ
+  CC -> MH ++ : 13: encode(matKhauMoi)
+  MH --> CC -- : 14: chuỗi đã băm
+  CC -> DAO ++ : 15: save(tk)\n[phaiDoiMatKhau:\nfalse]
+  deactivate DAO
+  CC -> CC : 16: SecurityContext\nLogoutHandler\n.logout(req, res, auth)
+  CC --> TR -- : 17: "thong-diep":\n"Đã đổi mật khẩu",\nmời đăng nhập lại
+end
+TR --> ND : 18: thông báo
+deactivate TR
+@enduml

@@ -1,0 +1,80 @@
+@startuml lht-ht02
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "tai-khoan.html" as DS <<boundary>> {
+  danh sách, ô tìm
+  nút Khoá, Mở khoá, Đặt lại
+}
+class "tai-khoan-form.html" as BM <<boundary>> {
+  hoTen, soDienThoai
+  tenDangNhap, vaiTro[]
+}
+class QuanTriTaiKhoanController <<boundary>> {
+  + danhSach(tuKhoa, model) : String
+  + them(model) : String
+  + sua(ma, model, ra) : String
+  + luu(bm, model, ra) : String
+  + khoa(ma, ra) : String
+  + moKhoa(ma, ra) : String
+  + datLai(ma, ra) : String
+}
+class QuanTriTaiKhoanBUS <<control>> {
+  + danhSach(tuKhoa) : List<NhanVien>
+  + themNhanVien(bm) : String
+  + suaNhanVien(bm)
+  + khoa(maNhanVien) : String
+  + moKhoa(maNhanVien) : String
+  + datLaiMatKhau(maNhanVien) : String[]
+  - kiemTra(bm, themMoi) : Map
+  - sinhMatKhauTam() : String
+}
+class ChanTaiKhoanBiKhoa <<control>> {
+  # doFilterInternal(req, res, chain)
+}
+class NhanVienTruyVanG12 <<DAO>> {
+  + layTatCaKemTaiKhoan() : List<NhanVien>
+  + timKemTaiKhoan(ma) : Optional<NhanVien>
+  + demQuanTriKhac(trangThai, tru) : long
+}
+class TaiKhoanDAO <<DAO>> {
+  + existsByTenDangNhap(ten) : boolean
+  + save(tk) : TaiKhoan
+}
+class NhanVienDAO <<DAO>> {
+  + save(nv) : NhanVien
+}
+class NhanVien <<entity>> {
+  - hoTen : String
+  - soDienThoai : String
+}
+class TaiKhoan <<entity>> {
+  - tenDangNhap : String
+  - matKhau : String
+  - trangThai : TrangThaiTaiKhoan
+  - phaiDoiMatKhau : Boolean
+}
+class VaiTro <<entity>> {
+  - maVaiTro : String
+  - tenVaiTro : String
+}
+
+DS ..> QuanTriTaiKhoanController : /quan-tri/tai-khoan
+BM ..> QuanTriTaiKhoanController : POST /luu
+QuanTriTaiKhoanController ..> QuanTriTaiKhoanBUS
+ChanTaiKhoanBiKhoa ..> QuanTriTaiKhoanBUS : dangBiKhoa()
+QuanTriTaiKhoanBUS ..> NhanVienTruyVanG12
+QuanTriTaiKhoanBUS ..> TaiKhoanDAO
+QuanTriTaiKhoanBUS ..> NhanVienDAO
+NhanVienTruyVanG12 ..> NhanVien
+TaiKhoanDAO ..> TaiKhoan
+NhanVien "0..1" -right-> "1" TaiKhoan : có
+TaiKhoan "*" -right-> "1..*" VaiTro : có vai trò
+@enduml

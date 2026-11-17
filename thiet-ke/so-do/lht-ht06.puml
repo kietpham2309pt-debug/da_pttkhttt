@@ -1,0 +1,51 @@
+@startuml lht-ht06
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "doi-mat-khau.html" as Trang <<boundary>> {
+  matKhauCu, matKhauMoi, nhapLai
+}
+class "thong-diep.html" as TD <<boundary>> {
+  "Đã đổi mật khẩu"
+}
+class ChungController <<boundary>> {
+  + doiMatKhau() : String
+  + doiMatKhau(matKhauCu, matKhauMoi, nhapLai, …) : String
+}
+class ChanTaiKhoanBiKhoa <<control>> {
+  # doFilterInternal(req, res, chain)
+}
+class TaiKhoanBUS <<control>> {
+  + tenDangNhapHienTai() : Optional
+}
+class QuanTriTaiKhoanBUS <<control>> {
+  + phaiDoiMatKhau(ten) : boolean
+}
+class BaoMat <<control>> {
+  + maHoaMatKhau() : PasswordEncoder
+}
+class TaiKhoanDAO <<DAO>> {
+  + findByTenDangNhap(ten) : Optional
+  + save(tk) : TaiKhoan
+}
+class TaiKhoan <<entity>> {
+  - tenDangNhap : String
+  - matKhau : String
+  - phaiDoiMatKhau : Boolean
+}
+
+Trang ..> ChungController : GET, POST /doi-mat-khau
+ChungController ..> TD
+ChungController ..> TaiKhoanBUS
+ChungController ..> BaoMat : PasswordEncoder
+ChungController ..> TaiKhoanDAO
+ChanTaiKhoanBiKhoa ..> QuanTriTaiKhoanBUS : lần đầu thì\nchuyển /doi-mat-khau
+TaiKhoanDAO ..> TaiKhoan
+@enduml

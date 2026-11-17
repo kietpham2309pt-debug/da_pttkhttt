@@ -1,0 +1,54 @@
+@startuml hd-uc-kb-06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 200
+
+|Nhân viên bán hàng|
+start
+:Nhập serial (số điện thoại, mã đơn), bấm Tra;
+|Hệ thống|
+:Tra cứu bảo hành (UC-KB-07);
+if () then ([đúng máy])
+else ([không thấy])
+  :Báo không tìm thấy máy do cửa hàng bán;
+  stop
+endif
+|Nhân viên bán hàng|
+:Chọn máy, bấm Lập phiếu tiếp nhận;
+|Hệ thống|
+if () then ([được tiếp nhận])
+else ([không được nhận])
+  :Đã bảo hành 3 lần: gợi ý đổi trả; có phiếu đang mở: mở phiếu đó;
+  stop
+endif
+if () then ([hết hạn])
+  |Nhân viên bán hàng|
+  if () then ([khách đồng ý])
+  else ([khách từ chối phí])
+    stop
+  endif
+  :Đánh dấu Sửa có phí;
+else ([còn hạn])
+endif
+|Nhân viên bán hàng|
+:Ghi lỗi, tình trạng, loại lỗi, ngày hẹn; bấm Lưu;
+|Hệ thống|
+:Tạo phiếu bảo hành; máy sang Đang bảo hành; in 2 liên;
+if () then ([gửi hãng])
+else ([không gửi hãng])
+  :Lỗi lắp đặt, bảo hành tại nhà: không vào danh sách gửi hãng;
+  stop
+endif
+|Thủ kho|
+:Gửi máy tới hãng, bấm Đã gửi hãng; nhận máy đã sửa, bấm Đã nhận về;
+|Hệ thống|
+:Ghi ngày gửi, ngày nhận về, tính số ngày ở hãng;
+|Nhân viên bán hàng|
+:Báo khách, trả máy, bấm Đã trả khách;
+|Hệ thống|
+:Máy về Đã bán, cộng số ngày ở hãng vào hạn;
+stop
+@enduml

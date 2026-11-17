@@ -1,0 +1,51 @@
+@startuml tt-ht-ht03
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Quản trị__\n__hệ thống__" as QT
+boundary "__: tai-khoan-__\n__form.html__" as TR
+boundary "__: QuanTri__\n__TaiKhoan__\n__Controller__" as CTL
+control "__: QuanTri__\n__TaiKhoan__\n__BUS__" as BUS
+participant "__: NhanVien__\n__TruyVan__\n__G12__" as TV <<DAO>>
+participant "__: TaiKhoan__\n__DAO__" as TKD <<DAO>>
+control "__: Spring__\n__Security__\n__(BaoMat)__" as SS
+actor "__: Nhân__\n__viên__" as NV
+
+QT -> TR : 1: Bấm Sửa\ntrên dòng\nnhân viên
+activate TR
+TR -> CTL ++ : 2: sua(ma)
+CTL -> BUS ++ : 3: bieuMauSua(ma)
+BUS -> TV ++ : 4: timKem\nTaiKhoan(ma)
+TV --> BUS -- : 5: NhanVien
+BUS --> CTL -- : 6: bm (các vai\nđang gán)
+CTL --> TR -- : 7: biểu mẫu,\nvaiChoNhanVien()
+QT -> TR : 8: Đánh dấu,\nbỏ vai, Lưu
+TR -> CTL ++ : 9: luu(bm)
+CTL -> BUS ++ : 10: suaNhan\nVien(bm)
+alt chưa chọn vai nào
+  BUS --> CTL : 11: LoiNhapLieu\n("Chọn ít nhất\nmột vai.")
+else bỏ vai QUAN_TRI của tài khoản đang dùng
+  BUS -> TV ++ : 12: demQuanTri\nKhac(DANG_DUNG,\nma)
+  TV --> BUS -- : 13: 0
+  BUS --> CTL : 14: LoiNghiepVu\n("Phải còn ít nhất\nmột tài khoản\nQuản trị …")
+else hợp lệ
+  BUS -> BUS : 15: layVai(ma)\n[VaiTroDAO.\nfindById(m)]
+  BUS -> TKD ++ : 16: save(tk)\n[tập vai mới]
+  deactivate TKD
+end
+BUS --> CTL -- : 17: kết quả
+CTL --> TR -- : 18: danh sách,\n"Đã cập nhật"\nhoặc lỗi
+deactivate TR
+NV -> SS ++ : 19: mở\n/quan-tri/…
+SS -> SS : 20: so vai\nROLE_… (nạp\nlúc đăng nhập)\nvới đường dẫn
+alt thiếu vai
+  SS --> NV : 21: chuyển tới\n/khong-co-\nquyen
+else đủ vai
+  SS --> NV -- : 22: trang chức\nnăng, menu\ntheo vai
+end
+@enduml

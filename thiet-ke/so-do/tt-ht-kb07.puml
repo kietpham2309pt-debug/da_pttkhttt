@@ -1,0 +1,45 @@
+@startuml tt-ht-kb07
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__vãng lai__" as KH
+boundary "__: bao-hanh__\n__.html__" as TR
+boundary "__: BaoHanhKhach__\n__Controller__" as CTL
+control "__: BaoHanhKhach__\n__BUS__" as BUS
+participant "__: TonKho__\n__TruyVanKhach__" as TKD <<DAO>>
+participant "__: HauMai__\n__TruyVanKhach__" as HMD <<DAO>>
+
+KH -> TR : 1: Chọn cách tra,\nnhập serial (hoặc\nsố điện thoại, mã\nđơn); bấm Tra cứu
+activate TR
+TR -> CTL ++ : 2: tra(cach, soSerial,\nsoDienThoai, maDon)
+alt cach = serial
+  CTL -> BUS ++ : 3: traTheoSerial\n(soSerial)
+  BUS -> TKD ++ : 4: theoSoSerial(so)
+  TKD --> BUS -- : 5: SanPhamSerial
+else cach = sdt
+  CTL -> CTL : 6: DinhDangTien.\ndocMaDon(maDon)
+  CTL -> BUS : 7: traTheoSoDien\nThoai(sdt, ma)
+  BUS -> TKD ++ : 8: theoSoDien\nThoai(sdt)
+  TKD --> BUS -- : 9: các máy đã bán
+end
+alt để trống, sai định dạng,\nkhông thấy hoặc máy chưa bán
+  BUS --> CTL : 10: LoiNghiepVu
+  CTL --> TR : 11: báo lỗi
+else tìm thấy
+  loop mỗi chiếc máy
+    BUS -> BUS : 12: dong(may):\nhạn là ngayBan +\nthoiHanBaoHanh
+    BUS -> HMD ++ : 13: phieuBaoHanh\n(soSerial)
+    HMD --> BUS -- : 14: các lần\nbảo hành
+  end
+  BUS --> CTL : 15: List<Ket\nQuaBaoHanh>
+  CTL --> TR : 16: ngày bán, hạn,\ncòn hạn, các lần\nbảo hành
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

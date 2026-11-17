@@ -1,0 +1,76 @@
+@startuml lht-ht03
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "tai-khoan-form.html" as BM <<boundary>> {
+  ô đánh dấu vaiTro[]
+}
+class "layout/quan-tri.html" as MENU <<boundary>> {
+  menu sec:authorize theo vai
+}
+class "thong-diep.html" as TD <<boundary>> {
+  "Không có quyền"
+}
+class QuanTriTaiKhoanController <<boundary>> {
+  + sua(ma, model, ra) : String
+  + luu(bm, model, ra) : String
+}
+class ChungController <<boundary>> {
+  + khongCoQuyen(model) : String
+}
+class QuanTriTaiKhoanBUS <<control>> {
+  + VAI_NHAN_VIEN : List<String>
+  + vaiChoNhanVien() : List<VaiTro>
+  + bieuMauSua(maNhanVien) : BieuMauNhanVien
+  + suaNhanVien(bm)
+  - layVai(ma) : Set<VaiTro>
+}
+class BaoMat <<control>> {
+  + NHAN_VIEN : String[]
+  + chuoiLoc(http, xuLy) : SecurityFilterChain
+}
+class TaiKhoanBUS <<control>> {
+  + loadUserByUsername(ten) : UserDetails
+  + coVai(vai) : boolean
+}
+class NhanVienTruyVanG12 <<DAO>> {
+  + timKemTaiKhoan(ma) : Optional
+  + demQuanTriKhac(trangThai, tru) : long
+}
+class VaiTroDAO <<DAO>> {
+  + findById(ma) : Optional
+}
+class TaiKhoanDAO <<DAO>> {
+  + findByTenDangNhap(ten) : Optional
+  + save(tk) : TaiKhoan
+}
+class TaiKhoan <<entity>> {
+  - tenDangNhap : String
+  - trangThai : TrangThaiTaiKhoan
+}
+class VaiTro <<entity>> {
+  - maVaiTro : String
+  - tenVaiTro : String
+}
+
+BM ..> QuanTriTaiKhoanController : POST /luu
+QuanTriTaiKhoanController ..> QuanTriTaiKhoanBUS
+QuanTriTaiKhoanBUS ..> NhanVienTruyVanG12
+QuanTriTaiKhoanBUS ..> VaiTroDAO
+QuanTriTaiKhoanBUS ..> TaiKhoanDAO
+MENU ..> BaoMat : hasRole
+BaoMat ..> TaiKhoanBUS : quyền ROLE_…
+BaoMat ..> ChungController : sai vai
+ChungController ..> TD
+TaiKhoanBUS ..> TaiKhoanDAO
+VaiTroDAO ..> VaiTro
+TaiKhoanDAO ..> TaiKhoan
+TaiKhoan "*" -right-> "1..*" VaiTro : có vai trò
+@enduml

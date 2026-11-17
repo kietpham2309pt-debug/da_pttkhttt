@@ -1,0 +1,35 @@
+@startuml hd-uc-sp-04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 220
+
+|Quản lý cửa hàng|
+start
+:Chọn mục Khuyến mãi;
+|Hệ thống|
+:Hiện danh sách chương trình kèm trạng thái;
+|Quản lý cửa hàng|
+:Bấm Thêm, hoặc chọn chương trình rồi bấm Sửa hay Dừng (nhập lý do);
+|Hệ thống|
+if () then ([dừng sớm])
+  :Đặt ngày kết thúc là hôm nay, ghi lý do, người dừng;
+  stop
+else ([thêm, sửa])
+  :Hiện biểu mẫu; chương trình Đang chạy chỉ cho sửa tên, ngày kết thúc;
+endif
+repeat
+  |Quản lý cửa hàng|
+  :Nhập tên, loại, mức giảm hoặc quà, ngày, mã, người duyệt; chọn phạm vi; bấm Lưu;
+  |Hệ thống|
+  :Kiểm tra ô bắt buộc, ngày kết thúc không trước ngày bắt đầu, mức giảm hợp lệ;
+  :Kiểm tra mã chưa trùng, mẫu máy chưa có khuyến mãi cùng loại trùng thời gian;
+  :Tính giá sau khuyến mãi, so với giá nhập gần nhất;
+backward :Báo lỗi, chỗ trùng; dưới giá nhập thì cảnh báo, bắt ghi lý do;
+repeat while () is ([không hợp lệ]) not ([hợp lệ])
+:Lưu khuyến mãi; ghi người lập, người duyệt, thời điểm;
+:Báo "Đã lưu"; hiện khuyến mãi ở trang Tổng quan của nhân viên bán hàng;
+stop
+@enduml

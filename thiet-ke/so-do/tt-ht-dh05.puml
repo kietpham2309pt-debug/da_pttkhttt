@@ -1,0 +1,53 @@
+@startuml tt-ht-dh05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Nhân viên__\n__giao hàng –__\n__kỹ thuật__" as NV
+boundary "__: phieu-giao__\n__.html__" as TR
+boundary "__: GiaoHang__\n__Controller__" as CTL
+control "__: GiaoHang__\n__BUS__" as BUS
+control "__: TaiKhoan__\n__BUS__" as TKB
+participant "__: PhieuGiao__\n__TruyVan__\n__G4__" as PGD <<DAO>>
+participant "__: PhieuXuat__\n__TruyVan__\n__G4__" as PXD <<DAO>>
+participant "__: PhieuLapDat__\n__TruyVan__\n__G4__" as PLD <<DAO>>
+
+NV -> TR : 1: Mở phiếu\ngiao kèm lắp
+activate TR
+TR -> CTL ++ : 2: chiTiet\nPhieu(ma)
+CTL -> BUS ++ : 3: chiTiet\nPhieu(ma)
+BUS -> PGD ++ : 4: layDayDu(ma)
+PGD --> BUS -- : 5: PhieuGiaoHang
+BUS -> PXD ++ : 6: theoDon(don)
+PXD --> BUS -- : 7: máy, serial
+BUS -> PLD ++ : 8: theoPhieu\nGiao(ma)
+PLD --> BUS -- : 9: biên bản\n(có thể rỗng)
+BUS --> CTL -- : 10: ChiTietPhieu\n(canBienBan,\nduocCapNhat)
+CTL --> TR -- : 11: "phieu-giao"
+NV -> TR : 12: Nhập chạy thử,\nphát sinh, phí;\nđánh dấu khách ký
+TR -> CTL ++ : 13: bienBan(ma,\nketQuaChayThu,\n…, khachDaKy)
+CTL -> BUS ++ : 14: luuBienBan\n(maPhieu, …)
+BUS -> PGD ++ : 15: layDayDu(ma)
+PGD --> BUS -- : 16: PhieuGiaoHang
+BUS -> TKB ++ : 17: nhanVien\nHienTai()
+TKB --> BUS -- : 18: nv
+BUS -> BUS : 19: phieuDuoc\nCapNhat,\ncanBienBan
+alt không đúng người, không có việc lắp, hoặc phí âm
+  BUS --> CTL : 20: LoiNghiepVu
+  CTL --> TR : 21: báo lỗi
+else hợp lệ
+  BUS -> PLD ++ : 22: theoPhieu\nGiao(ma)
+  PLD --> BUS -- : 23: bb cũ\nhoặc mới
+  BUS -> PLD ++ : 24: save(bb)\n[kết quả, phí,\nkhachDaKy]
+  deactivate PLD
+  BUS --> CTL : 25: xong
+  CTL --> TR : 26: "Đã lưu biên\nbản lắp đặt"
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

@@ -19,7 +19,7 @@
                     </div>
                     <div class="o-nhap">
                         <label for="maDon">Mã đơn</label>
-                        <input id="maDon" name="maDon" maxlength="14" th:value="${maDon}" placeholder="Ví dụ DH000012 hoặc 12">
+                        <input type="text" id="maDon" name="maDon" maxlength="14" th:value="${maDon}" placeholder="Ví dụ DH000012 hoặc 12">
                         <span class="loi-nhap" th:if="${loiO['maDon'] != null}" th:text="${loiO['maDon']}"></span>
                     </div>
                     <button type="submit" class="nut nut--dac the-tk__gui" th:disabled="${khoaDen != null}">Tra cứu</button>

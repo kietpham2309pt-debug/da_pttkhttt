@@ -1,0 +1,77 @@
+@startuml lht-sp06
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "chi-tiet.html" as CT <<boundary>> {
+  ảnh, giá, khuyến mãi, tình trạng,
+  thông số, đánh giá, Thêm vào so sánh
+}
+class "so-sanh.html" as SS <<boundary>> {
+  cột mẫu máy, dòng thông số, nút Bỏ
+}
+class SanPhamKhachController <<boundary>> {
+  + chiTiet(ma, model) : String
+  + soSanh(ma, model) : String
+  + themSoSanh(ma, ra) : String
+  + boSoSanh(ma) : String
+}
+class PhienKhach {
+  + SO_MAU_SO_SANH = 3
+  + getSoSanh() : List<Long>
+  + themSoSanh(ma) : boolean
+  + boSoSanh(ma)
+  + datSoSanh(ds)
+}
+class SanPhamKhachBUS <<control>> {
+  + chiTiet(ma) : ChiTietSanPham
+  + soSanh(dsMa) : List<TheSanPham>
+  + {static} tenThongSoChung(ds)
+  + {static} giaTriThongSo(t, ten)
+}
+class GiaBUS <<control>> {
+  + dongThe(dsSanPham) : List<TheSanPham>
+}
+class TaiKhoanKhachBUS <<control>> {
+  + canDanhGia(kh) : List<CoTheDanhGia>
+}
+class SanPhamTruyVanKhach <<DAO>> {
+  + theoMa(dsMa) : List<SanPham>
+  + cungNhom(dm, bo, tt, trang)
+}
+class KhachHangTruyVanKhach <<DAO>> {
+  + danhGiaCuaSanPham(maSanPham)
+}
+class SanPham <<entity>> {
+  - tenSanPham : String
+  - giaBan : Long
+  - trangThai : TrangThaiSanPham
+}
+class ThongSoKyThuat <<entity>> {
+  - tenThongSo : String
+  - giaTri : String
+}
+class DanhGia <<entity>> {
+  - soSao : Integer
+  - noiDung : String
+}
+
+CT ..> SanPhamKhachController : GET /san-pham/{ma}
+SS ..> SanPhamKhachController : GET /so-sanh
+SanPhamKhachController ..> SanPhamKhachBUS
+SanPhamKhachController ..> PhienKhach
+SanPhamKhachController ..> TaiKhoanKhachBUS
+SanPhamKhachBUS ..> GiaBUS
+SanPhamKhachBUS ..> SanPhamTruyVanKhach
+SanPhamKhachBUS ..> KhachHangTruyVanKhach
+SanPhamTruyVanKhach ..> SanPham
+KhachHangTruyVanKhach ..> DanhGia
+SanPham "1" *-- "0..*" ThongSoKyThuat : gồm
+DanhGia "*" --> "1" SanPham : cho
+@enduml

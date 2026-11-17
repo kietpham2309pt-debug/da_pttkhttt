@@ -1,0 +1,53 @@
+@startuml hd-uc-mh-07
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 250
+
+|Khách vãng lai|
+start
+:Mở chi tiết đơn (UC-MH-06);
+|Hệ thống|
+if () then ([đơn không còn Chờ xác nhận])
+  :Không hiện khung huỷ; hiện số điện thoại cửa hàng;
+  stop
+else ([Chờ xác nhận])
+endif
+:Hiện khung "Huỷ đơn", ô lý do;
+repeat
+  |Khách vãng lai|
+  :Nhập lý do, bấm "Huỷ đơn";
+  |Hệ thống|
+  :Kiểm tra lý do không trống, tối đa 200 ký tự;
+  backward :Báo lỗi ở ô lý do;
+repeat while () is ([lý do sai]) not ([hợp lệ])
+:Hỏi xác nhận huỷ đơn;
+|Khách vãng lai|
+:Chọn "Đồng ý" hoặc "Không";
+|Hệ thống|
+if () then ([chọn "Không"])
+  :Giữ nguyên đơn;
+  stop
+else ([đồng ý huỷ])
+endif
+:Kiểm tra lại đơn vẫn Chờ xác nhận;
+if () then ([vừa được nhân viên xác nhận])
+  :Báo gọi cửa hàng để huỷ, không đổi đơn;
+  stop
+else ([vẫn Chờ xác nhận])
+endif
+:Đổi đơn sang Đã huỷ, ghi lý do, ghi lịch sử trạng thái;
+-[dashed]->
+:Đơn hàng
+[Đã huỷ]; <<object>>
+-[dashed]->
+if () then ([đã trả cọc hoặc trả trước])
+  :Ghi hoàn tiền theo cách khách đã trả; trạng thái thanh toán Đã hoàn tiền;
+else ([chưa trả])
+endif
+:Trả lại lượt dùng mã giảm giá (nếu có);
+:Hiện chi tiết đơn Đã huỷ, lý do, số tiền hoàn;
+stop
+@enduml

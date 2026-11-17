@@ -13,7 +13,7 @@
                 <form method="post" th:action="@{/dang-ky}" th:object="${f}">
                     <div class="o-nhap">
                         <label for="hoTen">Họ và tên</label>
-                        <input id="hoTen" th:field="*{hoTen}" autocomplete="name" maxlength="60">
+                        <input type="text" id="hoTen" th:field="*{hoTen}" autocomplete="name" maxlength="60">
                         <span class="loi-nhap" th:if="${loiO['hoTen'] != null}" th:text="${loiO['hoTen']}"></span>
                     </div>
                     <div class="o-doi">
@@ -30,7 +30,7 @@
                     </div>
                     <div class="o-nhap">
                         <label for="tenDangNhap">Tên đăng nhập</label>
-                        <input id="tenDangNhap" th:field="*{tenDangNhap}" autocomplete="username" maxlength="50">
+                        <input type="text" id="tenDangNhap" th:field="*{tenDangNhap}" autocomplete="username" maxlength="50">
                         <span class="o-nhap__goi">Từ 4 tới 50 ký tự: chữ không dấu, số, dấu chấm, gạch dưới.</span>
                         <span class="loi-nhap" th:if="${loiO['tenDangNhap'] != null}" th:text="${loiO['tenDangNhap']}"></span>
                     </div>

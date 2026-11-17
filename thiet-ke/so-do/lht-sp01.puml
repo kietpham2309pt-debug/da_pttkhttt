@@ -1,0 +1,91 @@
+@startuml lht-sp01
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "danh-muc.html" as DS <<boundary>> {
+  bảng danh mục, bảng thương hiệu,
+  số mẫu máy, nút Sửa, Xoá
+}
+class "danh-muc-form.html" as BMDM <<boundary>> {
+  mã, tên, thứ tự
+}
+class "thuong-hieu-form.html" as BMTH <<boundary>> {
+  tên, xuất xứ
+}
+class QuanTriDanhMucController <<boundary>> {
+  + danhSach(model) : String
+  + themDanhMuc(model) : String
+  + suaDanhMuc(ma, model, ra) : String
+  + luuDanhMuc(maDanhMuc, tenDanhMuc, thuTu, themMoi, model, ra)
+  + xoaDanhMuc(ma, ra) : String
+  + luuThuongHieu(maThuongHieu, tenThuongHieu, xuatXu, model, ra)
+  + xoaThuongHieu(ma, ra) : String
+}
+class QuanTriDanhMucBUS <<control>> {
+  + danhMuc() : List<DanhMuc>
+  + thuongHieu() : List<ThuongHieu>
+  + soSanPhamTheoDanhMuc() : Map<String, Long>
+  + soSanPhamTheoThuongHieu() : Map<Long, Long>
+  + luuDanhMuc(ma, ten, thuTu, themMoi)
+  + xoaDanhMuc(ma) : String
+  + luuThuongHieu(ma, ten, xuatXu)
+  + xoaThuongHieu(ma) : String
+}
+class DanhMucTruyVanG12 <<DAO>> {
+  + layTheoThuTu() : List<DanhMuc>
+  + layThuongHieu() : List<ThuongHieu>
+  + demTrungTenDanhMuc(ten, tru) : long
+  + demTrungTenThuongHieu(ten, tru) : long
+  + demSanPhamTheoDanhMuc()
+  + demSanPhamTheoThuongHieu()
+}
+class DanhMucDAO <<DAO>> {
+  + existsById(ma) : boolean
+  + save(dm) : DanhMuc
+  + delete(dm)
+}
+class ThuongHieuDAO <<DAO>> {
+  + save(th) : ThuongHieu
+  + delete(th)
+}
+class SanPhamTruyVanG12 <<DAO>> {
+  + countByDanhMuc_MaDanhMuc(ma) : long
+  + countByThuongHieu_MaThuongHieu(ma)
+}
+class DanhMuc <<entity>> {
+  - maDanhMuc : String
+  - tenDanhMuc : String
+  - thuTu : Integer
+}
+class ThuongHieu <<entity>> {
+  - maThuongHieu : Long
+  - tenThuongHieu : String
+  - xuatXu : String
+}
+class SanPham <<entity>> {
+  - tenSanPham : String
+  - model : String
+}
+
+DS ..> QuanTriDanhMucController
+BMDM ..> QuanTriDanhMucController : POST /quan-tri/danh-muc/luu
+BMTH ..> QuanTriDanhMucController : POST /quan-tri/thuong-hieu/luu
+QuanTriDanhMucController ..> QuanTriDanhMucBUS
+QuanTriDanhMucBUS ..> DanhMucTruyVanG12
+QuanTriDanhMucBUS ..> DanhMucDAO
+QuanTriDanhMucBUS ..> ThuongHieuDAO
+QuanTriDanhMucBUS ..> SanPhamTruyVanG12
+DanhMucTruyVanG12 ..> DanhMuc
+DanhMucDAO ..> DanhMuc
+ThuongHieuDAO ..> ThuongHieu
+SanPhamTruyVanG12 ..> SanPham
+SanPham "*" --> "1" DanhMuc
+SanPham "*" --> "1" ThuongHieu
+@enduml

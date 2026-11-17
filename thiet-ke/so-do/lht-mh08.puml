@@ -1,0 +1,62 @@
+@startuml lht-mh08
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "dat-hang.html" as T1 <<boundary>> {
+  ô mã giảm giá,
+  nút Áp dụng mã
+}
+class DatHangController <<boundary>> {
+  + guiForm(phieu, nut = "apMa", model, ra)
+}
+class PhienKhach <<control>> {
+  + setBanNhap(phieu)
+}
+class DatHangBUS <<control>> {
+  + tinh(gio, noiThanh, maGiamGia) : BangTinh
+  + datHang(phieu, gio, kh, …, tongDaXem)
+}
+class GiaBUS <<control>> {
+  + kiemMaGiamGia(maCode, giaTriDon)
+  + giamMoiChiec(km, giaBan) : long
+}
+class BangTinh <<control>> {
+  + getMaGiam() : KhuyenMai
+  + getLoiMa() : String
+  + getTongTien() : long
+}
+class KhuyenMaiTruyVanKhach <<DAO>> {
+  + findFirstByMaCodeIgnoreCaseAndLoai(…)
+  + findById(ma)
+  + save(km) : KhuyenMai
+}
+class KhuyenMai <<entity>> {
+  - maCode : String
+  - kieuGiam : KieuGiam
+  - mucGiam, giamToiDa, donToiThieu
+  - ngayBatDau, ngayKetThuc
+  - soLuotToiDa, soLuotDaDung
+  - trangThai : TrangThaiKhuyenMai
+}
+class DonHang <<entity>> {
+  - tienGiam : long
+  - tongTien : long
+}
+
+T1 ..> DatHangController : POST /dat-hang
+DatHangController ..> PhienKhach
+DatHangController ..> DatHangBUS
+DatHangBUS ..> GiaBUS
+DatHangBUS ..> BangTinh
+DatHangBUS ..> KhuyenMaiTruyVanKhach
+GiaBUS ..> KhuyenMaiTruyVanKhach
+KhuyenMaiTruyVanKhach ..> KhuyenMai
+KhuyenMai "0..1" -- "0..*" DonHang : áp
+@enduml

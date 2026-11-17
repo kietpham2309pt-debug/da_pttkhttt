@@ -5,10 +5,10 @@
 <th:block th:replace="~{layout/khung :: dauTrang}"></th:block>
 <main>
     <link th:replace="~{khach/manh :: css}">
-    <section class="hero-sp hero-sp--dm" id="banner">
-        <img class="hero-sp__anh" th:src="${danhMucChon != null} ? |/assets/img/banner-${danhMucChon.maDanhMuc}.jpg| : '/assets/img/hero-san-pham.jpg'" alt="">
-        <span class="hero-sp__phu" aria-hidden="true"></span>
-        <div class="hero-sp__chu">
+    <section class="hero-sp" id="banner" th:with="coChu=${danhMucChon != null or loc.tuKhoa != null}" th:classappend="${coChu} ? 'hero-sp--dm'">
+        <img class="hero-sp__anh" th:src="${danhMucChon != null} ? |/assets/img/banner-${danhMucChon.maDanhMuc}.jpg| : (${loc.tuKhoa != null} ? '/assets/img/banner-1.jpg' : '/assets/img/hero-san-pham.jpg')" alt="">
+        <span class="hero-sp__phu" aria-hidden="true" th:if="${coChu}"></span>
+        <div class="hero-sp__chu" th:classappend="${coChu} ? '' : 'an-nhin'">
             <div class="khung">
                 <h1 th:text="${danhMucChon != null} ? ${danhMucChon.tenDanhMuc} : (${loc.tuKhoa != null} ? |Kết quả cho “${loc.tuKhoa}”| : 'Tất cả sản phẩm')">Sản phẩm</h1>
                 <p>Giá bán đã gồm VAT. Phí giao và phí lắp đặt ghi riêng khi đặt hàng.</p>

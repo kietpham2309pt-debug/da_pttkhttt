@@ -1,0 +1,56 @@
+@startuml tt-ht-dh04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Kế toán__" as KT
+boundary "__: tien-thu__\n__.html__" as TR
+boundary "__: TienThu__\n__Controller__" as CTL
+control "__: TienThu__\n__BUS__" as BUS
+control "__: TaiKhoan__\n__BUS__" as TKB
+participant "__: PhieuGiao__\n__TruyVan__\n__G4__" as PGD <<DAO>>
+participant "__: DonHang__\n__TruyVan__\n__G4__" as DHD <<DAO>>
+
+KT -> TR : 1: Mở trang\nTiền thu khi giao
+activate TR
+TR -> CTL ++ : 2: danhSach()
+CTL -> BUS ++ : 3: chuaXacNhan()
+BUS -> PGD ++ : 4: tienChua\nXacNhan()
+PGD --> BUS -- : 5: phiếu Đã giao\ncó tiền thu
+BUS -> BUS : 6: gom theo ngày\nvà người nộp
+BUS --> CTL -- : 7: List<Nhom>
+CTL --> TR -- : 8: "tien-thu"
+KT -> TR : 9: Chọn phiếu,\nnhập số thực\nnhận, ghi chú
+TR -> CTL ++ : 10: xacNhan(maPhieu,\nsoNop, ghiChu)
+CTL -> BUS ++ : 11: xacNhan(maPhieu,\nsoNop, ghiChu)
+BUS -> TKB ++ : 12: batBuoc\nNhanVien()
+TKB --> BUS -- : 13: keToan
+loop mỗi mã phiếu
+  BUS -> PGD ++ : 14: layDayDu(ma)
+  PGD --> BUS -- : 15: PhieuGiaoHang
+  BUS -> BUS : 16: kiểm chưa xác\nnhận, DA_GIAO;\ncộng tổng
+end
+alt phiếu đã xác nhận, hoặc lệch mà chưa ghi chú
+  BUS --> CTL : 17: LoiNghiepVu
+  CTL --> TR : 18: báo lỗi
+else hợp lệ
+  loop mỗi phiếu
+    BUS -> PGD ++ : 19: save(p)\n[keToan,\nthời điểm]
+    deactivate PGD
+  end
+  opt số nộp lệch tổng
+    BUS -> BUS : 20: G4Chung\n.noiGhiChu\n(don, khoản lệch)
+    BUS -> DHD ++ : 21: save(don)
+    deactivate DHD
+  end
+  BUS --> CTL : 22: "Đã xác\nnhận …"
+  CTL --> TR : 23: thông báo
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

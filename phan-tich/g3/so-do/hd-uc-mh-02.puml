@@ -1,0 +1,31 @@
+@startuml hd-uc-mh-02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 220
+
+|Khách hàng|
+start
+:Mở trang "Tài khoản";
+|Hệ thống|
+if () then ([chưa đăng nhập])
+  :Chuyển sang trang đăng nhập (UC-HT-01);
+  stop
+else ([đã đăng nhập])
+endif
+repeat
+  :Hiện hồ sơ, sổ địa chỉ (mặc định đứng đầu), đơn hàng của tôi;
+  |Khách hàng|
+  :Chọn một việc: sửa hồ sơ, thêm hoặc sửa địa chỉ, đặt mặc định, xoá địa chỉ; nhập dữ liệu, bấm nút tương ứng;
+  |Hệ thống|
+  :Kiểm tra dữ liệu và địa chỉ thuộc khách đang đăng nhập;
+  if () then ([sai dạng, trùng số điện thoại])
+    :Báo lỗi, không lưu;
+  else ([hợp lệ])
+    :Lưu hồ sơ hoặc sổ địa chỉ; giữ đúng một địa chỉ mặc định;
+  endif
+repeat while () is ([làm tiếp]) not ([xong])
+stop
+@enduml

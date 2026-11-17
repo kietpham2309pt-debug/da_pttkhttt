@@ -1,0 +1,73 @@
+@startuml lht-mh03
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "chi-tiet.html" as T1 <<boundary>> {
+  số lượng, ô lắp đặt,
+  Thêm vào giỏ, Mua ngay
+}
+class "gio-hang.html" as T2 <<boundary>> {
+  dòng giỏ, nút + −, Xoá,
+  ô lắp đặt, tạm tính
+}
+class GioHangKhachController <<boundary>> {
+  + xem(model) : String
+  + them(maSanPham, soLuong, lapDat, muaNgay, ra)
+  + sua(maSanPham, soLuong, thayDoi, ra)
+  + lapDat(maSanPham, co) : String
+  + xoa(maSanPham, ve, ra) : String
+}
+class GioHang <<control>> {
+  + them(ma, soLuong, canLap)
+  + datSoLuong(ma, soLuong)
+  + datLapDat(ma, co)
+  + xoa(ma)
+  + getDong() : Map
+}
+class DatHangBUS <<control>> {
+  + themVaoGio(gio, ma, soLuong, lapDat)
+  + suaSoLuong(gio, ma, soLuong)
+  + tinh(gio, noiThanh, maGiamGia) : BangTinh
+}
+class GiaBUS <<control>> {
+  + tonKhaDung(dsMa) : Map
+  + dongThe(dsSanPham) : List
+}
+class SanPhamTruyVanKhach <<DAO>> {
+  + findById(ma)
+  + theoMa(dsMa) : List
+}
+class TonKhoTruyVanKhach <<DAO>> {
+  + demTrongKho(tt, dsMa)
+  + demDangGiu(dsMa, ttDon)
+}
+class SanPham <<entity>> {
+  - tenSanPham : String
+  - giaBan : Long
+  - trangThai : TrangThaiSanPham
+  - canLapDat : Boolean
+}
+class SanPhamSerial <<entity>> {
+  - soSerial : String
+  - trangThai : TrangThaiSerial
+}
+
+T1 ..> GioHangKhachController : /gio-hang/them
+T2 ..> GioHangKhachController : /gio-hang/**
+GioHangKhachController ..> DatHangBUS
+GioHangKhachController ..> GioHang
+DatHangBUS ..> GioHang
+DatHangBUS ..> GiaBUS
+DatHangBUS ..> SanPhamTruyVanKhach
+GiaBUS ..> TonKhoTruyVanKhach
+SanPhamTruyVanKhach ..> SanPham
+TonKhoTruyVanKhach ..> SanPhamSerial
+SanPham "1" -- "0..*" SanPhamSerial : có
+@enduml

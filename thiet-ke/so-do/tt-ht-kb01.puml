@@ -1,0 +1,60 @@
+@startuml tt-ht-kb01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Thủ kho__" as TK
+boundary "__: nha-cung-cap__\n__-form.html__" as TR
+boundary "__: NhaCungCap__\n__Controller__" as CTL
+control "__: NhaCungCap__\n__BUS__" as BUS
+participant "__: NhaCungCap__\n__TruyVanG5__" as DAO <<DAO>>
+
+== Thêm, sửa ==
+TK -> TR : 1: Bấm Thêm\n(hoặc Sửa)
+activate TR
+TR -> CTL ++ : 2: them(model)\nhoặc sua(ma)
+CTL --> TR -- : 3: biểu mẫu
+TK -> TR : 4: Nhập tên, số\nđiện thoại, email,\nđịa chỉ; bấm Lưu
+TR -> CTL ++ : 5: luu(ma, ten,\nsdt, email, diaChi)
+CTL -> BUS ++ : 6: luu(ma, ten,\nsdt, email, diaChi)
+BUS -> BUS : 7: chuẩn hoá,\nkiểm định dạng
+BUS -> DAO ++ : 8: existsByTen\nNhaCungCap\nIgnoreCase(t)
+DAO --> BUS -- : 9: trùng?
+alt sai định dạng hoặc trùng tên
+  BUS --> CTL : 10: LoiNghiepVu
+  CTL --> TR : 11: giữ biểu mẫu,\nbáo lỗi
+else hợp lệ
+  BUS -> DAO ++ : 12: save(n)\n[mới: dangHopTac\nlà true]
+  deactivate DAO
+  BUS --> CTL : 13: NhaCungCap
+  CTL --> TR : 14: redirect danh\nsách, "Đã thêm"
+end
+deactivate BUS
+deactivate CTL
+== Ngừng hợp tác, xoá ==
+TK -> TR : 15: Bấm Ngừng hợp\ntác hoặc Xoá
+TR -> CTL ++ : 16: ngung(ma)\nhoặc xoa(ma)
+alt ngừng hợp tác (hợp tác lại)
+  CTL -> BUS ++ : 17: doiHopTac\n(ma, false)
+  BUS -> DAO ++ : 18: save(n)
+  deactivate DAO
+  deactivate BUS
+else xoá
+  CTL -> BUS ++ : 19: xoa(ma)
+  BUS -> DAO ++ : 20: demPhieuNhap(ma)\n+ demDonDat(ma)
+  DAO --> BUS -- : 21: số chứng từ
+  alt số chứng từ > 0
+    BUS --> CTL : 22: LoiNghiepVu\n("hãy chọn\nNgừng hợp tác")
+  else chưa có chứng từ
+    BUS -> DAO ++ : 23: delete(n)
+    deactivate DAO
+  end
+  deactivate BUS
+end
+CTL --> TR -- : 24: redirect,\nthông báo
+deactivate TR
+@enduml

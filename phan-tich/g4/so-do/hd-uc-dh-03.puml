@@ -1,0 +1,43 @@
+@startuml hd-uc-dh-03
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 260
+
+|Nhân viên giao hàng – kỹ thuật\n(hoặc Nhân viên bán hàng)|
+start
+:Mở danh sách việc giao được phân công (đơn vận chuyển: danh sách chờ của nhân viên bán hàng);
+|Hệ thống|
+:Hiện các phiếu giao Đã phân công;
+|Nhân viên giao hàng – kỹ thuật\n(hoặc Nhân viên bán hàng)|
+:Chọn phiếu;
+|Hệ thống|
+:Hiện đơn, máy và serial theo phiếu xuất kho, số tiền còn phải thu;
+|Nhân viên giao hàng – kỹ thuật\n(hoặc Nhân viên bán hàng)|
+:Giao máy, khách kiểm hàng;
+if () then ([không nhận])
+  :Nhập lý do, đánh dấu "chỉ hẹn giao lại" nếu khách hẹn, bấm "Không thành công";
+  |Hệ thống|
+  :Phiếu sang Không thành công, lưu lý do; hẹn lại: ghi chú vào đơn, đơn giữ Đang giao, chờ xếp lịch lại; từ chối: đơn sang Giao không thành công, thêm lịch sử, máy chờ nhận lại về kho;
+  stop
+else ([nhận])
+endif
+|Nhân viên giao hàng – kỹ thuật\n(hoặc Nhân viên bán hàng)|
+if () then ([có lắp])
+  :Thực hiện UC-DH-05 Lập biên bản lắp đặt;
+else ([không lắp])
+endif
+:Khách ký phiếu giao; nhập tiền thu khi giao, bấm "Đã giao";
+|Hệ thống|
+:Kiểm tra đơn Đang giao, biên bản có chữ ký khách nếu có lắp;
+if () then ([lỗi])
+  :Báo lỗi, không đổi trạng thái;
+  stop
+else ([hợp lệ])
+endif
+:Ghi tiền thu, phiếu sang Đã giao; máy Đã xuất sang Đã bán, ghi ngày bán;
+:Đơn sang Hoàn thành, thêm lịch sử; thu thiếu thì báo số còn thiếu;
+stop
+@enduml

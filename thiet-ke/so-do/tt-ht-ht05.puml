@@ -1,0 +1,39 @@
+@startuml tt-ht-ht05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Quản lý__\n__cửa hàng__" as QL
+boundary "__: ton-kho__\n__.html__" as TR
+boundary "__: BaoCao__\n__Controller__" as CTL
+control "__: BaoCaoBUS__" as BUS
+participant "__: KhoTruy__\n__VanG12__" as KHO <<DAO>>
+participant "__: SanPham__\n__TruyVanG12__" as SP <<DAO>>
+database "__: CSDL__" as DB
+
+QL -> TR : 1: Chọn mục\nBáo cáo tồn\nkho, bảo hành
+activate TR
+TR -> CTL ++ : 2: tonKho(model)
+CTL -> BUS ++ : 3: tonKho()
+BUS -> KHO ++ : 4: demSerialTheo\nTrangThai()
+KHO -> DB ++ : 5: select … group by\nmẫu máy, trạng thái
+DB --> KHO -- : 6: các dòng
+KHO --> BUS -- : 7: số chiếc máy\ntheo mẫu, trạng thái
+BUS -> SP ++ : 8: layTatCa\nKemDanhMuc()
+SP --> BUS -- : 9: List<SanPham>
+BUS -> BUS : 10: ghép mỗi mẫu một\nDongTonKho; sapHet nếu\nđang bán và trongKho\n≤ MUC_TON_TOI_THIEU
+BUS --> CTL -- : 11: List<DongTonKho>
+CTL -> BUS ++ : 12: mauSapHet()
+BUS --> CTL -- : 13: mẫu dưới mức tối\nthiểu, xếp tăng dần
+CTL -> BUS ++ : 14: phieuBaoHanh\nDangMo()
+BUS -> KHO ++ : 15: phieuBaoHanh\nDangMo()
+KHO --> BUS -- : 16: phiếu chưa\nDA_TRA_KHACH
+BUS --> CTL -- : 17: List<PhieuBaoHanh>
+CTL --> TR -- : 18: "quan-tri/g1/\nton-kho"
+TR --> QL : 19: bảng mẫu sắp hết,\nbảng tồn theo mẫu,\nbảng máy đang\nbảo hành, gửi hãng
+deactivate TR
+@enduml

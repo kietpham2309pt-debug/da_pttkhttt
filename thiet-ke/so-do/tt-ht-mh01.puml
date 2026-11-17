@@ -1,0 +1,45 @@
+@startuml tt-ht-mh01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__vãng lai__" as KH
+boundary "__: dang-ky__\n__.html__" as DK
+boundary "__: TaiKhoan__\n__Khach__\n__Controller__" as CTL
+control "__: TaiKhoan__\n__KhachBUS__" as BUS
+control "__: FormDangKy__" as F
+participant "__: TaiKhoan__\n__DAO__" as TKD <<DAO>>
+participant "__: KhachHang__\n__TruyVan__\n__Khach__" as KHD <<DAO>>
+
+KH -> DK : 1: Nhập họ tên, số\nđiện thoại, email,\ntên đăng nhập, mật\nkhẩu, tích đồng ý,\nbấm Đăng ký
+activate DK
+DK -> CTL ++ : 2: dangKy(f, model)
+CTL -> BUS ++ : 3: dangKy(f)
+BUS -> F ++ : 4: kiemTra()
+F --> BUS -- : 5: lỗi theo ô
+BUS -> TKD ++ : 6: findByTenDang\nNhap(ten)
+TKD --> BUS -- : 7: rỗng / đã có
+BUS -> KHD ++ : 8: existsBySo\nDienThoai(sdt)
+KHD --> BUS -- : 9: false / true
+alt có ô sai, trùng tên đăng nhập hoặc số điện thoại
+  BUS --> CTL : 10: loi (Map)
+  CTL --> DK : 11: "khach/dang-ky"\n(loiO, giữ dữ liệu)
+  DK --> KH : 12: Báo đỏ\ndưới ô sai
+else hợp lệ
+  BUS -> BUS : 13: vaiTroDAO.findById\n("KHACH_HANG"),\nmaHoa.encode(matKhau)
+  BUS -> TKD ++ : 14: save(tk)\n[DANG_DUNG]
+  deactivate TKD
+  BUS -> KHD ++ : 15: save(kh)\n[gắn tk]
+  deactivate KHD
+  BUS --> CTL : 16: loi rỗng
+  CTL --> DK : 17: redirect\n/dang-nhap?daDangKy
+  DK --> KH : 18: "Đăng ký xong,\nmời bạn đăng nhập"
+end
+deactivate BUS
+deactivate CTL
+deactivate DK
+@enduml

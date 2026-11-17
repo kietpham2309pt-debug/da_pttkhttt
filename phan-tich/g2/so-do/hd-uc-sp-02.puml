@@ -1,0 +1,42 @@
+@startuml hd-uc-sp-02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 220
+
+|Nhân viên bán hàng|
+start
+:Chọn mục Sản phẩm;
+|Hệ thống|
+:Hiện danh sách mẫu máy, ô tìm, nút Thêm mẫu máy;
+|Nhân viên bán hàng|
+:Bấm Thêm mẫu máy, hoặc chọn mẫu máy rồi bấm Sửa hay Ngừng bán;
+|Hệ thống|
+if () then ([ngừng bán])
+  :Hỏi xác nhận; đổi trạng thái sang Ngừng bán, ẩn khỏi trang khách, giữ dữ liệu;
+  stop
+else ([thêm, sửa])
+  :Hiện biểu mẫu (sửa: có sẵn dữ liệu), ô giá chỉ để xem;
+endif
+|Nhân viên bán hàng|
+:Chọn danh mục;
+|Hệ thống|
+:Hiện bảng thông số theo danh mục;
+repeat
+  |Nhân viên bán hàng|
+  :Nhập thông tin, thông số, chọn ảnh, bấm Lưu;
+  |Hệ thống|
+  :Kiểm tra ô bắt buộc, thông số đo là số, bếp âm có kích thước khoét đá, nhãn năng lượng;
+  :Kiểm tra model chưa có ở mẫu máy khác;
+backward :Báo lỗi dưới ô;
+repeat while () is ([thiếu, sai, trùng]) not ([hợp lệ])
+if () then ([thêm mới])
+  :Sinh mã, lưu mẫu máy Chưa mở bán cùng thông số, ảnh; ghi người tạo, thời điểm;
+else ([sửa])
+  :Giữ bản thông tin cũ, lưu thông tin mới; ghi người sửa;
+endif
+:Báo "Đã lưu mẫu máy, chờ Quản lý cửa hàng đặt giá bán";
+stop
+@enduml

@@ -1,0 +1,75 @@
+@startuml lht-kb08
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "nhan-lai.html" as T1 <<boundary>> {
+  máy giao không thành công,
+  máy trả về; tình trạng, kết quả
+}
+class NhanLaiController <<boundary>> {
+  + xem(model) : String
+  + nhan(soSerial, ketQua, tinhTrang, ra)
+}
+class QuyenG5 <<control>> {
+  + batBuoc(vai…) : NhanVien
+}
+class NhanLaiBUS <<control>> {
+  + CON_TOT = "TOT", BI_LOI = "LOI"
+  + mayGiaoKhongThanh() : List<MayCanNhan>
+  + mayTraVe() : List<MayCanNhan>
+  + nhanVe(soSerial, ketQua, tinhTrang, thuKho)
+}
+class SerialBUS <<control>> {
+  + doiTrangThai(may, moi)
+}
+class PhieuXuatTruyVanG5 <<DAO>> {
+  + serialCuaDonTheoTrangThai(ts, td)
+}
+class SerialTruyVanG5 <<DAO>> {
+  + dayDu(so)
+  + theoTrangThai(tt)
+}
+class YeuCauDoiTraTruyVanG5 <<DAO>> {
+  + yeuCauCuaSerial(so)
+}
+class DonHangTruyVanG5 <<DAO>> {
+  + findById(ma)
+}
+class LichSuTrangThaiDonDAO <<DAO>> {
+  + save(ls)
+}
+class SanPhamSerial <<entity>> {
+  - soSerial : String
+  - ngayBan : LocalDateTime
+  - trangThai : TrangThaiSerial
+}
+class DonHang <<entity>> {
+  - trangThai : TrangThaiDonHang
+}
+class LichSuTrangThaiDon <<entity>> {
+  - thoiDiem : LocalDateTime
+  - ghiChu : String
+}
+
+T1 ..> NhanLaiController : POST /quan-tri/kho/nhan-lai
+NhanLaiController ..> QuyenG5
+NhanLaiController ..> NhanLaiBUS
+NhanLaiBUS ..> SerialBUS
+NhanLaiBUS ..> PhieuXuatTruyVanG5
+NhanLaiBUS ..> SerialTruyVanG5
+NhanLaiBUS ....> YeuCauDoiTraTruyVanG5
+NhanLaiBUS ....> DonHangTruyVanG5
+NhanLaiBUS ..> LichSuTrangThaiDonDAO
+SerialTruyVanG5 ..> SanPhamSerial
+DonHangTruyVanG5 ..> DonHang
+LichSuTrangThaiDonDAO ..> LichSuTrangThaiDon
+SanPhamSerial "*" --> "0..1" DonHang : donHangBan
+LichSuTrangThaiDon "*" --> "1" DonHang
+@enduml

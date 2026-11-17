@@ -1,0 +1,83 @@
+@startuml lht-mh07
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "chi-tiet-don.html" as T1 <<boundary>> {
+  khung Huỷ đơn: ô lý do,
+  nút Huỷ đơn
+}
+class TraCuuDonController <<boundary>> {
+  + huy(ma, lyDo, ra) : String
+  + chiTiet(ma, model, ra) : String
+}
+class QuyenDonKhach <<control>> {
+  + duocXem(maDon) : boolean
+}
+class DonHangKhachBUS <<control>> {
+  + huyDon(maDon, lyDo)
+  + thongTin(maDon) : ThongTinDon
+  + coTheHuy(don) : boolean
+}
+class DonHangBUS <<control>> {
+  + doiTrangThai(don, moi, nguoiLam, ghiChu)
+  + duocDoi(tu, sang) : boolean
+}
+class DonHangDAO <<DAO>> {
+  + save(don) : DonHang
+}
+class LichSuTrangThaiDonDAO <<DAO>> {
+  + save(ls)
+}
+class GiaoDichTruyVanKhach <<DAO>> {
+  + save(gd) : GiaoDichThanhToan
+}
+class DonHangTruyVanKhach <<DAO>> {
+  + layDayDu(maDon)
+  + save(don) : DonHang
+}
+class KhuyenMaiTruyVanKhach <<DAO>> {
+  + save(km) : KhuyenMai
+}
+class DonHang <<entity>> {
+  - trangThai : TrangThaiDonHang
+  - trangThaiThanhToan
+  - lyDoHuy : String
+}
+class LichSuTrangThaiDon <<entity>> {
+  - trangThaiCu, trangThaiMoi
+  - ghiChu : String
+}
+class GiaoDichThanhToan <<entity>> {
+  - loai : LoaiGiaoDich
+  - soTien : long
+  - phuongThuc : String
+}
+class KhuyenMai <<entity>> {
+  - soLuotDaDung : Integer
+}
+
+T1 ..> TraCuuDonController : /tra-cuu-don/{ma}/huy
+TraCuuDonController ..> QuyenDonKhach
+TraCuuDonController ..> DonHangKhachBUS
+DonHangKhachBUS ..> DonHangBUS
+DonHangKhachBUS ..> DonHangTruyVanKhach
+DonHangKhachBUS ..> GiaoDichTruyVanKhach
+DonHangKhachBUS ..> KhuyenMaiTruyVanKhach
+DonHangBUS ..> DonHangDAO
+DonHangBUS ..> LichSuTrangThaiDonDAO
+DonHangDAO ..> DonHang
+DonHangTruyVanKhach ..> DonHang
+LichSuTrangThaiDonDAO ..> LichSuTrangThaiDon
+GiaoDichTruyVanKhach ..> GiaoDichThanhToan
+KhuyenMaiTruyVanKhach ..> KhuyenMai
+DonHang "1" *-- "1..*" LichSuTrangThaiDon
+DonHang "1" -- "0..*" GiaoDichThanhToan
+KhuyenMai "0..1" -- "0..*" DonHang
+@enduml

@@ -1,0 +1,52 @@
+@startuml hd-uc-dh-01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 280
+
+|Nhân viên bán hàng|
+start
+:Mở trang Đơn hàng, lọc "Chờ xác nhận";
+|Hệ thống|
+:Hiện đơn Chờ xác nhận, tô nổi đơn chờ quá 30 phút;
+if () then ([không có])
+  :Báo "Không có đơn chờ xác nhận";
+  stop
+else ([có])
+endif
+|Nhân viên bán hàng|
+:Chọn một đơn;
+|Hệ thống|
+:Hiện chi tiết đơn, số máy còn trong kho;
+|Nhân viên bán hàng|
+:Gọi khách xác nhận, ghi ghi chú, sửa địa chỉ nếu khách đổi;
+if () then ([chưa nghe])
+  :Bấm "Gọi lại sau";
+  |Hệ thống|
+  :Tăng số lần đã gọi, giữ Chờ xác nhận;
+  stop
+else ([nghe máy])
+endif
+|Nhân viên bán hàng|
+if () then ([huỷ])
+  :Khách huỷ hoặc đã gọi đủ số lần: bấm "Huỷ đơn", chọn lý do;
+  |Hệ thống|
+  :Chuyển Đã huỷ, thêm lịch sử, hiện tiền cọc phải hoàn;
+  stop
+else ([đồng ý])
+endif
+|Nhân viên bán hàng|
+:Bấm "Xác nhận đơn";
+|Hệ thống|
+:Kiểm tra trạng thái đơn và số máy trong kho;
+if () then ([lỗi])
+  :Đơn đã đổi trạng thái: báo "Đơn #… đã ở trạng thái …"; không đủ hàng: báo mẫu thiếu, đơn giữ Chờ xác nhận;
+  stop
+else ([hợp lệ])
+endif
+:Chuyển Đã xác nhận, ghi nhân viên duyệt, thêm lịch sử;
+:Đưa vào danh sách chờ xếp lịch, chờ xuất kho; báo "Đã xác nhận đơn #…";
+stop
+@enduml

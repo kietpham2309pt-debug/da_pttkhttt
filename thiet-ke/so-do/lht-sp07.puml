@@ -1,0 +1,76 @@
+@startuml lht-sp07
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "chi-tiet.html" as CT <<boundary>> {
+  thẻ Đánh giá, nút Viết đánh giá
+}
+class "danh-gia.html" as DG <<boundary>> {
+  mẫu máy chờ đánh giá, số sao,
+  nhận xét, nút Gửi đánh giá
+}
+class TaiKhoanKhachController <<boundary>> {
+  + danhGia(maSanPham, model) : String
+  + guiDanhGia(maDon, maSanPham, soSao, noiDung, ra)
+  - batBuocKhach() : KhachHang
+}
+class TaiKhoanBUS <<control>> {
+  + khachHangHienTai() : Optional<KhachHang>
+}
+class TaiKhoanKhachBUS <<control>> {
+  + canDanhGia(kh) : List<CoTheDanhGia>
+  + danhGia(kh, maDon, maSanPham, soSao, noiDung)
+}
+class DonHangTruyVanKhach <<DAO>> {
+  + cuaKhachTheoTrangThai(kh, tt)
+  + layDayDu(maDonHang) : Optional<DonHang>
+}
+class KhachHangTruyVanKhach <<DAO>> {
+  + daDanhGia(maDon, maSanPham) : boolean
+  + findById(ma) : Optional<KhachHang>
+}
+class DanhGiaDAO <<DAO>> {
+  + save(dg) : DanhGia
+}
+class DanhGia <<entity>> {
+  - soSao : Integer
+  - noiDung : String
+  - ngayDanhGia : LocalDateTime
+}
+class DonHang <<entity>> {
+  - trangThai : TrangThaiDonHang
+  - ngayHoanThanh : LocalDateTime
+}
+class ChiTietDonHang <<entity>> {
+  - tenSanPhamLucBan : String
+}
+class SanPham <<entity>> {
+  - tenSanPham : String
+}
+class KhachHang <<entity>> {
+  - hoTen : String
+}
+
+CT ..> TaiKhoanKhachController : GET /danh-gia?maSanPham
+DG ..> TaiKhoanKhachController : POST /danh-gia
+TaiKhoanKhachController ..> TaiKhoanBUS
+TaiKhoanKhachController ..> TaiKhoanKhachBUS
+TaiKhoanKhachBUS ..> DonHangTruyVanKhach
+TaiKhoanKhachBUS ..> KhachHangTruyVanKhach
+TaiKhoanKhachBUS ..> DanhGiaDAO
+DonHangTruyVanKhach ..> DonHang
+KhachHangTruyVanKhach ..> KhachHang
+DanhGiaDAO ..> DanhGia
+DonHang "1" *-- "1..*" ChiTietDonHang
+ChiTietDonHang "*" --> "1" SanPham
+DanhGia "*" --> "1" DonHang : của đơn
+DanhGia "*" --> "1" SanPham : cho
+DanhGia "*" --> "1" KhachHang : viết bởi
+@enduml

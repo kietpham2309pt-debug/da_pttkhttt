@@ -1,0 +1,52 @@
+@startuml tt-ht-kb08
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Thủ kho__" as TK
+boundary "__: nhan-lai__\n__.html__" as TR
+boundary "__: NhanLai__\n__Controller__" as CTL
+control "__: NhanLai__\n__BUS__" as BUS
+participant "__: PhieuXuat__\n__TruyVanG5__" as PXD <<DAO>>
+participant "__: Serial__\n__TruyVanG5__" as SED <<DAO>>
+participant "__: LichSuTrang__\n__ThaiDonDAO__" as LSD <<DAO>>
+
+TK -> TR : 1: Mở trang Nhận\nlại máy về kho
+activate TR
+TR -> CTL ++ : 2: xem(model)
+CTL -> BUS ++ : 3: mayGiao\nKhongThanh()
+BUS -> PXD ++ : 4: serialCuaDonTheo\nTrangThai(DA_XUAT,\nGIAO_KHONG_THANH\n_CONG)
+PXD --> BUS -- : 5: serial, đơn,\nphiếu xuất
+BUS --> CTL -- : 6: máy giao\nkhông thành
+CTL -> BUS ++ : 7: mayTraVe()
+BUS -> SED ++ : 8: theoTrangThai\n(TRA_VE_KHO)
+SED --> BUS -- : 9: máy trả về
+BUS --> CTL -- : 10: máy trả về
+CTL --> TR -- : 11: hai danh sách
+TK -> TR : 12: Ghi tình trạng,\nchọn kết quả;\nbấm Nhận về kho
+TR -> CTL ++ : 13: nhan(soSerial,\nketQua, tinhTrang)
+CTL -> BUS ++ : 14: nhanVe(soSerial,\nketQua, tinhTrang, nv)
+BUS -> SED ++ : 15: dayDu(so)
+SED --> BUS -- : 16: SanPhamSerial
+alt không tìm thấy, thiếu tình trạng, máy\nkhông chờ nhận hoặc chưa chọn kết quả
+  BUS --> CTL : 17: LoiNghiepVu
+  CTL --> TR : 18: báo lỗi
+else DA_XUAT của đơn giao không thành
+  BUS -> BUS : 19: serialBUS.\ndoiTrangThai\n(s, TRONG_KHO)
+else TRA_VE_KHO, ketQua = TOT
+  BUS -> BUS : 20: serialBUS.\ndoiTrangThai\n(s, TRONG_KHO)
+else TRA_VE_KHO, ketQua = LOI
+  BUS -> BUS : 21: serialBUS.\ndoiTrangThai(s,\nLOI_CHO_GUI\n_HANG)
+end
+opt máy có đơn liên quan
+  BUS -> LSD ++ : 22: save(ls) ["Kho\nnhận lại máy …,\ntình trạng: …"]
+  deactivate LSD
+end
+BUS --> CTL -- : 23: "Đã nhận\nmáy … về kho"
+CTL --> TR -- : 24: redirect,\nthông báo
+deactivate TR
+@enduml

@@ -1,0 +1,80 @@
+@startuml lht-sp04
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "khuyen-mai.html" as DS <<boundary>> {
+  danh sách, trạng thái,
+  nút Sửa, Tạm dừng, Chạy lại
+}
+class "khuyen-mai-form.html" as BM <<boundary>> {
+  tên, loại, mã, kiểu giảm, mức giảm,
+  quà, ngày, sản phẩm, lý do
+}
+class QuanTriKhuyenMaiController <<boundary>> {
+  + danhSach(model) : String
+  + them(model) : String
+  + sua(ma, model, ra) : String
+  + luu(bm, kq, model, ra) : String
+  + tamDung(ma, ra) : String
+  + chayLai(ma, ra) : String
+}
+class QuanTriKhuyenMaiBUS <<control>> {
+  + danhSach() : List<DongKhuyenMai>
+  + tim(ma) : KhuyenMai
+  + bieuMauSua(ma) : BieuMauKhuyenMai
+  + {static} giaiDoan(km) : String
+  + luu(bm, loiChuyenDoi) : KhuyenMai
+  + tamDung(ma) : String
+  + chayLai(ma) : String
+}
+class QuanTriSanPhamBUS <<control>> {
+  + sanPhamChoKhuyenMai()
+  + giaNhapGanNhat(maSanPham) : Long
+}
+class KhuyenMaiTruyVanG12 <<DAO>> {
+  + layTatCa() : List<KhuyenMai>
+  + timDayDu(ma) : Optional<KhuyenMai>
+  + existsByMaCodeIgnoreCaseAndMaKhuyenMaiNot(maCode, ma)
+  + trungThoiGian(ds, loai, tu, den, tru)
+  + save(km) : KhuyenMai
+}
+class SanPhamTruyVanG12 <<DAO>> {
+  + findAllById(dsMa) : List<SanPham>
+}
+class KhuyenMai <<entity>> {
+  - tenKhuyenMai : String
+  - loai : LoaiKhuyenMai
+  - maCode : String
+  - kieuGiam : KieuGiam
+  - mucGiam : Long
+  - quaTang : String
+  - ngayBatDau, ngayKetThuc
+  - trangThai : TrangThaiKhuyenMai
+}
+class SanPham <<entity>> {
+  - tenSanPham : String
+  - giaBan : Long
+}
+class NhanVien <<entity>> {
+  - hoTen : String
+}
+
+DS ..> QuanTriKhuyenMaiController
+BM ..> QuanTriKhuyenMaiController : POST …/luu
+QuanTriKhuyenMaiController ..> QuanTriKhuyenMaiBUS
+QuanTriKhuyenMaiController ..> QuanTriSanPhamBUS
+QuanTriKhuyenMaiBUS ..> QuanTriSanPhamBUS
+QuanTriKhuyenMaiBUS ..> KhuyenMaiTruyVanG12
+QuanTriKhuyenMaiBUS ..> SanPhamTruyVanG12
+KhuyenMaiTruyVanG12 ..> KhuyenMai
+SanPhamTruyVanG12 ..> SanPham
+KhuyenMai "*" --> "*" SanPham : áp cho
+KhuyenMai "*" --> "1" NhanVien : người tạo
+@enduml

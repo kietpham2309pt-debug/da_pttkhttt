@@ -1,0 +1,32 @@
+@startuml hd-uc-dh-04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 260
+
+|Kế toán|
+start
+:Mở trang "Tiền thu khi giao";
+|Hệ thống|
+:Hiện phiếu Đã giao có tiền thu chưa xác nhận, gom theo ngày và người nộp, kèm tổng;
+repeat
+  |Kế toán|
+  :Đếm tiền nhận, chọn phiếu, nhập số tiền thực nhận, ghi chú nếu lệch, bấm "Xác nhận đã nhận";
+  |Hệ thống|
+  :Kiểm tra phiếu chưa được xác nhận, so số nộp với tổng tiền thu;
+  if () then ([đã xác nhận])
+    :Báo "Phiếu … đã được … xác nhận lúc …";
+    stop
+  else ([chưa])
+  endif
+repeat while (lệch mà chưa ghi chú?) is ([có, báo số lệch]) not ([khớp hoặc đã ghi chú])
+:Ghi kế toán xác nhận và thời điểm lên từng phiếu;
+if () then ([có lệch])
+  :Ghi khoản lệch vào đơn, nhắc báo quản lý cửa hàng;
+else ([khớp])
+  :Báo đã nhận đủ;
+endif
+stop
+@enduml

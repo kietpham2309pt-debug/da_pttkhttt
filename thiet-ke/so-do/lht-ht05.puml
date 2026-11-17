@@ -1,0 +1,64 @@
+@startuml lht-ht05
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "ton-kho.html" as Trang <<boundary>> {
+  bảng mẫu dưới mức tồn tối thiểu
+  bảng tồn theo mẫu máy
+  bảng máy đang bảo hành
+}
+class BaoCaoController <<boundary>> {
+  + tonKho(model) : String
+}
+class BaoCaoBUS <<control>> {
+  + MUC_TON_TOI_THIEU = 2
+  + tonKho() : List
+  + mauSapHet() : List
+  + phieuBaoHanhDangMo() : List
+}
+class DongTonKho <<record>> {
+  tongNhap, trongKho, daXuat, daBan
+  dangBaoHanh, traVeKho
+  loiChoGuiHang, sapHet
+}
+class KhoTruyVanG12 <<DAO>> {
+  + demSerialTheoTrangThai() : List
+  + phieuBaoHanhDangMo() : List
+}
+class SanPhamTruyVanG12 <<DAO>> {
+  + layTatCaKemDanhMuc() : List
+}
+class SanPham <<entity>> {
+  - tenSanPham : String
+  - model : String
+  - trangThai : TrangThaiSanPham
+}
+class SanPhamSerial <<entity>> {
+  - soSerial : String
+  - trangThai : TrangThaiSerial
+}
+class PhieuBaoHanh <<entity>> {
+  - ngayNhan : LocalDateTime
+  - ngayHenTra : LocalDate
+  - ngayGuiHang : LocalDateTime
+  - trangThai : TrangThaiBaoHanh
+}
+
+Trang ..> BaoCaoController : GET /quan-tri/bao-cao/ton-kho
+BaoCaoController ..> BaoCaoBUS
+BaoCaoBUS ..> DongTonKho : tạo
+BaoCaoBUS ..> KhoTruyVanG12
+BaoCaoBUS ..> SanPhamTruyVanG12
+KhoTruyVanG12 ..> SanPhamSerial
+KhoTruyVanG12 ..> PhieuBaoHanh
+SanPhamTruyVanG12 ..> SanPham
+SanPhamSerial "*" -left-> "1" SanPham : thuộc mẫu
+PhieuBaoHanh "*" -up-> "1" SanPhamSerial : của chiếc máy
+@enduml

@@ -1,0 +1,53 @@
+@startuml tt-ht-mh02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__hàng__" as KH
+boundary "__: tai-khoan__\n__.html__" as TK
+boundary "__: TaiKhoan__\n__Khach__\n__Controller__" as CTL
+control "__: TaiKhoan__\n__BUS__" as TKB
+control "__: TaiKhoan__\n__KhachBUS__" as BUS
+participant "__: KhachHang__\n__TruyVan__\n__Khach__" as KHD <<DAO>>
+participant "__: DiaChi__\n__GiaoHang__\n__DAO__" as DCD <<DAO>>
+
+KH -> TK : 1: Mở trang\nTài khoản
+activate TK
+TK -> CTL ++ : 2: taiKhoan\n(suaDiaChi)
+CTL -> TKB ++ : 3: khachHang\nHienTai()
+TKB --> CTL -- : 4: kh
+CTL -> BUS ++ : 5: soDiaChi(kh)
+BUS -> KHD ++ : 6: soDiaChi\n(maKhachHang)
+KHD --> BUS -- : 7: ds địa chỉ\n(mặc định trước)
+BUS --> CTL -- : 8: ds địa chỉ
+CTL --> TK -- : 9: "khach/tai-khoan"
+KH -> TK : 10: Nhập người nhận,\nsố điện thoại, địa chỉ,\nkhu vực, mặc định;\nbấm Thêm địa chỉ
+TK -> CTL ++ : 11: luuDiaChi(null,\nhoTenNguoiNhan, …)
+CTL -> BUS ++ : 12: luuDiaChi(kh,\nnull, …, macDinh)
+BUS -> BUS : 13: kiểm họ tên 2–60,\nsố 10 chữ số, địa chỉ\n≤ 255 ký tự
+alt ô sai
+  BUS --> CTL : 14: LoiNghiepVu
+  CTL --> TK : 15: redirect /tai-khoan\n(loi)
+else hợp lệ
+  BUS -> KHD ++ : 16: soDiaChi\n(maKhachHang)
+  KHD --> BUS -- : 17: tatCa
+  opt sổ trống hoặc khách chọn mặc định
+    loop từng địa chỉ đang mặc định
+      BUS -> DCD ++ : 18: save(khac)\n[macDinh = false]
+      deactivate DCD
+    end
+  end
+  BUS -> DCD ++ : 19: save(dc)
+  deactivate DCD
+  BUS --> CTL : 20: xong
+  CTL --> TK : 21: redirect\n/tai-khoan#so-dia-chi
+  TK --> KH : 22: "Đã thêm địa\nchỉ vào sổ."
+end
+deactivate BUS
+deactivate CTL
+deactivate TK
+@enduml

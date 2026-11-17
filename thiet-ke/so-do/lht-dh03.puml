@@ -1,0 +1,84 @@
+@startuml lht-dh03
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "giao-hang.html" as T1 <<boundary>> {
+  việc của tôi,
+  đơn vận chuyển đang chờ
+}
+class "phieu-giao.html" as T2 <<boundary>> {
+  máy, serial, tiền còn thu,
+  nút Đã giao, Không thành công
+}
+class GiaoHangController <<boundary>> {
+  + trangChinh(ngay, nv, model)
+  + chiTietPhieu(ma, model, ra)
+  + daGiao(ma, tienThu, ra) : String
+  + khongThanhCong(ma, lyDo, henGiaoLai, ra)
+}
+class GiaoHangBUS <<control>> {
+  + viecCuaToi() : List<PhieuGiaoHang>
+  + vanChuyenDangCho()
+  + chiTietPhieu(maPhieu) : ChiTietPhieu
+  + daGiao(maPhieu, tienThu) : String
+  + khongThanhCong(maPhieu, lyDo, …)
+  - phieuDuocCapNhat(maPhieu)
+  - canBienBan(p, don) : boolean
+  - daTra(don) : long
+}
+class DonHangBUS <<control>> {
+  + doiTrangThai(don, moi, …)
+}
+class SerialBUS <<control>> {
+  + doiTrangThai(may, moi)
+}
+class PhieuGiaoTruyVanG4 <<DAO>> {
+  + viecDangCho(nv)
+  + vanChuyenDangCho()
+  + layDayDu(ma)
+  + save(p)
+}
+class PhieuXuatTruyVanG4 <<DAO>> {
+  + theoDon(don)
+}
+class PhieuLapDatTruyVanG4 <<DAO>> {
+  + theoPhieuGiao(ma)
+}
+class GiaoDichTruyVanG4 <<DAO>> {
+  + theoDon(don)
+  + save(g)
+}
+class PhieuGiaoHang <<entity>> {
+  - trangThai : TrangThaiPhieuGiao
+  - tienThuKhiGiao : Long
+  - lyDoKhongThanhCong : String
+}
+class SanPhamSerial <<entity>> {
+  - ngayBan : LocalDateTime
+  - trangThai : TrangThaiSerial
+}
+class GiaoDichThanhToan <<entity>> {
+  - soTien : Long
+  - phuongThuc : String
+}
+
+T1 ..> GiaoHangController : GET /quan-tri/giao-hang
+T2 ..> GiaoHangController : POST /phieu/{ma}/da-giao
+GiaoHangController ..> GiaoHangBUS
+GiaoHangBUS ...> DonHangBUS
+GiaoHangBUS ...> SerialBUS
+GiaoHangBUS ..> PhieuGiaoTruyVanG4
+GiaoHangBUS ..> PhieuXuatTruyVanG4
+GiaoHangBUS ..> PhieuLapDatTruyVanG4
+GiaoHangBUS ..> GiaoDichTruyVanG4
+PhieuGiaoTruyVanG4 ..> PhieuGiaoHang
+SerialBUS ..> SanPhamSerial
+GiaoDichTruyVanG4 ..> GiaoDichThanhToan
+@enduml

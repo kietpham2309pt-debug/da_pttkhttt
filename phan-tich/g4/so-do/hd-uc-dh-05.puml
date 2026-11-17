@@ -1,0 +1,42 @@
+@startuml hd-uc-dh-05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 260
+
+|Nhân viên giao hàng – kỹ thuật|
+start
+:Mở phiếu giao kèm lắp được phân công;
+|Hệ thống|
+:Hiện đơn, máy và serial theo phiếu xuất kho, khung biên bản lắp đặt;
+|Nhân viên giao hàng – kỹ thuật|
+:Khảo sát chỗ lắp: tủ, khoét đá, điện, nước;
+if () then ([chưa sẵn sàng])
+  :Ghi tình trạng công trình, hẹn buổi khác, báo "Không thành công";
+  |Hệ thống|
+  :Lưu lý do, đơn quay về danh sách chờ xếp lịch (UC-DH-02);
+  stop
+else ([sẵn sàng])
+endif
+|Nhân viên giao hàng – kỹ thuật|
+:Lắp máy, đấu nối, chạy thử cùng khách;
+if () then ([máy lỗi])
+  :Ghi lỗi vào biên bản, mang máy về đổi;
+  |Hệ thống|
+  :Lưu biên bản ghi lỗi, phiếu sang Không thành công;
+  stop
+else ([chạy tốt])
+endif
+|Nhân viên giao hàng – kỹ thuật|
+:Nhập kết quả chạy thử, tình trạng công trình, phát sinh, phí lắp, phí vật tư; bấm "Lập biên bản";
+|Hệ thống|
+:Kiểm tra phiếu có việc lắp, đúng người được phân công, phí không âm;
+:Lưu biên bản lắp đặt (chưa ký);
+|Nhân viên giao hàng – kỹ thuật|
+:Khách và người lắp ký, đánh dấu "Khách đã ký", bấm "Lưu biên bản";
+|Hệ thống|
+:Lưu biên bản đã ký; cho phép báo "Đã giao" ở UC-DH-03;
+stop
+@enduml

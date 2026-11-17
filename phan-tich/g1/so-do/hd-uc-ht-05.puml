@@ -1,0 +1,38 @@
+@startuml hd-uc-ht-05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 190
+
+|Quản lý cửa hàng|
+start
+:Chọn mục Báo cáo tồn kho và bảo hành;
+|Hệ thống|
+:Hiện báo cáo tháng hiện tại, mọi danh mục;
+repeat
+  |Quản lý cửa hàng|
+  :Chọn kỳ báo cáo, danh mục, bấm Xem;
+  |Hệ thống|
+  if () then ([kỳ sau tháng hiện tại])
+    :Báo "Kỳ báo cáo không hợp lệ", giữ báo cáo cũ;
+  else ([hợp lệ])
+    :Đếm chiếc máy theo số serial: tồn đầu kỳ, nhập, xuất, tồn cuối kỳ từng mẫu;
+    if () then ([danh mục không có mẫu máy])
+      :Báo "Không có dữ liệu";
+    else ([có])
+      :Hiện bảng nhập – xuất – tồn, đánh dấu mẫu dưới mức tồn tối thiểu;
+      :Liệt kê phiếu bảo hành đang mở, máy đang gửi hãng;
+    endif
+  endif
+repeat while () is ([xem kỳ khác]) not ([xong])
+|Quản lý cửa hàng|
+if () then ([xuất tệp])
+  :Bấm Xuất tệp;
+  |Hệ thống|
+  :Tạo tệp bảng tính của báo cáo đang xem;
+else ([không xuất])
+endif
+stop
+@enduml

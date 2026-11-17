@@ -1,0 +1,42 @@
+@startuml tt-ht-mh08
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__vãng lai__" as KH
+boundary "__: dat-hang__\n__.html__" as DH
+boundary "__: DatHang__\n__Controller__" as CTL
+control "__: DatHang__\n__BUS__" as BUS
+control "__: GiaBUS__" as GIA
+participant "__: KhuyenMai__\n__TruyVan__\n__Khach__" as KMD <<DAO>>
+
+KH -> DH : 1: Nhập mã,\nbấm Áp dụng mã
+activate DH
+DH -> CTL ++ : 2: guiForm(phieu,\nnut = "apMa")
+CTL -> CTL : 3: phien.\nsetBanNhap(phieu)
+CTL -> BUS ++ : 4: tinh(gio, noiThanh,\nmaGiamGia)
+BUS -> BUS : 5: giá sau KM theo\nmẫu máy (dongThe)
+BUS -> GIA ++ : 6: kiemMaGiamGia\n(maCode, tienHang\n− giamSp)
+GIA -> KMD ++ : 7: findFirstByMaCode\nIgnoreCaseAndLoai\n(maCode, MA_GIAM_GIA)
+KMD --> GIA -- : 8: KhuyenMai
+alt không có mã, tạm dừng, ngoài hạn, hết lượt, chưa đủ đơn tối thiểu
+  GIA --> BUS : 9: LoiNghiepVu
+  BUS --> CTL : 10: BangTinh\n(loiMa, không giảm)
+  CTL --> DH : 11: "khach/dat-hang"\n(loiO.maGiamGia)
+  DH --> KH : 12: Báo lý do\ndưới ô mã
+else hợp lệ
+  GIA --> BUS : 13: KhuyenMai
+  BUS -> GIA : 14: giamMoiChiec\n(ma, giaTriDon)
+  BUS --> CTL : 15: BangTinh(maGiam,\ngiamMa, tổng mới)
+  CTL --> DH : 16: "khach/dat-hang"\n("Đã áp mã …")
+  DH --> KH : 17: Tiền giảm,\ntổng, cọc mới
+end
+deactivate GIA
+deactivate BUS
+deactivate CTL
+deactivate DH
+@enduml

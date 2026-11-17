@@ -109,7 +109,13 @@ def doc_suc():
             m = re.match(r"(UC-[A-Z]{2}-\d\d)\s*[:·.-]?\s*(.*)", ten)
             if not m:
                 continue
-            ks = [k for k in khoi(dong) if k[0] != "img" and not la_dong_so_do(k)]
+            ks = []
+            for k in khoi(dong):
+                if la_dong_so_do(k):
+                    continue
+                if k[0] == "img":
+                    k = ("img", (k[1][0], os.path.normpath(os.path.join(os.path.dirname(p), k[1][1]))))
+                ks.append(k)
             kq.append((m.group(1), m.group(2).strip(), g, ks))
     return kq
 
@@ -181,9 +187,53 @@ def ve_than_md(d, ds, goc, so, dem):
         i += 1
 
 
-def ve_chuong_md(d, duong, so, dem, bo_muc=(), bo_h3=()):
+THU_TU_PH = ["HT", "SP", "MH", "DH", "KB"]
+XUONG = chr(10)
+
+
+def khoa_uc(ten):
+    m = re.search(r"UC-([A-Z]{2})-(\d\d)", ten)
+    return (THU_TU_PH.index(m.group(1)), int(m.group(2))) if m else (9, 0)
+
+
+def tach_h3(dong):
+    dau, khoi_ds = [], []
+    for l in dong:
+        if l.startswith("### "):
+            khoi_ds.append([l])
+        elif khoi_ds:
+            khoi_ds[-1].append(l)
+        else:
+            dau.append(l)
+    return dau, khoi_ds
+
+
+def gop_hien_thuc_hoa(p7):
+    text = doc_md(p7)
+    phan = text.split(XUONG + "## ")
+    for i, ph in enumerate(phan):
+        if not ph.startswith("7.2"):
+            continue
+        dong = ph.split(XUONG)
+        dau, khoi_ds = tach_h3(dong[1:])
+        for g in GOI:
+            pg = os.path.join(TK, "hien-thuc-hoa", g + ".md")
+            if os.path.exists(pg):
+                _, them = tach_h3(doc_md(pg).replace("](../so-do/", "](so-do/").split(XUONG))
+                khoi_ds += them
+        khoi_ds.sort(key=lambda k: khoa_uc(k[0]))
+        moi = []
+        for n, k in enumerate(khoi_ds, 1):
+            ten = re.sub(r"^### (\d+\.\d+\.\d+ )?", "", k[0])
+            moi.append(f"### 7.2.{n} {ten}")
+            moi += k[1:]
+        phan[i] = XUONG.join([dong[0]] + dau + moi)
+    return (XUONG + "## ").join(phan)
+
+
+def ve_chuong_md(d, duong, so, dem, bo_muc=(), bo_h3=(), text=None):
     goc = os.path.dirname(duong)
-    text = doc_md(duong)
+    text = text if text is not None else doc_md(duong)
     dau = text.split("\n## ", 1)[0].split("\n")
     if dau and dau[0].startswith("# "):
         dau = dau[1:]
@@ -251,6 +301,14 @@ GIA_DINH = [
     "Nhân viên đã có tài khoản và đã đăng nhập trước khi thực hiện các use case hệ thống phía cửa hàng; sơ đồ không vẽ include Đăng nhập.",
     "Ngoài phạm vi: bán và đồng bộ giá, tồn kho lên sàn thương mại điện tử, mạng xã hội; bán theo dự án qua kiến trúc sư; chấm công, tính lương; kế toán thuế; phát hành hoá đơn điện tử; phí giao tỉnh.",
     "Thanh toán trực tuyến trong bản chạy thử là cổng mô phỏng, không kết nối ngân hàng thật; email xác nhận chỉ hiện thông báo, không gửi thật.",
+]
+
+HAN_CHE = [
+    ["G1", "Phân quyền gán vai ngay trong biểu mẫu sửa nhân viên, quyền của từng vai cố định trong mã; báo cáo tồn kho chưa chọn kỳ, chưa xuất tệp; đổi mật khẩu xử lý thẳng ở Controller (chưa tách lớp nghiệp vụ); chưa có ô ghi nhớ đăng nhập."],
+    ["G2", "Danh mục một cấp; chưa lưu lịch sử sửa thông tin mẫu máy và nhãn năng lượng; chưa lọc theo thông số kỹ thuật; khuyến mãi chưa có loại giảm theo hãng và người duyệt; chưa có hỏi đáp dưới trang sản phẩm."],
+    ["G3", "Phí giao luôn bằng 0; khách tự chọn nội thành hay tỉnh; mã giảm giá cộng dồn với khuyến mãi theo mẫu máy; tra đơn theo số điện thoại người nhận; chưa lưu lần đồng ý xử lý dữ liệu; cổng thanh toán là trang mô phỏng."],
+    ["G4", "Duyệt đổi trả chuyển máy về kho ngay, chưa có bước nhân viên nhận máy; mỗi phiếu giao một nhân viên; biên bản lắp đặt lấy danh sách máy từ phiếu xuất; chưa có bảng giá công lắp; khoản lệch tiền thu ghi vào ghi chú đơn."],
+    ["G5", "Mức tồn tối thiểu chung 2 máy cho mọi mẫu; kết quả kiểm kê chỉ xuất CSV, chưa có phiếu điều chỉnh; nhà cung cấp chưa gắn với mẫu máy; hạn bảo hành phía khách chưa cộng số ngày máy nằm ở hãng; máy lỗi chờ gửi hãng chưa có bước xử lý tiếp."],
 ]
 
 CAN_XAC_NHAN = [
@@ -381,7 +439,7 @@ def chuong_4(d, dem, buc, suc):
         for r in dm[1:]:
             dong_uc.append([r[0], sach(r[1]), sach(r[2]), TEN_PHAN_HE[g], so_suc.get(r[0], "")])
     bang(d, ["Mã", "Use case", "Tác nhân", "Phân hệ", "Đặc tả"], dong_uc, rong=[1.3, 2.6, 2.3, 1.7, 0.8], co=11)
-    doan(d, f"Có {len(suc)} use case hệ thống được đặc tả chi tiết ở mục 5.2 (mỗi phân hệ 3 use case chính); tất cả 35 use case đều có trong bản chạy thử (mục 12).", nghieng=True, co=12)
+    doan(d, f"Cả {len(suc)} use case hệ thống đều được đặc tả ở mục 5.2 kèm sơ đồ hoạt động, có sơ đồ lớp hiện thực hoá và sơ đồ tuần tự ở mục 11.2, và đều có trong bản chạy thử (mục 12).", nghieng=True, co=12)
     tieu_de(d, "4.3 Sơ đồ use case", 2)
     hinh(d, os.path.join(SD, "uc-nghiep-vu-tong.png"), "Sơ đồ use case nghiệp vụ tổng của cửa hàng", dem)
     hinh(d, os.path.join(SD, "uc-tong-quat-khach.png"), "Sơ đồ use case tổng quát phía khách", dem, cao_toi_da_cm=17)
@@ -404,7 +462,12 @@ def chuong_5_6_7(d, dem, buc, suc):
     tieu_de(d, "5.2 Đặc tả use case hệ thống", 2)
     for i, (ma, ten, g, ks) in enumerate(suc):
         tieu_de(d, f"5.2.{i + 1} {ma}: {ten}", 3)
-        ve_khoi(d, ks)
+        for k in ks:
+            if k[0] == "img":
+                if os.path.exists(k[1][1]):
+                    hinh(d, k[1][1], f"Sơ đồ hoạt động {ma} {ten}", dem, cao_toi_da_cm=23)
+            else:
+                ve_khoi(d, [k])
     tieu_de(d, "6. Quy tắc nghiệp vụ", 1)
     doan(d, "Gom từ dòng Quy tắc nghiệp vụ của các đặc tả ở mục 5.1. Mã nguồn trong ngoặc cho biết quy tắc lấy từ tài liệu thật (TL) hay từ cửa hàng giả định (MP). Bản chạy thử kiểm các quy tắc này ở các lớp nghiệp vụ (mục 11).")
     br, n = [], 0
@@ -498,7 +561,7 @@ def chuong_9_10_11(d, dem):
     p7 = os.path.join(TK, "chuong-7-thiet-ke-chuc-nang.md")
     if os.path.exists(p7):
         tieu_de(d, "11. Thiết kế chức năng hệ thống", 1)
-        ve_chuong_md(d, p7, 11, dem, bo_h3=("Danh sách ảnh màn hình",))
+        ve_chuong_md(d, p7, 11, dem, bo_h3=("Danh sách ảnh màn hình",), text=gop_hien_thuc_hoa(p7))
 
 
 def chuong_12_13(d, dem):
@@ -512,6 +575,9 @@ def chuong_12_13(d, dem):
         gach_dau(d, g)
     tieu_de(d, "13.2 Điểm cần xác nhận", 2)
     bang(d, ["Mã", "Nội dung cần xác nhận", "Ảnh hưởng"], CAN_XAC_NHAN, rong=[0.6, 4.4, 2])
+    tieu_de(d, "13.3 Chỗ bản chạy thử chưa làm đúng phân tích", 2)
+    doan(d, "Nhóm đối chiếu từng use case với mã nguồn; chi tiết ghi ở dòng \"Ghi chú hiện thực\" cuối mỗi đặc tả (mục 5.2). Tóm tắt các điểm chính:")
+    bang(d, ["Phân hệ", "Chưa làm hoặc làm khác"], HAN_CHE, rong=[1.1, 5.5])
 
 
 def main():

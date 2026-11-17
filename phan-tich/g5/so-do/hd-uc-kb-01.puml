@@ -1,0 +1,38 @@
+@startuml hd-uc-kb-01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 200
+
+|Thủ kho|
+start
+:Mở trang Nhà cung cấp;
+|Hệ thống|
+:Hiện danh sách nhà cung cấp, đang hợp tác ở đầu;
+|Thủ kho|
+if () then ([thêm, sửa])
+  :Nhập tên, số điện thoại, email, địa chỉ; bấm Lưu;
+  |Hệ thống|
+  :Kiểm tra định dạng, trùng tên;
+  if () then ([hợp lệ])
+  else ([sai, trùng])
+    :Báo lỗi, giữ biểu mẫu;
+    stop
+  endif
+  :Lưu nhà cung cấp (mới: Đang hợp tác);
+else ([ngừng, hợp tác lại, xoá])
+  |Thủ kho|
+  :Bấm Ngừng hợp tác, Hợp tác lại hoặc Xoá;
+  |Hệ thống|
+  if () then ([chưa có chứng từ])
+  else ([có chứng từ])
+    :Báo không xoá được, gợi ý Ngừng hợp tác;
+    stop
+  endif
+  :Đổi trạng thái hợp tác hoặc xoá;
+endif
+:Báo kết quả, hiện lại danh sách;
+stop
+@enduml

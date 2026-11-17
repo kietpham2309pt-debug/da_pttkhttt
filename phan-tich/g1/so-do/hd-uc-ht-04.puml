@@ -1,0 +1,45 @@
+@startuml hd-uc-ht-04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 165
+
+|Quản lý cửa hàng, Kế toán|
+start
+:Chọn mục Báo cáo doanh thu;
+|Hệ thống|
+:Hiện báo cáo tháng hiện tại, nhóm theo ngày;
+repeat
+  |Quản lý cửa hàng, Kế toán|
+  :Chọn khoảng ngày, cách nhóm, bấm Xem;
+  |Hệ thống|
+  if () then ([ngày đầu sau ngày cuối])
+    :Báo "Khoảng ngày không hợp lệ", giữ báo cáo cũ;
+  else ([hợp lệ])
+    if () then ([quá 12 tháng])
+      :Chỉ cho nhóm theo tháng;
+    else ([không quá])
+    endif
+    :Lấy đơn Hoàn thành trong khoảng, trừ đơn đã trả hàng và khoản hoàn tiền;
+    if () then ([không có đơn])
+      :Báo "Không có doanh thu trong khoảng đã chọn";
+    else ([có đơn])
+      :Hiện bảng số đơn, doanh thu, giảm giá, đã thu, dòng tổng, biểu đồ cột;
+      if () then ([đã xác nhận hết])
+      else ([có])
+        :Đánh dấu tiền thu khi giao chưa xác nhận, liệt kê các đơn;
+      endif
+    endif
+  endif
+repeat while () is ([xem khoảng khác]) not ([xong])
+|Quản lý cửa hàng, Kế toán|
+if () then ([xuất tệp])
+  :Bấm Xuất tệp;
+  |Hệ thống|
+  :Tạo tệp bảng tính đúng các cột đang hiện, kèm khoảng ngày, thời điểm xuất;
+else ([không xuất])
+endif
+stop
+@enduml

@@ -1,0 +1,85 @@
+@startuml lht-kb04
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "phieu-xuat.html" as T1 <<boundary>> {
+  đơn chờ xuất, yêu cầu
+  đổi máy, phiếu đã lập
+}
+class "phieu-xuat-lap.html" as T2 <<boundary>> {
+  serial gợi ý, ô quét serial
+}
+class "phieu-xuat-chi-tiet.html" as T3 <<boundary>> {
+  phiếu đã khoá, serial
+}
+class PhieuXuatController <<boundary>> {
+  + danhSach(model) : String
+  + lap(loai, ma, model, ra) : String
+  + luu(loai, ma, p, model, ra) : String
+  + chiTiet(ma, model, ra) : String
+}
+class QuyenG5 <<control>> {
+  + batBuoc(vai…) : NhanVien
+}
+class PhieuXuatBUS <<control>> {
+  + donChoXuat() : List<DonChoXuat>
+  + yeuCauDoiMayChoXuat()
+  + taoPhieu(loai, ma) : PhieuXuatNhap
+  + luu(loai, ma, serialChon, thuKho) : Long
+  + xem(ma) : PhieuXuatXem
+}
+class SerialBUS <<control>> {
+  + doiTrangThai(may, moi)
+}
+class DonHangBUS <<control>> {
+  + doiTrangThai(don, moi, nguoiLam, ghiChu)
+}
+class DonHangTruyVanG5 <<DAO>> {
+  + chuaCoPhieuXuat(tt)
+  + kemChiTiet(ma)
+  + daCoPhieuXuat(ma)
+}
+class SerialTruyVanG5 <<DAO>> {
+  + theoMauVaTrangThai(ma, tt)
+  + dayDuNhieu(ds)
+}
+class PhieuXuatTruyVanG5 <<DAO>> {
+  + danhSach()
+  + chiTiet(ma)
+  + save(p)
+}
+class PhieuXuat <<entity>> {
+  - ngayXuat : LocalDateTime
+  - lyDoXuat : String
+}
+class SanPhamSerial <<entity>> {
+  - soSerial : String
+  - trangThai : TrangThaiSerial
+}
+class DonHang <<entity>> {
+  - trangThai : TrangThaiDonHang
+}
+
+T1 ..> PhieuXuatController : GET /lap
+T2 ..> PhieuXuatController : POST /lap
+T3 ..> PhieuXuatController
+PhieuXuatController ..> QuyenG5
+PhieuXuatController ..> PhieuXuatBUS
+PhieuXuatBUS ..> SerialBUS
+PhieuXuatBUS ..> DonHangBUS
+PhieuXuatBUS ..> DonHangTruyVanG5
+PhieuXuatBUS ..> SerialTruyVanG5
+PhieuXuatBUS ..> PhieuXuatTruyVanG5
+PhieuXuatTruyVanG5 ..> PhieuXuat
+SerialTruyVanG5 ..> SanPhamSerial
+DonHangTruyVanG5 ..> DonHang
+PhieuXuat "*" --> "1" DonHang
+PhieuXuat "*" -- "1..*" SanPhamSerial : ChiTietPhieuXuat
+@enduml

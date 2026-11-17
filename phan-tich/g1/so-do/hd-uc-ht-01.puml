@@ -1,0 +1,48 @@
+@startuml hd-uc-ht-01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 170
+
+|Người dùng|
+start
+:Mở trang đăng nhập;
+|Hệ thống|
+:Hiện ô tên đăng nhập, mật khẩu, ghi nhớ đăng nhập;
+repeat
+  |Người dùng|
+  :Nhập tên đăng nhập, mật khẩu, bấm Đăng nhập;
+  |Hệ thống|
+  if () then ([có ô trống])
+    :Báo ngay dưới ô để trống;
+  else ([đủ hai ô])
+    :Tìm tài khoản, so mật khẩu đã băm;
+    if () then ([Đã khoá])
+      :Báo "Tài khoản đã bị khoá";
+      stop
+    else ([Đang dùng])
+    endif
+    if () then ([sai tên hoặc mật khẩu])
+      :Tăng số lần sai liên tiếp;
+      if () then ([đủ 5 lần])
+        :Khoá đăng nhập 15 phút;
+        stop
+      else ([chưa đủ])
+      endif
+      :Báo "Tên đăng nhập hoặc mật khẩu không đúng";
+    else ([đúng])
+      :Mở phiên, đặt lại số lần sai;
+    endif
+  endif
+repeat while () is ([chưa đăng nhập được]) not ([đã mở phiên])
+if () then ([phải đổi mật khẩu được cấp])
+  :Chuyển sang đổi mật khẩu (UC-HT-06);
+elseif () then ([khách hàng])
+  :Về trang chủ;
+else ([nhân viên])
+  :Về trang Tổng quan quản trị;
+endif
+stop
+@enduml

@@ -1,0 +1,25 @@
+@startuml hd-uc-ht-06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 170
+
+|Người dùng|
+start
+:Chọn Đổi mật khẩu hoặc bị chuyển tới sau lần đăng nhập đầu;
+|Hệ thống|
+:Hiện ô mật khẩu hiện tại, mật khẩu mới, nhập lại;
+repeat
+  |Người dùng|
+  :Nhập ba ô, bấm Đổi mật khẩu;
+  |Hệ thống|
+  :Kiểm tra mật khẩu hiện tại, mật khẩu mới;
+  backward :Báo lỗi: sai mật khẩu hiện tại, mới dưới 6 ký tự, nhập lại không khớp hoặc trùng mật khẩu cũ;
+repeat while () is ([không hợp lệ]) not ([hợp lệ])
+:Lưu mật khẩu mới đã băm, bỏ đánh dấu phải đổi;
+:Kết thúc các phiên của tài khoản;
+:Báo "Đã đổi mật khẩu", mời đăng nhập lại;
+stop
+@enduml

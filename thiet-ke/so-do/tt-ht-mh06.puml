@@ -1,0 +1,52 @@
+@startuml tt-ht-mh06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__vãng lai__" as KH
+boundary "__: tra-cuu-don__\n__.html__" as TC
+boundary "__: TraCuuDon__\n__Controller__" as CTL
+control "__: PhienKhach__\n__(phiên)__" as PH
+control "__: DonHang__\n__KhachBUS__" as BUS
+control "__: DonHang__\n__BUS__" as DHB
+participant "__: DonHang__\n__TruyVan__\n__Khach__" as DHD <<DAO>>
+participant "__: GiaoDich__\n__TruyVan__\n__Khach__" as GDD <<DAO>>
+
+KH -> TC : 1: Nhập số điện\nthoại, mã đơn,\nbấm Tra cứu
+activate TC
+TC -> CTL ++ : 2: tra(soDienThoai,\nmaDon)
+CTL -> PH ++ : 3: dangKhoaTra()
+PH --> CTL -- : 4: false
+CTL -> CTL : 5: kiểm dạng,\nDinhDangTien.\ndocMaDon(maDon)
+CTL -> BUS ++ : 6: timDon(sdt, ma)
+BUS -> DHD ++ : 7: findById(ma)
+DHD --> BUS -- : 8: DonHang
+BUS --> CTL -- : 9: Optional\n[khớp số điện thoại]
+alt không có đơn khớp
+  CTL -> PH ++ : 10: ghiTraSai()
+  PH --> CTL -- : 11: đủ 5 lần?\n(khoá 15 phút)
+  CTL --> TC : 12: "Không tìm thấy\nđơn…", còn n lần
+else tìm thấy
+  CTL -> PH : 13: ghiTraDung(),\nchoXemDon(ma)
+  CTL --> TC : 14: redirect\n/tra-cuu-don/{ma}
+  TC -> CTL : 15: chiTiet(ma)
+  CTL -> CTL : 16: quyen.\nduocXem(ma)
+  CTL -> BUS ++ : 17: thongTin(ma)
+  BUS -> DHD ++ : 18: layDayDu(ma)
+  DHD --> BUS -- : 19: DonHang
+  BUS -> DHB ++ : 20: lichSu(don)
+  DHB --> BUS -- : 21: các mốc
+  BUS -> GDD ++ : 22: findByDonHang_\nMaDonHang…(ma)
+  GDD --> BUS -- : 23: giao dịch
+  BUS -> BUS : 24: hauMaiTV.\nphieuGiao(ma);\ntính đã trả, còn lại
+  BUS --> CTL -- : 25: ThongTinDon
+  CTL --> TC : 26: "khach/\nchi-tiet-don"
+  TC --> KH : 27: Trạng thái, mốc,\ntiền, hẹn giao,\nnút Thanh toán\nngay / Huỷ đơn
+end
+deactivate CTL
+deactivate TC
+@enduml

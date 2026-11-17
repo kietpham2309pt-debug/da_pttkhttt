@@ -4,6 +4,23 @@ Bản 1.0 (14/11/2026) · nhóm 4
 
 ## 6.1 Tinh chế lớp
 
+### Tiên đề và hệ luận áp dụng
+
+Thiết kế lớp bám hai tiên đề của thiết kế hướng đối tượng (mục 6.1 giáo trình):
+
+| Tiên đề, hệ luận | Nội dung | Áp dụng trong thiết kế của nhóm |
+|---|---|---|
+| Tiên đề 1 (độc lập) | Giữ các thành phần độc lập với nhau | Mỗi phân hệ có lớp nghiệp vụ riêng (`DonHangQuanTriBUS`, `PhieuNhapBUS`…); phân hệ chỉ nối với nhau qua trạng thái đơn hàng và trạng thái chiếc máy, đổi trạng thái đi qua một lớp chung (`DonHangBUS`, `SerialBUS`) |
+| Tiên đề 2 (ít thông tin) | Giảm lượng thông tin mỗi thành phần phải biết | Lớp giao diện chỉ gọi lớp nghiệp vụ, không gọi thẳng lớp truy cập dữ liệu; thuộc tính dẫn xuất không lưu mà tính khi dùng |
+| Hệ luận 1: ít ghép nối, ít thông tin | Hai lớp chỉ biết nhau khi thật cần | Chiều điều hướng một chiều từ phía "nhiều" về phía "một" (xem dưới) |
+| Hệ luận 2: một lớp một mục đích | Mỗi lớp làm một việc | Tách `SanPham` (mẫu máy) với `SanPhamSerial` (chiếc máy), tách `PhieuGiaoHang` với `PhieuLapDat` |
+| Hệ luận 3: nhiều lớp đơn giản | Chia lớp lớn thành lớp nhỏ dễ dùng lại | Chi tiết phiếu, chi tiết đơn là lớp riêng thay vì cột lặp trong lớp cha |
+| Hệ luận 4: ánh xạ chặt | Lớp thiết kế khớp với khái niệm nghiệp vụ | Tên lớp giữ đúng tên thực thể nghiệp vụ ở chương 3 (Phiếu nhập kho → `PhieuNhap`) |
+| Hệ luận 5: chuẩn hoá | Dùng lại thành phần chuẩn | Trạng thái dùng kiểu liệt kê; truy cập dữ liệu dùng chung một khuôn DAO |
+| Hệ luận 6: kế thừa | Gom phần chung lên lớp cha | Khách hàng kế thừa khách vãng lai ở mô hình use case; vai trò nhân viên dùng chung lớp `TaiKhoan` + `VaiTro` |
+
+### Bổ sung cho từng lớp
+
 Từ sơ đồ lớp phân tích (chương 5), mỗi lớp được bổ sung:
 - **Kiểu dữ liệu**: tiền dùng `long` (đơn vị đồng, không dùng số thực để khỏi sai số); ngày dùng `LocalDate`, thời điểm `LocalDateTime`, giờ hẹn `LocalTime`;
   trạng thái và phân loại dùng kiểu liệt kê (`TrangThaiDonHang`, `TrangThaiSerial`, `LoaiKhuyenMai`…) để không gõ sai giá trị.

@@ -1,0 +1,80 @@
+@startuml lht-sp03
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "san-pham.html" as DS <<boundary>> {
+  nút Giá, Mở bán,
+  lọc trạng thái
+}
+class "gia.html" as TG <<boundary>> {
+  giá bán mới, giá niêm yết,
+  lý do, giá nhập gần nhất,
+  lịch sử giá
+}
+class QuanTriSanPhamController <<boundary>> {
+  + gia(ma, model, ra) : String
+  + capNhatGia(ma, giaMoi, giaNiemYet, lyDo, model, ra)
+  + moBan(ma, ra) : String
+  - chiQuanLy()
+  - docSo(s) : Long
+}
+class QuanTriSanPhamBUS <<control>> {
+  + tim(ma) : SanPham
+  + giaNhapGanNhat(maSanPham) : Long
+  + lichSuGia(maSanPham) : List<LichSuGia>
+  + capNhatGia(maSanPham, giaMoi, giaNiemYet, lyDo)
+  + moBan(ma) : String
+}
+class TaiKhoanBUS <<control>> {
+  + coVai(vai) : boolean
+  + batBuocNhanVien() : NhanVien
+}
+class SanPhamTruyVanG12 <<DAO>> {
+  + timDayDu(ma) : Optional<SanPham>
+  + giaNhapMoiNhat(ma, trang) : List<Long>
+  + lichSuGia(ma) : List<LichSuGia>
+  + save(sp) : SanPham
+}
+class LichSuGiaDAO <<DAO>> {
+  + save(ls) : LichSuGia
+}
+class SanPham <<entity>> {
+  - giaBan : Long
+  - giaNiemYet : Long
+  - trangThai : TrangThaiSanPham
+}
+class LichSuGia <<entity>> {
+  - giaCu : Long
+  - giaMoi : Long
+  - lyDo : String
+  - duoiGiaNhap : Boolean
+  - thoiDiem : LocalDateTime
+}
+class ChiTietPhieuNhap <<entity>> {
+  - donGiaNhap : Long
+}
+class NhanVien <<entity>> {
+  - hoTen : String
+}
+
+DS ..> QuanTriSanPhamController : POST …/{ma}/mo-ban
+TG ..> QuanTriSanPhamController : POST …/{ma}/gia
+QuanTriSanPhamController ..> QuanTriSanPhamBUS
+QuanTriSanPhamController ..> TaiKhoanBUS
+QuanTriSanPhamBUS ..> TaiKhoanBUS
+QuanTriSanPhamBUS ..> SanPhamTruyVanG12
+QuanTriSanPhamBUS ..> LichSuGiaDAO
+SanPhamTruyVanG12 ..> SanPham
+SanPhamTruyVanG12 ..> ChiTietPhieuNhap
+LichSuGiaDAO ..> LichSuGia
+LichSuGia "*" --> "1" SanPham : giá của
+LichSuGia "*" --> "1" NhanVien : người đổi
+ChiTietPhieuNhap "*" --> "1" SanPham
+@enduml

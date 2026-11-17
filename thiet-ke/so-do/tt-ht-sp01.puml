@@ -1,0 +1,39 @@
+@startuml tt-ht-sp01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Quản lý__\n__cửa hàng__" as QL
+boundary "__: danh-muc-__\n__form.html__" as TR
+boundary "__: QuanTri__\n__DanhMuc__\n__Controller__" as CTL
+control "__: QuanTri__\n__DanhMucBUS__" as BUS
+participant "__: DanhMuc__\n__DAO__" as DMD <<DAO>>
+participant "__: DanhMuc__\n__TruyVanG12__" as TV <<DAO>>
+
+QL -> TR : 1: Nhập mã, tên,\nthứ tự, bấm Lưu
+activate TR
+TR -> CTL ++ : 2: luuDanhMuc(maDanhMuc,\ntenDanhMuc, thuTu,\nthemMoi, model, ra)
+CTL -> BUS ++ : 3: luuDanhMuc(ma,\nten, thuTu, themMoi)
+BUS -> BUS : 4: kiểm tra mã\nchữ thường không\ndấu, thứ tự ≥ 0
+BUS -> DMD ++ : 5: existsById(m)
+DMD --> BUS -- : 6: boolean
+BUS -> TV ++ : 7: demTrungTen\nDanhMuc(t, tru)
+TV --> BUS -- : 8: số tên trùng
+alt thiếu ô, sai định dạng, mã hoặc tên trùng
+  BUS --> CTL : 9: LoiNhapLieu(loi)
+  CTL --> TR : 10: "danh-muc-form"\n(loiO)
+  TR --> QL : 11: Báo lỗi dưới\ntừng ô, không lưu
+else hợp lệ
+  BUS -> DMD ++ : 12: save(dm)
+  DMD --> BUS -- : 13: DanhMuc
+  BUS --> CTL : 14: xong
+  CTL --> TR : 15: redirect\n/quan-tri/danh-muc\n"Đã lưu danh mục …"
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

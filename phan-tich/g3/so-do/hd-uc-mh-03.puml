@@ -1,0 +1,35 @@
+@startuml hd-uc-mh-03
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 220
+
+|Khách vãng lai|
+start
+:Chọn số lượng, lắp đặt; bấm "Thêm vào giỏ" hoặc "Mua ngay";
+|Hệ thống|
+:Kiểm tra mẫu máy đang bán, có giá, tồn khả dụng, tối đa 20 chiếc;
+if () then ([ngừng bán, hết hàng, vượt tồn])
+  :Báo lỗi ở trang chi tiết mẫu máy;
+  stop
+else ([hợp lệ])
+endif
+:Thêm dòng vào giỏ, cộng dồn nếu mẫu đã có;
+if () then ([Mua ngay])
+  :Chuyển sang trang đặt hàng (UC-MH-04);
+  stop
+else ([Thêm vào giỏ])
+endif
+repeat
+  :Tính giá sau khuyến mãi, tồn, tạm tính; hiện giỏ, đánh dấu dòng lỗi;
+  |Khách vãng lai|
+  :Sửa số lượng (+, −), bật tắt "Lắp đặt" hoặc bấm "Xoá" một dòng;
+  |Hệ thống|
+  :Kiểm tra tồn khả dụng, tối đa 20; cập nhật giỏ, số lượng về 0 thì bỏ dòng;
+repeat while () is ([sửa tiếp hoặc giỏ còn dòng lỗi]) not ([bấm "Tiến hành đặt hàng"])
+|Hệ thống|
+:Chuyển sang trang đặt hàng (UC-MH-04);
+stop
+@enduml

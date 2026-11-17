@@ -1,0 +1,65 @@
+@startuml lht-kb01
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "nha-cung-cap.html" as T1 <<boundary>> {
+  danh sách, nút Sửa, Ngừng
+  hợp tác, Hợp tác lại, Xoá
+}
+class "nha-cung-cap-form.html" as T2 <<boundary>> {
+  tên, số điện thoại,
+  email, địa chỉ
+}
+class NhaCungCapController <<boundary>> {
+  + danhSach(model) : String
+  + them(model) : String
+  + sua(ma, model, ra) : String
+  + luu(ma, ten, sdt, email, diaChi, …)
+  + ngung(ma, ra) : String
+  + hopTac(ma, ra) : String
+  + xoa(ma, ra) : String
+}
+class NhaCungCapBUS <<control>> {
+  + tatCa() : List<NhaCungCap>
+  + dangHopTac() : List<NhaCungCap>
+  + tim(ma) : NhaCungCap
+  + soChungTu(ma) : long
+  + luu(ma, ten, sdt, email, diaChi)
+  + doiHopTac(ma, dangHopTac)
+  + xoa(ma)
+}
+class NhaCungCapTruyVanG5 <<DAO>> {
+  + findAllByOrderByDangHopTac…()
+  + existsByTenNhaCungCapIgnoreCase(t)
+  + demPhieuNhap(ma) : long
+  + demDonDat(ma) : long
+  + save(n), delete(n)
+}
+class NhaCungCap <<entity>> {
+  - maNhaCungCap : Long
+  - tenNhaCungCap : String
+  - soDienThoai : String
+  - email : String
+  - diaChi : String
+  - dangHopTac : Boolean
+}
+class DonDatHangNCC <<entity>>
+class PhieuNhap <<entity>>
+
+T1 ..> NhaCungCapController : GET, POST /{ma}/…
+T2 ..> NhaCungCapController : POST /luu
+NhaCungCapController ..> NhaCungCapBUS
+NhaCungCapBUS ..> NhaCungCapTruyVanG5
+NhaCungCapTruyVanG5 ..> NhaCungCap
+NhaCungCapTruyVanG5 ..> DonDatHangNCC : đếm
+NhaCungCapTruyVanG5 ..> PhieuNhap : đếm
+DonDatHangNCC "*" --> "1" NhaCungCap
+PhieuNhap "*" --> "1" NhaCungCap
+@enduml

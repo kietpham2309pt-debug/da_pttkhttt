@@ -1,0 +1,53 @@
+@startuml hd-uc-mh-04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 250
+
+|Khách vãng lai|
+start
+:Bấm "Tiến hành đặt hàng";
+|Hệ thống|
+:Kiểm tra mẫu máy trong giỏ còn bán, còn hàng;
+if () then ([có mẫu ngừng bán, hết hàng])
+  :Báo tên mẫu máy, quay lại giỏ hàng;
+  stop
+else ([còn đủ])
+endif
+:Hiện trang đặt hàng; điền sẵn thông tin nếu đã đăng nhập;
+repeat
+  |Khách vãng lai|
+  :Nhập người nhận, địa chỉ, chọn lắp đặt, cách thanh toán;
+  if () then ([nhập mã giảm giá])
+    |Hệ thống|
+    :Thực hiện UC-MH-08 Áp mã giảm giá;
+  else ([không có mã])
+  endif
+  |Khách vãng lai|
+  :Bấm "Xem lại đơn";
+  |Hệ thống|
+  :Kiểm tra ô bắt buộc; tính phí lắp (chỉ nội thành), tiền cọc, tổng;
+  backward :Báo lỗi dưới ô sai;
+repeat while () is ([ô sai hoặc khách bấm "Sửa"]) not ([hợp lệ])
+repeat
+  :Hiện màn hình xác nhận, ba ô đồng ý không tích sẵn;
+  |Khách vãng lai|
+  :Tích hai ô bắt buộc, bấm "Đặt hàng";
+  |Hệ thống|
+  :Kiểm tra ô đồng ý, kiểm lại giá và tồn kho;
+  backward :Báo cần đồng ý hoặc báo giá mới;
+repeat while () is ([chưa đồng ý, giá hoặc tồn đã đổi]) not ([hợp lệ])
+:Tạo đơn, lưu giá lúc đặt, lần đồng ý, lịch sử trạng thái;
+-[dashed]->
+:Đơn hàng
+[Chờ xác nhận]; <<object>>
+-[dashed]->
+:Làm trống giỏ; hiện "Đặt hàng thành công" kèm mã đơn;
+if () then ([có tiền cọc hoặc chọn trả trực tuyến])
+  :Hiện nút "Thanh toán ngay" (UC-MH-05);
+else ([trả khi nhận hàng])
+endif
+stop
+@enduml

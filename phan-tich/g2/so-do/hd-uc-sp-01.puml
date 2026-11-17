@@ -1,0 +1,39 @@
+@startuml hd-uc-sp-01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 220
+
+|Quản lý cửa hàng|
+start
+:Chọn mục Danh mục, thương hiệu;
+|Hệ thống|
+:Hiện bảng danh mục, bảng thương hiệu kèm số mẫu máy;
+|Quản lý cửa hàng|
+:Bấm Thêm, Sửa hoặc Xoá ở bảng danh mục hay bảng thương hiệu;
+|Hệ thống|
+if () then ([xoá])
+  :Đếm mẫu máy thuộc danh mục hoặc thương hiệu;
+  if () then ([còn mẫu máy])
+    :Báo "Không xoá được … vì còn n sản phẩm";
+  else ([không còn])
+    :Xoá, báo "Đã xoá";
+  endif
+  stop
+else ([thêm, sửa])
+  :Hiện biểu mẫu (sửa: có sẵn dữ liệu, không sửa mã);
+endif
+repeat
+  |Quản lý cửa hàng|
+  :Nhập mã, tên, thứ tự (thương hiệu: tên, xuất xứ), bấm Lưu;
+  |Hệ thống|
+  :Kiểm tra ô bắt buộc, định dạng mã, thứ tự;
+  :Kiểm tra mã, tên chưa trùng;
+backward :Báo lỗi dưới ô;
+repeat while () is ([thiếu, sai, trùng]) not ([hợp lệ])
+:Lưu danh mục hoặc thương hiệu;
+:Báo "Đã lưu", về danh sách;
+stop
+@enduml

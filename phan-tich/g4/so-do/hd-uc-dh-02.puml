@@ -1,0 +1,40 @@
+@startuml hd-uc-dh-02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 260
+
+|Quản lý cửa hàng|
+start
+:Mở trang "Lịch giao lắp";
+|Hệ thống|
+:Hiện đơn Đã xác nhận chưa xếp lịch và lịch từng nhân viên theo khung giờ;
+|Quản lý cửa hàng|
+:Chọn một đơn;
+|Hệ thống|
+:Hiện chi tiết đơn, máy cần lắp;
+|Quản lý cửa hàng|
+if () then ([nội thành])
+else ([đơn tỉnh])
+  :Chọn "Gửi đơn vị vận chuyển", nhập ngày gửi dự kiến;
+  |Hệ thống|
+  :Lưu phiếu giao ghi đơn vị vận chuyển, không kiểm tra trùng;
+  stop
+endif
+|Quản lý cửa hàng|
+repeat
+  :Chọn ngày, khung giờ, nhân viên, loại việc (Giao, Giao kèm lắp, Khảo sát), bấm "Lưu lịch";
+  |Hệ thống|
+  :Kiểm tra ngày giờ sau hiện tại và trùng khung giờ của người được chọn;
+  if () then ([trùng])
+    :Cảnh báo trùng, gợi ý người trống và khung trống gần nhất;
+  else ([không trùng])
+  endif
+repeat while (chọn lại?) is ([có]) not ([không trùng hoặc lưu kèm lý do])
+|Hệ thống|
+:Lưu ngày, khung giờ, người phụ trách lên phiếu giao; ghi người xếp, thời điểm;
+:Thêm việc vào lịch nhân viên; đơn hiện ngày giờ hẹn;
+stop
+@enduml

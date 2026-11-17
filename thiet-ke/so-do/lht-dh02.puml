@@ -1,0 +1,80 @@
+@startuml lht-dh02
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "giao-hang.html" as T1 <<boundary>> {
+  đơn chờ phân công,
+  lịch ngày theo nhân viên
+}
+class "phan-cong.html" as T2 <<boundary>> {
+  ngày, khung giờ, người,
+  loại việc, lý do trùng
+}
+class GiaoHangController <<boundary>> {
+  + trangChinh(ngay, nv, model)
+  + formPhanCong(don, model, ra)
+  + formDoiLich(ma, model, ra)
+  + phanCong(f, loiNhap, model, ra)
+}
+class GiaoHangBUS <<control>> {
+  + donChoPhanCong() : List<DonCho>
+  + lich(ngay, maNhanVien)
+  + formMoi(maDon) : PhanCongForm
+  + formSua(maPhieu) : PhanCongForm
+  + phanCong(f) : KetQuaPhanCong
+  - trungLich(maNV, ngay, bd, kt, boQua)
+  - khungTrongGanNhat(maNV, ngay, …)
+}
+class TaiKhoanBUS <<control>> {
+  + coVai(vai) : boolean
+  + batBuocNhanVien()
+}
+class DonHangTruyVanG4 <<DAO>> {
+  + theoCacTrangThai(tt)
+  + layDayDu(ma)
+}
+class PhieuGiaoTruyVanG4 <<DAO>> {
+  + theoDon(don)
+  + lichNgay(ngay, nv)
+  + layDayDu(ma)
+  + save(p)
+}
+class NhanVienTruyVanG4 <<DAO>> {
+  + theoVai(maVaiTro)
+}
+class PhieuGiaoHang <<entity>> {
+  - loaiViec : LoaiViecGiao
+  - ngayHen : LocalDate
+  - gioBatDau, gioKetThuc
+  - donViVanChuyen : String
+  - lyDoTrungLich : String
+  - trangThai : TrangThaiPhieuGiao
+}
+class DonHang <<entity>> {
+  - noiThanh, canLapDat : Boolean
+  - trangThai : TrangThaiDonHang
+}
+class NhanVien <<entity>> {
+  - hoTen : String
+}
+
+T1 ..> GiaoHangController : GET /quan-tri/giao-hang
+T2 ..> GiaoHangController : POST /phan-cong
+GiaoHangController ..> GiaoHangBUS
+GiaoHangController ..> TaiKhoanBUS
+GiaoHangBUS ..> DonHangTruyVanG4
+GiaoHangBUS ..> PhieuGiaoTruyVanG4
+GiaoHangBUS ..> NhanVienTruyVanG4
+DonHangTruyVanG4 ..> DonHang
+PhieuGiaoTruyVanG4 ..> PhieuGiaoHang
+NhanVienTruyVanG4 ..> NhanVien
+DonHang "1" -- "0..*" PhieuGiaoHang
+PhieuGiaoHang "*" --> "0..1" NhanVien
+@enduml

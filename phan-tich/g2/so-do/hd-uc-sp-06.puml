@@ -1,0 +1,43 @@
+@startuml hd-uc-sp-06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 220
+
+|Khách vãng lai|
+start
+:Bấm một mẫu máy ở danh sách hoặc trang chủ;
+|Hệ thống|
+:Tìm mẫu máy theo mã;
+if () then ([không có hoặc Chưa mở bán])
+  :Báo "Không tìm thấy";
+  stop
+else ([có])
+  :Tính giá sau khuyến mãi còn hạn, số máy còn bán được;
+endif
+:Hiện ảnh, giá, khuyến mãi, tình trạng, bảo hành, thông số, đánh giá, mẫu cùng danh mục (Ngừng bán, Tạm hết hàng: ẩn nút mua);
+|Khách vãng lai|
+if () then ([đặt mua])
+  :Chọn số lượng, lắp đặt, bấm Thêm vào giỏ hoặc Mua ngay (sang G3);
+  stop
+else ([so sánh])
+endif
+repeat
+  |Khách vãng lai|
+  :Bấm Thêm vào so sánh;
+  |Hệ thống|
+  if () then ([đã đủ 3 mẫu])
+    :Báo "Đã đủ 3 mẫu máy để so sánh";
+  else ([chưa đủ])
+    :Thêm mẫu máy vào danh sách so sánh của phiên;
+  endif
+repeat while () is ([mở thêm mẫu khác]) not ([xem bảng])
+if () then ([dưới 2 mẫu])
+  :Báo "Cần ít nhất 2 mẫu máy";
+else ([2–3 mẫu])
+  :Hiện bảng: mỗi cột một mẫu máy, mỗi dòng một thông số, thiếu ghi "—";
+endif
+stop
+@enduml

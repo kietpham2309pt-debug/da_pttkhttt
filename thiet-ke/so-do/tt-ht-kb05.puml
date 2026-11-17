@@ -1,0 +1,50 @@
+@startuml tt-ht-kb05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Thủ kho__" as TK
+boundary "__: ton-kho__\n__.html__" as TR
+boundary "__: TonKho__\n__Controller__" as CTL
+control "__: TonKho__\n__BUS__" as BUS
+participant "__: SanPham__\n__TruyVanG5__" as SPD <<DAO>>
+participant "__: Serial__\n__TruyVanG5__" as SED <<DAO>>
+
+== Xem tồn, cảnh báo ==
+TK -> TR : 1: Mở trang\nTồn kho
+activate TR
+TR -> CTL ++ : 2: xem(model)
+CTL -> BUS ++ : 3: tonTheoMau()
+BUS -> SED ++ : 4: demTheoMau\nVaTrangThai()
+SED --> BUS -- : 5: số máy theo\nmẫu, trạng thái
+BUS -> SPD ++ : 6: tatCaTheo\nDanhMuc()
+SPD --> BUS -- : 7: mẫu máy
+BUS --> CTL -- : 8: List<DongTon>
+CTL -> CTL : 9: đếm mẫu\nduoiToiThieu()
+CTL --> TR -- : 10: bảng tồn, tô\nmẫu dưới tối thiểu
+== Kiểm kê ==
+TK -> TR : 11: Nhập số đếm\nthực tế; bấm So\nvới hệ thống
+TR -> CTL ++ : 12: kiemKe(p)
+CTL -> BUS ++ : 13: kiemKe(soDem)
+BUS -> BUS : 14: tonTheoMau()
+alt chưa nhập, số âm hoặc\nkhông phải số nguyên
+  BUS --> CTL : 15: LoiNghiepVu
+  CTL --> TR : 16: báo lỗi,\ngiữ số đã nhập
+else hợp lệ
+  BUS --> CTL : 17: List<DongKiemKe>
+  CTL -> CTL : 18: đếm mẫu có\nchenhLech() ≠ 0
+  CTL --> TR : 19: bảng kết quả,\n"khớp" hoặc\n"có … mẫu lệch"
+end
+deactivate BUS
+deactivate CTL
+TK -> TR : 20: Bấm Tải kết\nquả kiểm kê
+TR -> CTL ++ : 21: taiCsv(p)
+CTL -> BUS ++ : 22: kiemKe(soDem)
+BUS --> CTL -- : 23: List<DongKiemKe>
+CTL --> TR -- : 24: tệp kiem-ke-\n….csv
+deactivate TR
+@enduml

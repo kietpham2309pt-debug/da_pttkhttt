@@ -1,0 +1,37 @@
+@startuml hd-uc-kb-08
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 200
+
+|Thủ kho|
+start
+:Mở trang Nhận lại máy về kho;
+|Hệ thống|
+:Hiện máy của đơn giao không thành công và máy trả về từ đổi trả;
+|Thủ kho|
+:Nhận máy, đối chiếu serial, kiểm tra hộp, seal, bật thử;
+if () then ([khớp])
+else ([không khớp])
+  :Serial khác phiếu xuất: không nhận, báo quản lý;
+  stop
+endif
+:Ghi tình trạng; máy đổi trả thì chọn Còn tốt hoặc Máy lỗi; bấm Nhận về kho;
+|Hệ thống|
+if () then ([hợp lệ])
+else ([lỗi])
+  :Báo lỗi (không chờ nhận, thiếu tình trạng, thiếu kết quả), không nhận;
+  stop
+endif
+if () then ([giao không thành công])
+  :Đã xuất sang Trong kho, bỏ gắn đơn;
+elseif () then ([trả về, còn tốt])
+  :Trả về kho sang Trong kho;
+else ([trả về, máy lỗi])
+  :Trả về kho sang Lỗi chờ gửi hãng;
+endif
+:Ghi lịch sử đơn (người nhận, tình trạng); báo kết quả;
+stop
+@enduml

@@ -1,0 +1,36 @@
+@startuml hd-uc-mh-01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 260
+
+|Khách vãng lai|
+start
+:Bấm "Đăng ký";
+|Hệ thống|
+if () then ([đã đăng nhập])
+  :Chuyển về trang chủ;
+  stop
+else ([chưa đăng nhập])
+endif
+:Hiện biểu mẫu đăng ký, ô đồng ý không tích sẵn;
+repeat
+  |Khách vãng lai|
+  :Nhập họ tên, số điện thoại, email, tên đăng nhập, mật khẩu; tích ô đồng ý, bấm "Đăng ký";
+  |Hệ thống|
+  :Kiểm tra từng ô, ô đồng ý, tên đăng nhập và số điện thoại chưa dùng;
+  backward :Báo lỗi dưới ô sai, giữ dữ liệu đã nhập;
+repeat while () is ([ô sai hoặc trùng]) not ([hợp lệ])
+:Băm mật khẩu, tạo tài khoản vai trò Khách hàng và hồ sơ khách hàng;
+-[dashed]->
+:Tài khoản
+[Đang dùng]; <<object>>
+-[dashed]->
+:Lưu lần đồng ý điều khoản;
+:Chuyển sang trang đăng nhập, báo "Đăng ký xong";
+|Khách vãng lai|
+:Đăng nhập (UC-HT-01);
+stop
+@enduml

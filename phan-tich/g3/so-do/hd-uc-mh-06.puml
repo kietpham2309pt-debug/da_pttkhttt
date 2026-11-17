@@ -1,0 +1,55 @@
+@startuml hd-uc-mh-06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 210
+
+|Khách vãng lai|
+start
+:Mở "Tra cứu đơn hàng";
+note left
+  1a. Đã đăng nhập:
+  chọn đơn ở "Đơn
+  hàng của tôi", đi
+  thẳng tới chi tiết
+end note
+|Hệ thống|
+if () then ([đang khoá])
+  :Báo tạm khoá 15 phút;
+  stop
+else ([không khoá])
+endif
+repeat
+  |Khách vãng lai|
+  :Nhập số điện thoại, mã đơn, bấm "Tra cứu";
+  |Hệ thống|
+  :Kiểm tra dạng; tìm đơn khớp mã đơn và số điện thoại;
+  if () then ([sai lần thứ 5])
+    :Tạm khoá tra cứu 15 phút;
+    stop
+  else ([chưa tới 5 lần])
+  endif
+  backward :Báo chung "Không tìm thấy đơn…";
+repeat while () is ([sai dạng hoặc không khớp]) not ([tìm thấy])
+:Hiện chi tiết đơn: trạng thái và các mốc, tiền đã trả, còn phải trả, hẹn giao lắp; che bớt người nhận;
+if () then ([còn phải trả trước])
+  :Hiện nút "Thanh toán ngay" (UC-MH-05);
+else ([không])
+endif
+if () then ([Chờ xác nhận])
+  :Hiện khung "Huỷ đơn" (UC-MH-07);
+else ([Đã xác nhận])
+  :Hiện số điện thoại cửa hàng để gọi huỷ;
+endif
+|Khách vãng lai|
+:Bấm "Xem hoá đơn";
+|Hệ thống|
+if () then ([đã có hoá đơn])
+  :Hiện số, ký hiệu, đường dẫn tra cứu; cho tải, in;
+else ([chưa có])
+  :Ghi "Hoá đơn lập khi giao hàng";
+endif
+stop
+@enduml

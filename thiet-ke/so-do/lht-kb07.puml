@@ -1,0 +1,66 @@
+@startuml lht-kb07
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "khach/bao-hanh.html" as T1 <<boundary>> {
+  tra theo serial; theo số
+  điện thoại, mã đơn; kết quả
+}
+class BaoHanhKhachController <<boundary>> {
+  + tra(cach, soSerial, soDienThoai, maDon, model)
+}
+class DinhDangTien <<control>> {
+  + docMaDon(s) : Long
+}
+class BaoHanhKhachBUS <<control>> {
+  + traTheoSerial(soSerial) : List<KetQuaBaoHanh>
+  + traTheoSoDienThoai(sdt, maDon) : List<KetQuaBaoHanh>
+  - dong(may) : KetQuaBaoHanh
+}
+class KetQuaBaoHanh <<control>> {
+  - ngayBan, hanBaoHanh : LocalDate
+  - conHan, daTraLai : boolean
+  + getSoLanBaoHanh() : int
+}
+class TonKhoTruyVanKhach <<DAO>> {
+  + theoSoSerial(so)
+  + theoSoDienThoai(sdt)
+}
+class HauMaiTruyVanKhach <<DAO>> {
+  + phieuBaoHanh(soSerial)
+}
+class SanPhamSerial <<entity>> {
+  - soSerial : String
+  - ngayBan : LocalDateTime
+  - trangThai : TrangThaiSerial
+}
+class SanPham <<entity>> {
+  - thoiHanBaoHanh : Integer
+}
+class DonHang <<entity>> {
+  - soDienThoaiNhan : String
+}
+class PhieuBaoHanh <<entity>> {
+  - ngayNhan, ngayHenTra
+  - moTaLoi : String
+}
+
+T1 ..> BaoHanhKhachController : GET /bao-hanh
+BaoHanhKhachController ..> DinhDangTien
+BaoHanhKhachController ..> BaoHanhKhachBUS
+BaoHanhKhachBUS ..> KetQuaBaoHanh : tạo
+BaoHanhKhachBUS ..> TonKhoTruyVanKhach
+BaoHanhKhachBUS ..> HauMaiTruyVanKhach
+TonKhoTruyVanKhach ..> SanPhamSerial
+HauMaiTruyVanKhach ..> PhieuBaoHanh
+SanPhamSerial "*" --> "1" SanPham : thuộc mẫu
+SanPhamSerial "*" --> "0..1" DonHang : donHangBan
+PhieuBaoHanh "0..*" --> "1" SanPhamSerial : của máy
+@enduml

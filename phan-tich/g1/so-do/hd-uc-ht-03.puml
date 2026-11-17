@@ -1,0 +1,29 @@
+@startuml hd-uc-ht-03
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 165
+
+|Quản trị hệ thống|
+start
+:Chọn một nhân viên, bấm Phân quyền;
+|Hệ thống|
+:Hiện các vai đang gán và chức năng của từng vai;
+repeat
+  |Quản trị hệ thống|
+  :Đánh dấu hoặc bỏ vai, bấm Lưu;
+  |Hệ thống|
+  if () then ([không chọn vai nào])
+    :Báo "Chọn ít nhất một vai";
+  elseif () then ([bỏ vai của quản trị cuối cùng])
+    :Báo phải còn ít nhất một Quản trị hệ thống;
+  else ([hợp lệ])
+    :Lưu tập vai mới của tài khoản;
+  endif
+repeat while () is ([chưa lưu được]) not ([đã lưu])
+:Báo đã cập nhật quyền;
+:Áp quyền mới: menu chỉ hiện chức năng của các vai đã gán, mở chức năng ngoài vai thì báo Không có quyền;
+stop
+@enduml

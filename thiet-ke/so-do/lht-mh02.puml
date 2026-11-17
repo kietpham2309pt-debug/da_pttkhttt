@@ -1,0 +1,65 @@
+@startuml lht-mh02
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "tai-khoan.html" as T1 <<boundary>> {
+  hồ sơ, sổ địa chỉ,
+  biểu mẫu thêm/sửa địa chỉ,
+  đơn hàng của tôi
+}
+class TaiKhoanKhachController <<boundary>> {
+  + taiKhoan(suaDiaChi, model) : String
+  + hoSo(hoTen, soDienThoai, email, ra)
+  + luuDiaChi(ma, hoTenNguoiNhan, …, ra)
+  + macDinh(ma, ra) : String
+  + xoaDiaChi(ma, ra) : String
+}
+class TaiKhoanBUS <<control>> {
+  + khachHangHienTai() : Optional
+}
+class TaiKhoanKhachBUS <<control>> {
+  + capNhatHoSo(kh, hoTen, sdt, email)
+  + soDiaChi(kh) : List
+  + diaChiCuaKhach(kh, maDiaChi)
+  + luuDiaChi(kh, maDiaChi, …, macDinh)
+  + datMacDinh(kh, maDiaChi)
+  + xoaDiaChi(kh, maDiaChi)
+}
+class KhachHangTruyVanKhach <<DAO>> {
+  + existsBySoDienThoaiAndMaKhachHangNot(…)
+  + findById(ma)
+  + soDiaChi(maKhachHang) : List
+  + save(kh) : KhachHang
+}
+class DiaChiGiaoHangDAO <<DAO>> {
+  + findById(ma)
+  + save(dc) : DiaChiGiaoHang
+  + delete(dc)
+}
+class KhachHang <<entity>> {
+  - hoTen, soDienThoai
+  - email : String
+}
+class DiaChiGiaoHang <<entity>> {
+  - hoTenNguoiNhan, soDienThoai
+  - diaChi : String
+  - noiThanh : Boolean
+  - macDinh : Boolean
+}
+
+T1 ..> TaiKhoanKhachController : /tai-khoan/**
+TaiKhoanKhachController ..> TaiKhoanBUS
+TaiKhoanKhachController ..> TaiKhoanKhachBUS
+TaiKhoanKhachBUS ..> KhachHangTruyVanKhach
+TaiKhoanKhachBUS ..> DiaChiGiaoHangDAO
+KhachHangTruyVanKhach ..> KhachHang
+DiaChiGiaoHangDAO ..> DiaChiGiaoHang
+KhachHang "1" -right- "0..*" DiaChiGiaoHang : có
+@enduml

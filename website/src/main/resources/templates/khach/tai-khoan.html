@@ -15,7 +15,7 @@
                         <h2>Hồ sơ</h2>
                         <div class="o-nhap">
                             <label for="hoTen">Họ và tên</label>
-                            <input id="hoTen" name="hoTen" th:value="${kh.hoTen}" maxlength="60" required>
+                            <input type="text" id="hoTen" name="hoTen" th:value="${kh.hoTen}" maxlength="60" required>
                         </div>
                         <div class="o-nhap">
                             <label for="sdt">Số điện thoại</label>
@@ -61,7 +61,7 @@
                         <div class="o-doi">
                             <div class="o-nhap">
                                 <label for="dcTen">Họ tên người nhận</label>
-                                <input id="dcTen" name="hoTenNguoiNhan" maxlength="60" required
+                                <input type="text" id="dcTen" name="hoTenNguoiNhan" maxlength="60" required
                                        th:value="${diaChiSua != null} ? ${diaChiSua.hoTenNguoiNhan} : ${kh.hoTen}">
                             </div>
                             <div class="o-nhap">
@@ -72,7 +72,7 @@
                         </div>
                         <div class="o-nhap">
                             <label for="dcDiaChi">Địa chỉ đầy đủ</label>
-                            <input id="dcDiaChi" name="diaChi" maxlength="255" required th:value="${diaChiSua != null} ? ${diaChiSua.diaChi} : ''"
+                            <input type="text" id="dcDiaChi" name="diaChi" maxlength="255" required th:value="${diaChiSua != null} ? ${diaChiSua.diaChi} : ''"
                                    placeholder="Số nhà, đường, phường, quận, tỉnh">
                         </div>
                         <div class="o-nhap">

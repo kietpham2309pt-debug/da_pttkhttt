@@ -1,0 +1,53 @@
+@startuml tt-ht-sp07
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__hàng__" as KH
+boundary "__: danh-gia__\n__.html__" as TR
+boundary "__: TaiKhoan__\n__Khach__\n__Controller__" as CTL
+control "__: TaiKhoan__\n__KhachBUS__" as BUS
+participant "__: DonHang__\n__TruyVan__\n__Khach__" as DHD <<DAO>>
+participant "__: KhachHang__\n__TruyVan__\n__Khach__" as KHD <<DAO>>
+participant "__: DanhGia__\n__DAO__" as DGD <<DAO>>
+
+KH -> TR : 1: Bấm Viết\nđánh giá
+activate TR
+TR -> CTL ++ : 2: danhGia\n(maSanPham, model)
+CTL -> CTL : 3: batBuocKhach()
+CTL -> BUS ++ : 4: canDanhGia(kh)
+BUS -> DHD ++ : 5: cuaKhachTheo\nTrangThai(kh,\nHOAN_THANH)
+DHD --> BUS -- : 6: List<DonHang>
+loop mỗi chi tiết đơn
+  BUS -> KHD ++ : 7: daDanhGia\n(maDon, maSp)
+  KHD --> BUS -- : 8: boolean
+end
+BUS --> CTL -- : 9: List<CoTheDanhGia>
+CTL --> TR -- : 10: "khach/danh-gia"
+KH -> TR : 11: Chọn số sao,\nviết nhận xét,\nbấm Gửi
+TR -> CTL ++ : 12: guiDanhGia(maDon,\nmaSanPham, soSao,\nnoiDung, ra)
+CTL -> BUS ++ : 13: danhGia(kh, maDon,\nmaSanPham, soSao,\nnoiDung)
+BUS -> BUS : 14: soSao 1–5,\nnội dung ≤ 1000
+BUS -> DHD ++ : 15: layDayDu(maDon)
+DHD --> BUS -- : 16: DonHang
+BUS -> BUS : 17: đơn của khách,\nHOAN_THANH, có\nmẫu máy trong đơn
+BUS -> KHD ++ : 18: daDanhGia\n(maDon, maSanPham)
+KHD --> BUS -- : 19: boolean
+alt sai hoặc đã đánh giá
+  BUS --> CTL : 20: LoiNghiepVu
+  CTL --> TR : 21: redirect /danh-gia\n(loi)
+  TR --> KH : 22: Báo lỗi
+else hợp lệ
+  BUS -> DGD ++ : 23: save(dg)\n[ngayDanhGia]
+  DGD --> BUS -- : 24: DanhGia
+  BUS --> CTL : 25: xong
+  CTL --> KH : 26: redirect /san-pham/\n{maSanPham} "Cảm ơn\nbạn đã đánh giá"
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

@@ -1,0 +1,66 @@
+@startuml tt-ht-mh03
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__vãng lai__" as KH
+boundary "__: chi-tiet__\n__.html__" as CT
+boundary "__: gio-hang__\n__.html__" as GH
+boundary "__: GioHang__\n__Khach__\n__Controller__" as CTL
+control "__: DatHang__\n__BUS__" as BUS
+control "__: GiaBUS__" as GIA
+control "__: GioHang__\n__(phiên)__" as GIO
+participant "__: SanPham__\n__TruyVan__\n__Khach__" as SPD <<DAO>>
+
+KH -> CT : 1: Chọn số lượng,\nlắp đặt, bấm\nThêm vào giỏ
+activate CT
+CT -> CTL ++ : 2: them(maSanPham,\nsoLuong, lapDat)
+CTL -> BUS ++ : 3: themVaoGio(gio,\nma, soLuong, lapDat)
+BUS -> SPD ++ : 4: findById(ma)
+SPD --> BUS -- : 5: SanPham
+BUS -> GIA ++ : 6: tonKhaDung([ma])
+GIA --> BUS -- : 7: tồn khả dụng
+alt ngừng bán, hết hàng, vượt tồn hoặc quá 20 chiếc
+  BUS --> CTL : 8: LoiNghiepVu
+  CTL --> CT : 9: redirect\n/san-pham/{ma} (loi)
+else hợp lệ
+  BUS -> GIO ++ : 10: them(ma,\nsoLuong, canLap)
+  deactivate GIO
+  BUS --> CTL : 11: xong
+  CTL --> GH : 12: redirect /gio-hang
+end
+deactivate BUS
+deactivate CTL
+deactivate CT
+activate GH
+GH -> CTL ++ : 13: xem(model)
+CTL -> BUS ++ : 14: tinh(gio, true, null)
+BUS -> GIO ++ : 15: getDong()
+GIO --> BUS -- : 16: dòng giỏ
+BUS -> SPD ++ : 17: theoMa(dsMa)
+SPD --> BUS -- : 18: ds SanPham
+BUS -> GIA ++ : 19: dongThe(ds)
+GIA --> BUS -- : 20: giá sau KM, tồn
+BUS --> CTL -- : 21: BangTinh
+CTL --> GH -- : 22: "khach/gio-hang"
+GH --> KH : 23: Dòng giỏ,\ntạm tính
+KH -> GH : 24: Bấm + / −
+GH -> CTL ++ : 25: sua(maSanPham,\nthayDoi)
+CTL -> BUS ++ : 26: suaSoLuong\n(gio, ma, moi)
+BUS -> GIA ++ : 27: tonKhaDung([ma])
+GIA --> BUS -- : 28: tồn
+alt số lượng mới vượt tồn hoặc quá 20
+  BUS --> CTL : 29: LoiNghiepVu
+else bằng 0
+  BUS -> GIO : 30: xoa(ma)
+else hợp lệ
+  BUS -> GIO : 31: datSoLuong\n(ma, moi)
+end
+deactivate BUS
+CTL --> GH -- : 32: redirect /gio-hang
+deactivate GH
+@enduml

@@ -1,0 +1,46 @@
+@startuml tt-ht-mh07
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__vãng lai__" as KH
+boundary "__: chi-tiet-don__\n__.html__" as CT
+boundary "__: TraCuuDon__\n__Controller__" as CTL
+control "__: DonHang__\n__KhachBUS__" as BUS
+control "__: DonHang__\n__BUS__" as DHB
+participant "__: LichSu__\n__TrangThai__\n__DonDAO__" as LSD <<DAO>>
+participant "__: GiaoDich__\n__TruyVan__\n__Khach__" as GDD <<DAO>>
+
+KH -> CT : 1: Nhập lý do,\nbấm Huỷ đơn
+activate CT
+CT -> CTL ++ : 2: huy(ma, lyDo)
+CTL -> CTL : 3: quyen.\nduocXem(ma)
+CTL -> BUS ++ : 4: huyDon\n(ma, lyDo)
+BUS -> BUS : 5: thongTin(ma)\n[đơn, đã trả]
+alt lý do sai hoặc đơn đã qua\nChờ xác nhận
+  BUS --> CTL : 6: LoiNghiepVu
+else coTheHuy(don)
+  BUS -> DHB ++ : 7: doiTrangThai\n(don, DA_HUY)
+  DHB -> DHB : 8: duocDoi(…);\nsave(don)
+  DHB -> LSD ++ : 9: save(ls)
+  deactivate LSD
+  deactivate DHB
+  opt đã trả tiền
+    BUS -> GDD ++ : 10: save(hoan)\n[HOAN_TIEN]
+    deactivate GDD
+    BUS -> BUS : 11: donHangTV.save\n[DA_HOAN_TIEN]
+  end
+  opt có mã giảm giá
+    BUS -> BUS : 12: khuyenMaiTV.\nsave(km) [lượt − 1]
+  end
+  BUS --> CTL : 13: xong
+end
+deactivate BUS
+CTL --> CT -- : 14: redirect\n/tra-cuu-don/{ma}
+CT --> KH : 15: "Đã huỷ đơn\nDH…" hoặc lỗi
+deactivate CT
+@enduml

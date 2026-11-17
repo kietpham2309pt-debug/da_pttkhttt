@@ -1,0 +1,49 @@
+@startuml hd-uc-ht-02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam wrapWidth 150
+
+|Quản trị hệ thống|
+start
+:Mở trang Quản lý tài khoản;
+|Hệ thống|
+:Hiện danh sách nhân viên, các vai, trạng thái;
+|Quản trị hệ thống|
+:Chọn thao tác trên danh sách;
+|Hệ thống|
+if () then ([khoá, mở khoá, đặt lại])
+  if () then ([khoá])
+    if () then ([tự khoá mình, quản trị cuối cùng])
+      :Báo không được khoá;
+    else ([được])
+      :Đổi sang Đã khoá, huỷ phiên đang mở;
+    endif
+  elseif () then ([mở khoá])
+    :Đổi lại Đang dùng;
+  else ([đặt lại])
+    :Sinh mật khẩu tạm, đánh dấu phải đổi, hiện một lần;
+  endif
+  :Hiện lại danh sách;
+  stop
+else ([thêm, sửa])
+endif
+:Hiện biểu mẫu nhân viên;
+repeat
+  |Quản trị hệ thống|
+  :Nhập họ tên, số điện thoại, tên đăng nhập, chọn vai, bấm Lưu;
+  |Hệ thống|
+  :Kiểm tra ô bắt buộc, tên đăng nhập chưa dùng, có ít nhất một vai;
+  backward :Báo lỗi dưới ô, giữ dữ liệu đã nhập;
+repeat while () is ([sai]) not ([hợp lệ])
+if () then ([thêm mới])
+  :Tạo nhân viên, tài khoản Đang dùng, sinh mật khẩu tạm, đánh dấu phải đổi;
+  :Hiện mật khẩu tạm một lần;
+else ([sửa])
+  :Cập nhật họ tên, số điện thoại, các vai;
+endif
+:Hiện lại danh sách có dòng mới hoặc đã sửa;
+stop
+@enduml

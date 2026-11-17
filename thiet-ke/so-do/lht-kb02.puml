@@ -1,0 +1,86 @@
+@startuml lht-kb02
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "don-dat-lap.html" as T1 <<boundary>> {
+  nhà cung cấp, số lượng
+  từng mẫu, ghi chú
+}
+class "don-dat-chi-tiet.html" as T2 <<boundary>> {
+  chỉnh số lượng, ý kiến
+  chủ, nút Gửi, Huỷ đơn
+}
+class DonDatController <<boundary>> {
+  + danhSach(trangThai, model)
+  + lap(model) : String
+  + luu(p, model, ra) : String
+  + chiTiet(ma, model, ra) : String
+  + gui(ma, p, ra) : String
+  + huy(ma, lyDo, ra) : String
+}
+class QuyenG5 <<control>> {
+  + batBuoc(vai…) : NhanVien
+}
+class DonDatBUS <<control>> {
+  + danhSach(tt) : List<DonDatHangNCC>
+  + xem(ma) : DonDatXem
+  + lapDeXuat(maNcc, soLuong, ghiChu, nguoiLap)
+  + guiNhaCungCap(ma, maNcc, soLuong, yKienChu, quanLy)
+  + huy(ma, lyDo)
+  + capNhatSauNhap(maDonDat) : boolean
+}
+class TonKhoBUS <<control>> {
+  + TON_TOI_THIEU = 2
+  + tonTheoMau() : List<DongTon>
+  + trongKhoTheoMau() : Map
+}
+class NhaCungCapBUS <<control>> {
+  + dangHopTac() : List<NhaCungCap>
+  + tim(ma) : NhaCungCap
+}
+class DonDatTruyVanG5 <<DAO>> {
+  + danhSach()
+  + theoTrangThai(tt)
+  + chiTiet(ma)
+  + daNhapTheoMau(ma)
+  + save(d)
+}
+class SanPhamTruyVanG5 <<DAO>> {
+  + findById(ma)
+}
+class DonDatHangNCC <<entity>> {
+  - ngayLap : LocalDateTime
+  - trangThai : TrangThaiDonDat
+  - ghiChu : String
+}
+class ChiTietDonDatHangNCC <<entity>> {
+  - soLuong : Integer
+}
+class NhaCungCap <<entity>> {
+  - dangHopTac : Boolean
+}
+class SanPham <<entity>>
+
+T1 ..> DonDatController : POST /lap
+T2 ..> DonDatController : POST /{ma}/gui, /huy
+DonDatController ..> QuyenG5
+DonDatController ..> DonDatBUS
+DonDatController ..> TonKhoBUS
+DonDatController ..> NhaCungCapBUS
+DonDatBUS ..> NhaCungCapBUS
+DonDatBUS ..> TonKhoBUS
+DonDatBUS ..> DonDatTruyVanG5
+DonDatBUS ..> SanPhamTruyVanG5
+DonDatTruyVanG5 ..> DonDatHangNCC
+SanPhamTruyVanG5 ..> SanPham
+DonDatHangNCC "1" *-- "1..*" ChiTietDonDatHangNCC
+DonDatHangNCC "*" --> "1" NhaCungCap
+ChiTietDonDatHangNCC "*" --> "1" SanPham
+@enduml

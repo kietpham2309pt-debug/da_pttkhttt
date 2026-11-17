@@ -14,7 +14,7 @@
                     <h2>Theo số serial</h2>
                     <div class="o-nhap">
                         <label for="soSerial">Số serial</label>
-                        <input id="soSerial" name="soSerial" maxlength="50" th:value="${cach == 'serial'} ? ${soSerial} : ''" placeholder="Ví dụ BDT-BOS-001-0001">
+                        <input type="text" id="soSerial" name="soSerial" maxlength="50" th:value="${cach == 'serial'} ? ${soSerial} : ''" placeholder="Ví dụ BDT-BOS-001-0001">
                         <span class="o-nhap__goi">In trên tem dán ở thân máy và trên phiếu bảo hành.</span>
                     </div>
                     <button type="submit" class="nut nut--dac">Tra cứu</button>
@@ -28,7 +28,7 @@
                     </div>
                     <div class="o-nhap">
                         <label for="maDon">Mã đơn (không bắt buộc)</label>
-                        <input id="maDon" name="maDon" maxlength="14" th:value="${maDon}" placeholder="DH000012">
+                        <input type="text" id="maDon" name="maDon" maxlength="14" th:value="${maDon}" placeholder="DH000012">
                     </div>
                     <button type="submit" class="nut nut--dac">Tra cứu</button>
                 </form>

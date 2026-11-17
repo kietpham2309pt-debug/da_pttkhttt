@@ -1,0 +1,47 @@
+@startuml tt-ht-sp03
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Quản lý__\n__cửa hàng__" as QL
+boundary "__: gia.html__" as TR
+boundary "__: QuanTri__\n__SanPham__\n__Controller__" as CTL
+control "__: QuanTri__\n__SanPhamBUS__" as BUS
+control "__: TaiKhoan__\n__BUS__" as TK
+participant "__: SanPham__\n__TruyVanG12__" as SPD <<DAO>>
+participant "__: LichSuGia__\n__DAO__" as LSD <<DAO>>
+
+QL -> TR : 1: Nhập giá bán\nmới, giá niêm yết,\nlý do, bấm Lưu
+activate TR
+TR -> CTL ++ : 2: capNhatGia(ma,\ngiaMoi, giaNiemYet,\nlyDo, model, ra)
+CTL -> TK ++ : 3: coVai("QUAN_LY")
+TK --> CTL -- : 4: true
+CTL -> CTL : 5: docSo(giaMoi),\ndocSo(giaNiemYet)
+CTL -> BUS ++ : 6: capNhatGia(ma,\ngm, gny, lyDo)
+BUS -> TK ++ : 7: batBuocNhanVien()
+TK --> BUS -- : 8: NhanVien
+BUS -> SPD ++ : 9: timDayDu(ma)
+SPD --> BUS -- : 10: SanPham
+BUS -> BUS : 11: giá > 0, giá niêm\nyết ≥ giá bán, giá\nmới khác giá cũ
+BUS -> SPD ++ : 12: giaNhapMoiNhat\n(ma, trang 0, 1 dòng)
+SPD --> BUS -- : 13: giá nhập\ngần nhất
+alt giá sai, trùng giá cũ, hoặc dưới giá nhập mà lý do trống
+  BUS --> CTL : 14: LoiNhapLieu(loi)
+  CTL --> TR : 15: "gia" (loiO)
+  TR --> QL : 16: Báo lỗi, cảnh báo\ndưới giá nhập,\nbắt ghi lý do
+else hợp lệ
+  BUS -> LSD ++ : 17: save(ls)\n[giaCu, giaMoi, lyDo,\nduoiGiaNhap, nv]
+  LSD --> BUS -- : 18: LichSuGia
+  BUS -> SPD ++ : 19: save(sp)\n[giaBan, giaNiemYet]
+  SPD --> BUS -- : 20: SanPham
+  BUS --> CTL : 21: LichSuGia
+  CTL --> TR : 22: redirect …/{ma}/gia\n"Đã cập nhật giá bán"
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml
