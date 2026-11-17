@@ -1,0 +1,96 @@
+@startuml lht-kb06
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "bao-hanh.html" as T1 <<boundary>> {
+  tra theo serial, số điện thoại,
+  mã đơn; phiếu đang mở
+}
+class "bao-hanh-tiep-nhan.html" as T2 <<boundary>> {
+  lỗi, tình trạng, loại xử lý,
+  ngày hẹn, đồng ý sửa có phí
+}
+class "bao-hanh-chi-tiet.html" as T3 <<boundary>> {
+  nút Đã gửi hãng, Đã nhận về,
+  Đã trả khách, Đổi hẹn
+}
+class BaoHanhController <<boundary>> {
+  + xem(loai, q, model) : String
+  + formTiepNhan(serial, model, ra)
+  + tiepNhan(serial, hoTen, soDienThoai, …)
+  + chiTiet(ma, model, ra) : String
+  + guiHang(ma, ngay, ra) : String
+  + nhanVe(ma, ngay, ketQua, ghiChu, ra)
+  + traKhach(ma, ketQua, ra) : String
+}
+class QuyenG5 <<control>> {
+  + batBuoc(vai…) : NhanVien
+}
+class BaoHanhBUS <<control>> {
+  + SO_LAN_TOI_DA = 3
+  + traCuu(loai, tuKhoa) : List<MayTraCuu>
+  + mot(soSerial) : MayTraCuu
+  + canhBao(m) : Optional<String>
+  + tiepNhan(soSerial, hoTen, …, nhanVien)
+  + guiHang(ma, ngay)
+  + nhanVe(ma, ngay, ketQua, ghiChu)
+  + traKhach(ma, ketQua)
+  + soNgayOHang(p) : long
+}
+class SerialBUS <<control>> {
+  + doiTrangThai(may, moi)
+}
+class SerialTruyVanG5 <<DAO>> {
+  + dayDu(so)
+  + theoSoDienThoai(sdt)
+  + theoDonHang(ma)
+}
+class PhieuBaoHanhTruyVanG5 <<DAO>> {
+  + theoSerial(so)
+  + chiTiet(ma)
+  + khacTrangThai(tt)
+  + save(p)
+}
+class SanPhamSerialDAO <<DAO>> {
+  + save(may)
+}
+class PhieuBaoHanh <<entity>> {
+  - moTaLoi : String
+  - tinhTrangBenNgoai : String
+  - ngayHenTra : LocalDate
+  - lanThu : Integer
+  - ngayGuiHang, ngayNhanTuHang
+  - ngayTraKhach
+  - trangThai : TrangThaiBaoHanh
+}
+class SanPhamSerial <<entity>> {
+  - soSerial : String
+  - ngayBan : LocalDateTime
+  - trangThai : TrangThaiSerial
+}
+class SanPham <<entity>> {
+  - thoiHanBaoHanh : Integer
+}
+
+T1 ..> BaoHanhController : GET /quan-tri/bao-hanh
+T2 ..> BaoHanhController : POST /tiep-nhan
+T3 ..> BaoHanhController
+BaoHanhController ..> QuyenG5
+BaoHanhController ..> BaoHanhBUS
+BaoHanhBUS ..> SerialBUS
+BaoHanhBUS ..> SerialTruyVanG5
+BaoHanhBUS ..> PhieuBaoHanhTruyVanG5
+SerialBUS ..> SanPhamSerialDAO
+SerialTruyVanG5 ..> SanPhamSerial
+PhieuBaoHanhTruyVanG5 ..> PhieuBaoHanh
+SanPhamSerialDAO ..> SanPhamSerial
+PhieuBaoHanh "0..*" --> "1" SanPhamSerial : của máy
+SanPhamSerial "*" -right-> "1" SanPham : thuộc mẫu
+@enduml

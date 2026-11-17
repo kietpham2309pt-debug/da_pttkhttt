@@ -21,4 +21,7 @@ public interface NhanVienTruyVanG12 extends JpaRepository<NhanVien, Long> {
 
     @Query("select tk.trangThai from TaiKhoan tk where tk.tenDangNhap = :ten")
     Optional<TrangThaiTaiKhoan> trangThaiTheoTen(@Param("ten") String ten);
+
+    @Query("select tk.phaiDoiMatKhau from TaiKhoan tk where tk.tenDangNhap = :ten")
+    Optional<Boolean> phaiDoiMatKhauTheoTen(@Param("ten") String ten);
 }

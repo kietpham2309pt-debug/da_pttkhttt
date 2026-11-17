@@ -1,0 +1,49 @@
+@startuml tt-ht-ht04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Quản lý,__\n__Kế toán__" as QL
+boundary "__: doanh-thu__\n__.html__" as TR
+boundary "__: BaoCao__\n__Controller__" as CTL
+control "__: BaoCaoBUS__" as BUS
+participant "__: DonHang__\n__TruyVanG12__" as DAO <<DAO>>
+database "__: CSDL__" as DB
+
+QL -> TR : 1: Chọn khoảng\nngày, cách nhóm,\nbấm Xem
+activate TR
+TR -> CTL ++ : 2: doanhThu(tuNgay,\ndenNgay, nhom)
+CTL -> BUS ++ : 3: doanhThu(tu,\nden, nhom)
+BUS -> BUS : 4: kiemTraKhoangNgay\n(tu, den)
+alt ngày bắt đầu sau ngày kết thúc
+  BUS --> CTL : 5: LoiNghiepVu("Khoảng\nngày không hợp lệ.")
+  CTL -> BUS : 6: doanhThu(đầu tháng,\nhôm nay, "ngay")
+else khoảng ngày hợp lệ
+  BUS -> DAO ++ : 7: donHoanThanh\nTrongKhoang\n(HOAN_THANH,\ntu, den + 1)
+  DAO -> DB ++ : 8: select DonHang\njoin ChiTiet
+  DB --> DAO -- : 9: các dòng
+  DAO --> BUS -- : 10: List<DonHang>
+  BUS -> DAO ++ : 11: tongGiaoDich\nTheoDon(dsMa)
+  DAO --> BUS -- : 12: cọc, thanh toán,\nhoàn tiền theo đơn
+  BUS -> DAO ++ : 13: phieuDaGiao\nTheoDon(dsMa)
+  DAO --> BUS -- : 14: tiền thu khi giao,\nđã xác nhận chưa
+  BUS -> BUS : 15: nhóm theo ngày,\ntháng, nhóm hàng;\ntrừ tiền hoàn; tách\ntiền chưa xác nhận
+end
+BUS --> CTL -- : 16: BaoCaoDoanhThu
+CTL --> TR -- : 17: "quan-tri/g1/\ndoanh-thu"
+TR --> QL : 18: Bảng số liệu,\ndòng tổng, biểu\nđồ cột, đơn chưa\nxác nhận tiền
+opt bấm Xuất tệp CSV
+  QL -> TR : 19: Bấm\nXuất tệp
+  TR -> CTL ++ : 20: xuat(tuNgay,\ndenNgay, nhom)
+  CTL -> BUS ++ : 21: doanhThu(tu,\nden, nhom)
+  BUS --> CTL : 22: BaoCaoDoanhThu
+  CTL -> BUS : 23: xuatCsv(bc)
+  BUS --> CTL -- : 24: byte[]
+  CTL --> QL -- : 25: tệp bao-cao-doanh-thu_….csv
+end
+deactivate TR
+@enduml

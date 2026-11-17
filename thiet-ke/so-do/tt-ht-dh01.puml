@@ -1,0 +1,56 @@
+@startuml tt-ht-dh01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Nhân viên__\n__bán hàng__" as NV
+boundary "__: don-hang-__\n__chi-tiet__\n__.html__" as TR
+boundary "__: DonHang__\n__QuanTri__\n__Controller__" as CTL
+control "__: DonHang__\n__QuanTri__\n__BUS__" as BUS
+control "__: DonHang__\n__BUS__" as DHB
+participant "__: DonHang__\n__TruyVan__\n__G4__" as DHD <<DAO>>
+participant "__: Serial__\n__TruyVan__\n__G4__" as SED <<DAO>>
+participant "__: LichSu__\n__TrangThai__\n__DonDAO__" as LSD <<DAO>>
+
+NV -> TR : 1: Mở đơn\nChờ xác nhận
+activate TR
+TR -> CTL ++ : 2: chiTiet(ma)
+CTL -> BUS ++ : 3: chiTiet(ma)
+BUS -> DHD ++ : 4: layDayDu(ma)
+DHD --> BUS -- : 5: DonHang
+BUS -> SED ++ : 6: demTheo\nTrangThai(maSP,\nTRONG_KHO)
+SED --> BUS -- : 7: trongKho
+BUS --> CTL -- : 8: ChiTietDon
+CTL --> TR -- : 9: "don-hang-\nchi-tiet"
+NV -> TR : 10: Gọi khách,\nbấm Xác nhận\nđơn
+TR -> CTL ++ : 11: xacNhan(ma,\ntrangThaiLucMo)
+CTL -> BUS ++ : 12: xacNhan\n(ma, lucMo)
+BUS -> DHD ++ : 13: layDayDu(ma)
+DHD --> BUS -- : 14: DonHang
+BUS -> BUS : 15: kiemTra\nDangXuLy\n(don, lucMo)
+loop mỗi dòng chi tiết đơn
+  BUS -> SED ++ : 16: demTheo\nTrangThai(maSP,\nTRONG_KHO)
+  SED --> BUS -- : 17: trongKho
+  BUS -> DHD ++ : 18: soLuong\nDangGiu(maSP, ma)
+  DHD --> BUS -- : 19: dangGiu
+end
+alt đơn đã đổi trạng thái hoặc không đủ hàng
+  BUS --> CTL : 20: LoiNghiepVu\n("Không đủ\nhàng: …")
+  CTL --> TR : 21: báo lỗi; đơn\ngiữ Chờ xác nhận
+else đủ hàng
+  BUS -> DHB ++ : 22: doiTrangThai\n(don, DA_XAC_NHAN,\nnv, ghiChu)
+  DHB -> DHB : 23: duocDoi(CHO_\nXAC_NHAN,\nDA_XAC_NHAN);\ndonHangDAO\n.save(don)
+  DHB -> LSD ++ : 24: save(ls)\n[cũ, mới, nhân\nviên, thời điểm]
+  deactivate LSD
+  DHB --> BUS -- : 25: đã lưu
+  BUS --> CTL : 26: xong
+  CTL --> TR : 27: "Đã xác\nnhận đơn DH…"
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

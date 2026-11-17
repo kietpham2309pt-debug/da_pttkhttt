@@ -1,0 +1,95 @@
+@startuml lht-dh06
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "doi-tra-tao.html" as T1 <<boundary>> {
+  tìm đơn, chọn máy,
+  hình thức, lý do, tình trạng
+}
+class "doi-tra-chi-tiet.html" as T2 <<boundary>> {
+  nút Duyệt, Từ chối,
+  Đã hoàn tiền, Đã giao máy đổi
+}
+class DoiTraController <<boundary>> {
+  + formTao(tuKhoa, don, model, ra)
+  + tao(don, serial, hinhThuc, loaiLyDo, …)
+  + chiTiet(ma, model, ra) : String
+  + duyet(ma, lucMo, phiKhauTru, hinhThuc, …)
+  + tuChoi(ma, lucMo, lyDoTuChoi, yKienChu, ra)
+  + hoanTien(ma, lucMo, cachHoan, …)
+  + giaoMayDoi(ma, lucMo, ra) : String
+}
+class DoiTraBUS <<control>> {
+  + HAN_DOI_Y = 7
+  + HAN_LOI_NHA_SAN_XUAT = 30
+  + timDon(tuKhoa)
+  + donDeTao(maDon) : DonDoiTra
+  + doiChieu(loai, soNgay, conSeal, daLap)
+  + tao(maDon, soSerial, hinhThuc, …)
+  + phiGoiY(loai, hinhThuc, tongGia) : long
+  + duyet(ma, lucMo, phiKhauTru, …)
+  + tuChoi(ma, lucMo, lyDo, yKienChu)
+  + hoanTien(ma, lucMo, cachHoan, …)
+  + daGiaoMayDoi(ma, lucMo) : String
+}
+class SerialBUS <<control>> {
+  + doiTrangThai(may, moi)
+}
+class DonHangBUS <<control>> {
+  + doiTrangThai(don, moi, …)
+}
+class YeuCauDoiTraTruyVanG4 <<DAO>> {
+  + choDuyetCuaSerial(soSerial)
+  + layDayDu(ma)
+  + theoDon(don)
+  + save(y)
+}
+class PhieuXuatTruyVanG4 <<DAO>> {
+  + theoDon(don)
+}
+class GiaoDichTruyVanG4 <<DAO>> {
+  + theoDon(don)
+  + save(g)
+}
+class SanPhamSerialDAO <<DAO>> {
+  + save(may)
+}
+class YeuCauDoiTra <<entity>> {
+  - loaiLyDo : LoaiLyDoDoiTra
+  - hinhThuc : HinhThucDoiTra
+  - conSeal, laNgoaiLe : Boolean
+  - phiKhauTru, soTienHoan : Long
+  - trangThai : TrangThaiDoiTra
+}
+class SanPhamSerial <<entity>> {
+  - soSerial : String
+  - ngayBan : LocalDateTime
+  - trangThai : TrangThaiSerial
+}
+class GiaoDichThanhToan <<entity>> {
+  - loai : LoaiGiaoDich
+  - soTien : long
+  - phuongThuc : String
+}
+
+T1 ..> DoiTraController : /quan-tri/doi-tra/tao
+T2 ..> DoiTraController : /quan-tri/doi-tra/{ma}
+DoiTraController ..> DoiTraBUS
+DoiTraBUS ..> SerialBUS
+DoiTraBUS ..> DonHangBUS
+DoiTraBUS ..> YeuCauDoiTraTruyVanG4
+DoiTraBUS ..> PhieuXuatTruyVanG4
+DoiTraBUS ..> GiaoDichTruyVanG4
+YeuCauDoiTraTruyVanG4 ..> YeuCauDoiTra
+SerialBUS ..> SanPhamSerialDAO
+SanPhamSerialDAO ..> SanPhamSerial
+GiaoDichTruyVanG4 ..> GiaoDichThanhToan
+YeuCauDoiTra "*" --> "1..*" SanPhamSerial : gồm máy
+@enduml

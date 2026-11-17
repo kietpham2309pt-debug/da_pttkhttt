@@ -1,0 +1,55 @@
+@startuml tt-ht-mh05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__vãng lai__" as KH
+boundary "__: thanh-toan.html__\n__(cổng mô phỏng)__" as TR
+boundary "__: ThanhToan__\n__Controller__" as CTL
+control "__: PhienKhach__\n__(phiên)__" as PH
+control "__: DonHang__\n__KhachBUS__" as BUS
+participant "__: DonHang__\n__TruyVan__\n__Khach__" as DHD <<DAO>>
+participant "__: GiaoDich__\n__TruyVan__\n__Khach__" as GDD <<DAO>>
+
+KH -> TR : 1: Bấm "Thanh\ntoán ngay"
+activate TR
+TR -> CTL ++ : 2: moCong(maDon)
+CTL -> BUS ++ : 3: thongTin(maDon)
+BUS -> DHD ++ : 4: layDayDu\n(maDon)
+DHD --> BUS -- : 5: DonHang
+BUS -> GDD ++ : 6: findByDonHang_\nMaDonHang…(maDon)
+GDD --> BUS -- : 7: giao dịch\nđã có
+BUS --> CTL -- : 8: ThongTinDon\n(daTra)
+alt đơn đã huỷ, đã trả đủ hoặc không cần trả trước
+  CTL --> TR : 9: "Đơn không cần\nthanh toán"
+else còn tiền cọc hoặc tiền phải trả qua cổng
+  CTL -> PH ++ : 10: capYeuCau\n(maDon)
+  PH --> CTL -- : 11: YeuCauThanhToan\n("MOCK-…", hạn 15 phút)
+  CTL -> BUS : 12: soTienPhaiTra\n(don, daTra, traHet)
+  CTL --> TR -- : 13: trang cổng:\nsố tiền, cách trả
+  KH -> TR : 14: Bấm "Thanh\ntoán thành công"\nhoặc "thất bại"
+  TR -> CTL ++ : 15: ketQuaCong\n(maDon, maCong,\ntraHet, …)
+  CTL -> PH ++ : 16: layYeuCau(maCong)
+  PH --> CTL -- : 17: YeuCauThanhToan
+  alt mã cổng không khớp đơn hoặc quá 15 phút
+    CTL --> TR : 18: "không xác\nminh được" /\n"đã hết hạn"
+  else hợp lệ
+    CTL -> BUS ++ : 19: ghiKetQuaThanhToan\n(maDon, maCong, traHet,\ncachTra, thanhCong)
+    BUS -> GDD ++ : 20: findByMaGiao\nDichCong(maCong)
+    GDD --> BUS -- : 21: rỗng (chưa ghi)
+    BUS -> GDD ++ : 22: save(gd)\n[COC/THANH_TOAN,\nTHANH_CONG/THAT_BAI]
+    deactivate GDD
+    BUS -> DHD ++ : 23: save(don)\n[DA_DAT_COC hoặc\nDA_THANH_TOAN]
+    deactivate DHD
+    BUS --> CTL -- : 24: GiaoDich\nThanhToan
+    CTL --> TR : 25: redirect\n…/ket-qua
+    TR --> KH : 26: Mã giao\ndịch, số đã trả,\nsố còn phải trả
+  end
+  deactivate CTL
+end
+deactivate TR
+@enduml

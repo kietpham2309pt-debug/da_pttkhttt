@@ -26,7 +26,7 @@
                             <div><dt>Người nhận hàng từ kho</dt><dd th:text="${f.nguoiNhanHang() != null} ? ${f.nguoiNhanHang()} : 'Chưa phân công giao hàng'">NV</dd></div>
                             <div th:if="${f.yeuCau() != null}"><dt>Yêu cầu đổi trả</dt><dd th:text="'#' + ${f.yeuCau().maYeuCau} + ' · ' + ${f.yeuCau().lyDo}">#1</dd></div>
                         </dl>
-                        <p th:if="${f.yeuCau() != null}" class="goi-y">Xuất đổi máy: đơn giữ trạng thái Hoàn thành; máy mới chuyển Đã xuất rồi Đã bán ngay khi lưu (giao cho khách).</p>
+                        <p th:if="${f.yeuCau() != null}" class="goi-y">Xuất đổi máy: đơn giữ trạng thái Hoàn thành; máy mới chuyển Đã xuất khi lưu, nhân viên bán hàng giao cho khách rồi bấm "Đã giao máy đổi" thì máy chuyển Đã bán.</p>
                     </div>
                     <form th:action="@{/quan-tri/kho/phieu-xuat/lap}" method="post">
                         <input type="hidden" name="loai" th:value="${f.loai()}">

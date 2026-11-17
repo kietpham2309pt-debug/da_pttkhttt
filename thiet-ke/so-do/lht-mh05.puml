@@ -1,0 +1,80 @@
+@startuml lht-mh05
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "hoan-tat.html" as T1 <<boundary>> {
+  nút Thanh toán ngay
+}
+class "thanh-toan.html" as T2 <<boundary>> {
+  cổng mô phỏng: số tiền,
+  cách trả, nút thành công,
+  nút thất bại
+}
+class "ket-qua-thanh-toan.html" as T3 <<boundary>> {
+  mã giao dịch, số đã trả
+}
+class ThanhToanController <<boundary>> {
+  + moCong(maDon, model, ra) : String
+  + ketQuaCong(maDon, maCong, traHet, …)
+  + ketQua(maDon, maCong, model) : String
+  + doiTienMat(maDon, ra) : String
+}
+class QuyenDonKhach <<control>> {
+  + duocXem(maDon) : boolean
+}
+class PhienKhach <<control>> {
+  + capYeuCau(maDon)
+  + layYeuCau(maCong)
+}
+class DonHangKhachBUS <<control>> {
+  + thongTin(maDon) : ThongTinDon
+  + coTheThanhToan(don, daTra) : boolean
+  + dangChoCoc(don, daTra) : boolean
+  + soTienPhaiTra(don, daTra, traHet) : long
+  + ghiKetQuaThanhToan(maDon, maCong, …)
+  + doiSangTienMat(maDon)
+}
+class DonHangTruyVanKhach <<DAO>> {
+  + layDayDu(maDon)
+  + save(don) : DonHang
+}
+class GiaoDichTruyVanKhach <<DAO>> {
+  + findByDonHang_MaDonHangOrderByThoiDiemAsc(…)
+  + findByMaGiaoDichCong(maCong)
+  + save(gd) : GiaoDichThanhToan
+}
+class DonHang <<entity>> {
+  - tongTien : long
+  - tienCoc : long
+  - phuongThucThanhToan
+  - trangThaiThanhToan
+  - trangThai
+}
+class GiaoDichThanhToan <<entity>> {
+  - loai : LoaiGiaoDich
+  - soTien : long
+  - phuongThuc : String
+  - maGiaoDichCong : String
+  - trangThai
+  - thoiDiem : LocalDateTime
+}
+
+T1 ..> ThanhToanController : GET /thanh-toan/{maDon}
+T2 ..> ThanhToanController : POST /thanh-toan/{maDon}
+T3 ..> ThanhToanController
+ThanhToanController ..> QuyenDonKhach
+ThanhToanController ..> PhienKhach
+ThanhToanController ..> DonHangKhachBUS
+DonHangKhachBUS ..> DonHangTruyVanKhach
+DonHangKhachBUS ..> GiaoDichTruyVanKhach
+DonHangTruyVanKhach ..> DonHang
+GiaoDichTruyVanKhach ..> GiaoDichThanhToan
+DonHang "1" -right- "0..*" GiaoDichThanhToan : có
+@enduml

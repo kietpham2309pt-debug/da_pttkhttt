@@ -48,7 +48,7 @@
                     <dt>Hạn bảo hành</dt><dd th:text="${@dd.ngay(kq.hanBaoHanh)}">ngày</dd>
                     <dt>Tình trạng</dt>
                     <dd>
-                        <span th:class="${kq.conHan} ? 'the-nhan the-nhan--ok' : 'the-nhan the-nhan--do'" th:text="${kq.conHan} ? 'Còn hạn bảo hành' : 'Hết hạn bảo hành'">Còn hạn</span>
+                        <span th:class="${kq.conHan} ? 'the-nhan the-nhan--ok' : 'the-nhan the-nhan--do'" th:text="${kq.daTraLai} ? 'Máy đã trả lại cửa hàng (đổi trả), không còn bảo hành' : (${kq.conHan} ? 'Còn hạn bảo hành' : 'Hết hạn bảo hành')">Còn hạn</span>
                         <span class="chu-phu" th:text="|Máy: ${kq.trangThaiMay}|">Máy</span>
                     </dd>
                     <dt>Số lần bảo hành</dt><dd th:text="${kq.soLanBaoHanh}">0</dd>

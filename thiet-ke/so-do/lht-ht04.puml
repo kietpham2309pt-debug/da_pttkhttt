@@ -1,0 +1,60 @@
+@startuml lht-ht04
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "doanh-thu.html" as Trang <<boundary>> {
+  tuNgay, denNgay, nhom
+  bảng số liệu, biểu đồ cột
+  nút Xuất tệp CSV
+}
+class BaoCaoController <<boundary>> {
+  + doanhThu(tuNgay, denNgay, nhom, model) : String
+  + xuat(tuNgay, denNgay, nhom) : ResponseEntity<byte[]>
+}
+class BaoCaoBUS <<control>> {
+  + kiemTraKhoangNgay(tu, den)
+  + doanhThu(tu, den, nhom) : BaoCaoDoanhThu
+  + xuatCsv(bc) : byte[]
+  + tenNhom(nhom) : String
+}
+class DonHangTruyVanG12 <<DAO>> {
+  + donHoanThanhTrongKhoang(trangThai, tu, den) : List<DonHang>
+  + tongGiaoDichTheoDon(dsMa) : List<Object[]>
+  + phieuDaGiaoTheoDon(dsMa) : List<Object[]>
+}
+class DonHang <<entity>> {
+  - trangThai : TrangThaiDonHang
+  - ngayHoanThanh : LocalDateTime
+  - tienGiam : long
+  - tongTien : long
+}
+class ChiTietDonHang <<entity>> {
+  - soLuong : int
+  - donGia : long
+}
+class GiaoDichThanhToan <<entity>> {
+  - loai : LoaiGiaoDich
+  - soTien : long
+  - trangThai : TrangThaiGiaoDich
+}
+class PhieuGiaoHang <<entity>> {
+  - trangThai : TrangThaiPhieuGiao
+  - tienThuKhiGiao : long
+  - keToanXacNhan : NhanVien
+}
+
+Trang ..> BaoCaoController : GET /quan-tri/bao-cao/doanh-thu
+BaoCaoController ..> BaoCaoBUS
+BaoCaoBUS ..> DonHangTruyVanG12
+DonHangTruyVanG12 ..> DonHang
+DonHangTruyVanG12 ..> GiaoDichThanhToan
+DonHangTruyVanG12 ..> PhieuGiaoHang
+DonHang "1" *-right- "1..*" ChiTietDonHang : gồm
+@enduml

@@ -171,6 +171,11 @@ public class QuanTriTaiKhoanBUS {
         return nhanVienTruyVan.trangThaiTheoTen(tenDangNhap).map(t -> t == TrangThaiTaiKhoan.DA_KHOA).orElse(false);
     }
 
+    @Transactional(readOnly = true)
+    public boolean phaiDoiMatKhau(String tenDangNhap) {
+        return nhanVienTruyVan.phaiDoiMatKhauTheoTen(tenDangNhap).map(Boolean.TRUE::equals).orElse(false);
+    }
+
     private NhanVien timNhanVien(Long ma) {
         if (ma == null) {
             throw new LoiNghiepVu("Không tìm thấy nhân viên.");

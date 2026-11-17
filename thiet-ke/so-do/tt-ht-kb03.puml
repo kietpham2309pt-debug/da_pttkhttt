@@ -1,0 +1,57 @@
+@startuml tt-ht-kb03
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Thủ kho__" as TK
+boundary "__: phieu-nhap-__\n__lap.html__" as TR
+boundary "__: PhieuNhap__\n__Controller__" as CTL
+control "__: PhieuNhap__\n__BUS__" as BUS
+control "__: DonDat__\n__BUS__" as DDB
+participant "__: PhieuNhap__\n__TruyVanG5__" as PND <<DAO>>
+participant "__: Serial__\n__TruyVanG5__" as SED <<DAO>>
+participant "__: Entity__\n__Manager__\n__(JPA)__" as EM <<DAO>>
+
+TK -> TR : 1: Chọn đơn đặt\nhàng chờ nhập
+activate TR
+TR -> CTL ++ : 2: lap(donDat)
+CTL -> BUS ++ : 3: taoNhap\n(maDonDat)
+BUS -> DDB ++ : 4: xem\n(maDonDat)
+DDB --> BUS -- : 5: DonDatXem\n[DA_GUI]
+BUS -> PND ++ : 6: donGia\nGanNhat(maSP)
+PND --> BUS -- : 7: đơn giá
+BUS --> CTL -- : 8: PhieuNhap\nNhap
+CTL --> TR -- : 9: "phieu-\nnhap-lap"
+TK -> TR : 10: Nhập số hoá\nđơn, chứng từ,\nthực nhập, đơn\ngiá, quét serial;\nbấm Lưu
+TR -> CTL ++ : 11: luu(maDonDat, p)
+CTL -> BUS ++ : 12: luu(f, nv)
+BUS -> DDB ++ : 13: daNhap\nTheoMau(ma)
+DDB --> BUS -- : 14: số đã nhập
+BUS -> BUS : 15: tachSerial\n(serial) từng\nmẫu, kiểm số
+BUS -> SED ++ : 16: phieuNhap\nCuaSerial(ds)
+SED --> BUS -- : 17: serial đã có
+alt serial đã tồn tại, thiếu hoặc thừa serial
+  BUS --> CTL : 18: LoiNghiepVu\n("Serial … đã\ntồn tại")
+  CTL --> TR : 19: "phieu-nhap-lap"\n(giữ phiếu nháp)
+else hợp lệ
+  BUS -> EM ++ : 20: persist(p)\n[phiếu nhập,\nchi tiết]
+  deactivate EM
+  loop mỗi serial
+    BUS -> EM ++ : 21: persist(s)\n[TRONG_KHO,\nngayNhap]
+    deactivate EM
+  end
+  BUS -> EM ++ : 22: flush()
+  deactivate EM
+  BUS -> DDB ++ : 23: capNhat\nSauNhap(ma)
+  deactivate DDB
+  BUS --> CTL : 24: maPhieu
+  CTL --> TR : 25: redirect /phieu-\nnhap/{ma}, "Phiếu\nđã khoá"
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

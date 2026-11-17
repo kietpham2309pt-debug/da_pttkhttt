@@ -39,6 +39,10 @@ public class ChanTaiKhoanBiKhoa extends OncePerRequestFilter {
             res.sendRedirect("/dang-nhap?daKhoa");
             return;
         }
+        if (a != null && a.isAuthenticated() && req.getRequestURI().startsWith("/quan-tri") && taiKhoanBUS.phaiDoiMatKhau(a.getName())) {
+            res.sendRedirect("/doi-mat-khau?lanDau");
+            return;
+        }
         chain.doFilter(req, res);
     }
 }

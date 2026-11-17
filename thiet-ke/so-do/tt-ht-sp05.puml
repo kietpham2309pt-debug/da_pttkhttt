@@ -1,0 +1,44 @@
+@startuml tt-ht-sp05
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__vãng lai__" as KH
+boundary "__: danh-sach__\n__.html__" as TR
+boundary "__: SanPham__\n__Khach__\n__Controller__" as CTL
+control "__: SanPham__\n__KhachBUS__" as BUS
+control "__: GiaBUS__" as GIA
+participant "__: SanPham__\n__TruyVan__\n__Khach__" as SPD <<DAO>>
+participant "__: KhuyenMai__\n__TruyVan__\n__Khach__" as KMD <<DAO>>
+participant "__: TonKho__\n__TruyVan__\n__Khach__" as TKD <<DAO>>
+
+KH -> TR : 1: Gõ từ khoá\nhoặc chọn danh\nmục, khoảng giá,\nthương hiệu,\ncách sắp xếp
+activate TR
+TR -> CTL ++ : 2: danhSach\n(loc, model)
+CTL -> BUS ++ : 3: timKiem(loc)
+BUS -> BUS : 4: loc.chuanHoa()\n[giá từ > giá đến\nthì đổi chỗ]
+BUS -> SPD ++ : 5: findAll\n(dieuKien,\nPageRequest\n(trang, 12,\nsapXep))
+SPD --> BUS -- : 6: Page<SanPham>\n[chỉ DANG_BAN,\ncó giá]
+BUS -> GIA ++ : 7: dongThe\n(dsSanPham)
+GIA -> KMD ++ : 8: dangChay(GIAM_\nTHEO_SAN_PHAM,\nDANG_CHAY, homNay)
+KMD --> GIA -- : 9: List<KhuyenMai>
+GIA -> TKD ++ : 10: demTrongKho\n(TRONG_KHO, dsMa)
+TKD --> GIA -- : 11: số máy\ntrong kho
+GIA -> TKD ++ : 12: demDangGiu(dsMa,\nđơn chờ, đã xác nhận)
+TKD --> GIA -- : 13: số máy\nđang giữ
+GIA --> BUS -- : 14: List<The\nSanPham> (giá\nsau khuyến mãi,\ntồn khả dụng)
+BUS --> CTL -- : 15: Page<The\nSanPham>
+CTL -> BUS ++ : 16: danhMuc(),\nthuongHieu()
+BUS --> CTL -- : 17: dữ liệu\nbộ lọc
+CTL --> TR -- : 18: "khach/\ndanh-sach"
+alt không có mẫu máy nào khớp
+  TR --> KH : 19: "Không tìm thấy\nsản phẩm phù hợp",\nnút Bỏ lọc
+else có kết quả
+  TR --> KH : 20: Thẻ sản phẩm,\ngiá gạch ngang,\n"Tạm hết hàng",\nsố kết quả, trang
+end
+deactivate TR
+@enduml

@@ -75,8 +75,9 @@ public class ChungController {
     public String khongCoQuyen(Model model) {
         model.addAttribute("tieuDe", "Không có quyền");
         model.addAttribute("noiDung", "Vai trò của tài khoản này không được dùng chức năng vừa mở.");
-        model.addAttribute("lienKet", "/quan-tri");
-        model.addAttribute("chuLienKet", "Về trang quản trị");
+        boolean nhanVien = taiKhoanBUS.nhanVienHienTai().isPresent();
+        model.addAttribute("lienKet", nhanVien ? "/quan-tri" : "/");
+        model.addAttribute("chuLienKet", nhanVien ? "Về trang quản trị" : "Về trang chủ");
         return "thong-diep";
     }
 }

@@ -1,0 +1,47 @@
+@startuml tt-ht-ht01
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Người dùng__" as ND
+boundary "__: dang-nhap__\n__.html__" as TR
+boundary "__: Chung__\n__Controller__" as CC
+control "__: Spring__\n__Security__\n__(BaoMat)__" as SS
+control "__: TaiKhoan__\n__BUS__" as BUS
+control "__: XuLy__\n__DangNhap__" as XL
+participant "__: TaiKhoan__\n__DAO__" as DAO <<DAO>>
+
+ND -> TR : 1: Mở trang\nđăng nhập
+activate TR
+TR -> CC ++ : 2: dangNhap()
+CC --> TR -- : 3: "dang-nhap"
+ND -> TR : 4: Nhập tên đăng\nnhập, mật khẩu,\nbấm Đăng nhập
+TR -> SS ++ : 5: POST /dang-nhap\n(tenDangNhap,\nmatKhau)
+SS -> BUS ++ : 6: loadUserBy\nUsername(ten)
+BUS -> DAO ++ : 7: findByTen\nDangNhap(ten)
+DAO --> BUS -- : 8: TaiKhoan
+BUS --> SS -- : 9: UserDetails\n(vai trò, khoá)
+SS -> SS : 10: matches(matKhau,\nmatKhauDaBam)
+alt mật khẩu đúng, tài khoản không bị khoá
+  SS -> XL ++ : 11: onAuthentication\nSuccess(req, res, auth)
+  XL -> DAO ++ : 12: findByTen\nDangNhap(ten)
+  DAO --> XL -- : 13: TaiKhoan
+  XL -> DAO ++ : 14: save(tk)\n[soLanSai\nLienTiep về 0]
+  deactivate DAO
+  XL --> TR -- : 15: chuyển tới /doi-mat-khau?lanDau\nnếu phaiDoiMatKhau; "/" (khách)\nhoặc /quan-tri (nhân viên)
+else sai tên đăng nhập hoặc mật khẩu
+  SS -> XL ++ : 16: onAuthentication\nFailure(req, res, ex)
+  XL -> DAO ++ : 17: findByTen\nDangNhap(ten)
+  DAO --> XL -- : 18: TaiKhoan
+  XL -> DAO ++ : 19: save(t)\n[soLanSai + 1;\nđủ 5 lần thì\nkhoá 15 phút]
+  deactivate DAO
+  XL --> TR -- : 20: chuyển tới /dang-nhap?sai\nhoặc /dang-nhap?tamKhoa
+  TR --> ND : 21: "Tên đăng nhập\nhoặc mật khẩu\nkhông đúng"
+end
+deactivate SS
+deactivate TR
+@enduml

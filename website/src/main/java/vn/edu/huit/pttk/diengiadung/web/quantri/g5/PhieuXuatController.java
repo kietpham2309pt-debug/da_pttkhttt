@@ -75,7 +75,7 @@ public class PhieuXuatController {
         try {
             Long maPhieu = phieuXuatBUS.luu(loai, ma, serial, nv);
             ra.addFlashAttribute("thongBao", PhieuXuatBUS.LOAI_DOI.equals(loai)
-                    ? "Đã lưu phiếu xuất #" + maPhieu + " (xuất đổi máy); máy mới đã giao cho khách, đơn giữ trạng thái Hoàn thành."
+                    ? "Đã lưu phiếu xuất #" + maPhieu + " (xuất đổi máy); máy mới chuyển Đã xuất, chờ nhân viên bán hàng giao cho khách và bấm \"Đã giao máy đổi\". Đơn giữ trạng thái Hoàn thành."
                     : "Đã lưu phiếu xuất #" + maPhieu + "; các máy chuyển Đã xuất, đơn chuyển Đang giao. Phiếu đã khoá.");
             return "redirect:/quan-tri/kho/phieu-xuat/" + maPhieu;
         } catch (LoiNghiepVu e) {

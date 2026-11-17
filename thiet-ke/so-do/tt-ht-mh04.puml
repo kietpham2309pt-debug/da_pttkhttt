@@ -1,0 +1,55 @@
+@startuml tt-ht-mh04
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Khách__\n__vãng lai__" as KH
+boundary "__: dat-hang__\n__.html__" as DH
+boundary "__: xac-nhan__\n__.html__" as XN
+boundary "__: DatHang__\n__Controller__" as CTL
+control "__: GioHang__\n__(phiên)__" as GIO
+control "__: DatHang__\n__BUS__" as BUS
+control "__: GiaBUS__" as GIA
+control "__: DonHang__\n__BUS__" as DHB
+participant "__: DonHang__\n__TruyVan__\n__Khach__" as DAO <<DAO>>
+
+KH -> DH : 1: Nhập thông tin\nnhận hàng, lắp đặt,\nthanh toán, mã giảm;\nbấm Xem lại đơn
+activate DH
+DH -> CTL ++ : 2: guiForm\n(phieu, nut)
+CTL -> BUS ++ : 3: tinh(gio,\nnoiThanh,\nmaGiamGia)
+BUS -> GIO ++ : 4: getDong()
+GIO --> BUS -- : 5: dòng giỏ
+BUS -> GIA ++ : 6: dongThe(ds),\nkiemMaGiamGia\n(maCode, giaTri)
+GIA --> BUS -- : 7: giá sau KM,\ntồn, mã giảm
+BUS --> CTL -- : 8: BangTinh\n(phí lắp,\ncọc, tổng)
+CTL -> CTL : 9: phieu.kiemTra()
+CTL --> XN -- : 10: "khach/\nxac-nhan"\n(bang, maLuot)
+deactivate DH
+activate XN
+KH -> XN : 11: Tích 2 ô đồng ý\nbắt buộc, bấm\nĐặt hàng
+XN -> CTL ++ : 12: datHang\n(maLuot,\ntongDaXem,\ndongY…)
+CTL -> CTL : 13: phien.\ndungMaLuot\nDat(maLuot)
+CTL -> BUS ++ : 14: datHang\n(phieu, gio,\nkh, dongY…,\ntongDaXem)
+BUS -> BUS : 15: tinh(…) [kiểm\nlại giá, tồn kho]
+alt chưa đồng ý, hết hàng hoặc tổng tiền đã đổi
+  BUS --> CTL : 16: LoiNghiep\nVu(giá đã đổi)
+  CTL --> XN : 17: "khach/\nxac-nhan" (loi)
+else hợp lệ
+  BUS -> DAO ++ : 18: save(don)\n[CHO_XAC_NHAN,\nCHUA_THANH_TOAN,\nchi tiết giữ donGia]
+  deactivate DAO
+  BUS -> DHB ++ : 19: ghiTaoMoi\n(don, null)
+  deactivate DHB
+  BUS -> GIO ++ : 20: xoaHet()
+  deactivate GIO
+  BUS --> CTL : 21: DonHang
+  CTL --> XN : 22: redirect\n/don-hang/\nhoan-tat/{ma}
+  XN --> KH : 23: "Đặt hàng thành\ncông", mã đơn, nút\nThanh toán ngay
+end
+deactivate BUS
+deactivate CTL
+deactivate XN
+@enduml

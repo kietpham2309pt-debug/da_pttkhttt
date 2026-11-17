@@ -36,7 +36,7 @@
                                     <tr th:each="p : ${n.phieu}">
                                         <td><input type="checkbox" name="maPhieu" th:value="${p.maPhieuGiao}" checked></td>
                                         <td class="ma-mo" th:text="'PG' + ${p.maPhieuGiao}"></td>
-                                        <td><a class="ma-mo" th:href="@{/quan-tri/giao-hang/phieu/{m}(m=${p.maPhieuGiao})}" th:text="${@dd.maDon(p.donHang.maDonHang)}"></a></td>
+                                        <td class="ma-mo" th:text="${@dd.maDon(p.donHang.maDonHang)}"></td>
                                         <td th:text="${p.donHang.hoTenNguoiNhan}"></td>
                                         <td th:text="${p.loaiViec.nhan}"></td>
                                         <td class="canh-phai" th:text="${@dd.tien(p.tienThuKhiGiao)}"></td>

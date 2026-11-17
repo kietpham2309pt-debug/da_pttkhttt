@@ -1,0 +1,64 @@
+@startuml tt-ht-kb06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: NV bán__\n__hàng__" as NV
+actor "__: Thủ kho__" as TK
+boundary "__: bao-hanh*__\n__.html__" as TR
+boundary "__: BaoHanh__\n__Controller__" as CTL
+control "__: BaoHanh__\n__BUS__" as BUS
+participant "__: Serial__\n__TruyVanG5__" as SED <<DAO>>
+participant "__: PhieuBaoHanh__\n__TruyVanG5__" as PBD <<DAO>>
+control "__: SerialBUS__" as SB
+
+== Tra cứu (UC-KB-07) và tiếp nhận ==
+NV -> TR : 1: Nhập serial,\nbấm Tra
+TR -> CTL ++ : 2: xem(loai, q)
+CTL -> BUS ++ : 3: traCuu\n(loai, tuKhoa)
+BUS -> SED ++ : 4: dayDu(so)\n→ SanPhamSerial
+deactivate SED
+BUS -> PBD ++ : 5: theoSerial(so)\n→ lịch sử
+deactivate PBD
+BUS -> BUS : 6: tính hạn\nbảo hành
+BUS --> CTL -- : 7: List<MayTraCuu>
+CTL --> TR -- : 8: kết quả tra cứu
+NV -> TR : 9: Ghi lỗi, tình\ntrạng, ngày hẹn;\nbấm Lưu
+TR -> CTL ++ : 10: tiepNhan(serial,\nhoTen, …, dongYCoPhi)
+CTL -> BUS ++ : 11: tiepNhan(…, nv)
+BUS -> BUS : 12: mot(soSerial)
+alt có phiếu đang mở, máy không Đã bán, đã bảo hành\n3 lần, hoặc hết hạn mà khách chưa đồng ý sửa có phí
+  BUS --> CTL : 13: LoiNghiepVu
+  CTL --> TR : 14: báo lỗi,\nkhông lập phiếu
+else hợp lệ
+  BUS -> PBD ++ : 15: save(p)\n[DA_TIEP_NHAN]
+  deactivate PBD
+  BUS -> SB ++ : 16: doiTrangThai(may,\nDANG_BAO_HANH)
+  deactivate SB
+  BUS --> CTL : 17: PhieuBaoHanh
+  CTL --> TR : 18: phiếu #…,\nin 2 liên
+end
+deactivate BUS
+deactivate CTL
+== Gửi hãng, nhận về, trả khách ==
+TK -> TR : 19: Bấm Đã gửi\nhãng, Đã nhận về
+TR -> CTL ++ : 20: guiHang(ma, ngay);\nnhanVe(ma, ngay, …)
+CTL -> BUS ++ : 21: guiHang(…);\nnhanVe(…)
+BUS -> PBD ++ : 22: save(p) [DA_GUI\n_HANG, DA_NHAN_VE]
+deactivate PBD
+deactivate BUS
+deactivate CTL
+NV -> TR : 23: Bấm Đã\ntrả khách
+TR -> CTL ++ : 24: traKhach\n(ma, ketQua)
+CTL -> BUS ++ : 25: traKhach\n(ma, ketQua)
+BUS -> PBD ++ : 26: save(p)\n[DA_TRA_KHACH]
+deactivate PBD
+BUS -> SB ++ : 27: doiTrangThai(serial,\nDA_BAN)
+deactivate SB
+deactivate BUS
+deactivate CTL
+@enduml

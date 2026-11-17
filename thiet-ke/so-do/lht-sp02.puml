@@ -1,0 +1,86 @@
+@startuml lht-sp02
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "san-pham.html" as DS <<boundary>> {
+  ô tìm, lọc danh mục,
+  thương hiệu, trạng thái
+}
+class "san-pham-form.html" as BM <<boundary>> {
+  tên, model, danh mục, thương hiệu,
+  bảo hành, lắp đặt, ảnh, thông số
+}
+class QuanTriSanPhamController <<boundary>> {
+  + danhSach(danhMuc, thuongHieu, trangThai, tuKhoa, model)
+  + them(model) : String
+  + sua(ma, model, ra) : String
+  + luu(bm, kq, model, ra) : String
+  + ngungBan(ma, ra) : String
+}
+class QuanTriSanPhamBUS <<control>> {
+  + loc(maDanhMuc, maThuongHieu, trangThai, tuKhoa)
+  + tim(ma) : SanPham
+  + bieuMauSua(ma) : BieuMauSanPham
+  + thongSoGoiY() : Map<String, List<String>>
+  + luu(bm) : SanPham
+  + ngungBan(ma) : String
+}
+class QuanTriDanhMucBUS <<control>> {
+  + danhMuc() : List<DanhMuc>
+  + thuongHieu() : List<ThuongHieu>
+}
+class SanPhamTruyVanG12 <<DAO>> {
+  + loc(dm, th, tt, tk) : List<SanPham>
+  + timDayDu(ma) : Optional<SanPham>
+  + findFirstByModelIgnoreCase(model)
+  + thongSoThuongGapTheoDanhMuc()
+  + save(sp) : SanPham
+}
+class DanhMucDAO <<DAO>> {
+  + findById(ma) : Optional<DanhMuc>
+}
+class ThuongHieuDAO <<DAO>> {
+  + findById(ma) : Optional<ThuongHieu>
+}
+class SanPham <<entity>> {
+  - tenSanPham : String
+  - model : String
+  - thoiHanBaoHanh : Integer
+  - canLapDat : Boolean
+  - anh : String
+  - trangThai : TrangThaiSanPham
+  - ngayTao : LocalDateTime
+}
+class ThongSoKyThuat <<entity>> {
+  - tenThongSo : String
+  - giaTri : String
+}
+class DanhMuc <<entity>> {
+  - maDanhMuc : String
+  - tenDanhMuc : String
+}
+class ThuongHieu <<entity>> {
+  - tenThuongHieu : String
+}
+
+DS ..> QuanTriSanPhamController
+BM ..> QuanTriSanPhamController : POST /quan-tri/san-pham/luu
+QuanTriSanPhamController ..> QuanTriSanPhamBUS
+QuanTriSanPhamController ..> QuanTriDanhMucBUS
+QuanTriSanPhamBUS ..> SanPhamTruyVanG12
+QuanTriSanPhamBUS ..> DanhMucDAO
+QuanTriSanPhamBUS ..> ThuongHieuDAO
+SanPhamTruyVanG12 ..> SanPham
+DanhMucDAO ..> DanhMuc
+ThuongHieuDAO ..> ThuongHieu
+SanPham "1" *-- "0..*" ThongSoKyThuat : gồm
+SanPham "*" --> "1" DanhMuc
+SanPham "*" --> "1" ThuongHieu
+@enduml

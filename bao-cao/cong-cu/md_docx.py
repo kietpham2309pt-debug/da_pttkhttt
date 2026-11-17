@@ -227,7 +227,7 @@ class DemHinh:
 def hinh(d, duong, chu_thich, dem, rong_cm=15.0, cao_toi_da_cm=22.0):
     from PIL import Image
     w, h = Image.open(duong).size
-    rong = min(rong_cm, RONG_TRANG_CM)
+    rong = rong_cm
     if h / w * rong > cao_toi_da_cm:
         rong = cao_toi_da_cm * w / h
     p = d.add_paragraph()

@@ -1,0 +1,75 @@
+@startuml lht-sp05
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "danh-sach.html" as Trang <<boundary>> {
+  ô tìm, danh mục, khoảng giá,
+  thương hiệu, sắp xếp, phân trang
+}
+class SanPhamKhachController <<boundary>> {
+  + danhSach(loc, model) : String
+}
+class SanPhamKhachBUS <<control>> {
+  + SO_MOI_TRANG = 12
+  + timKiem(loc) : Page<TheSanPham>
+  + danhMuc() : List<DanhMuc>
+  + thuongHieu() : List<ThuongHieu>
+}
+class LocSanPham {
+  danhMuc, thuongHieu, giaTu,
+  giaDen, tuKhoa, sapXep, trang
+  + chuanHoa()
+}
+class GiaBUS <<control>> {
+  + dongThe(dsSanPham) : List<TheSanPham>
+  + khuyenMaiDangApDung(dsSanPham)
+  + tonKhaDung(dsMaSanPham)
+  + giamMoiChiec(km, giaBan) : long
+}
+class SanPhamTruyVanKhach <<DAO>> {
+  + findAll(dieuKien, trang) : Page<SanPham>
+}
+class KhuyenMaiTruyVanKhach <<DAO>> {
+  + dangChay(loai, trangThai, homNay)
+}
+class TonKhoTruyVanKhach <<DAO>> {
+  + demTrongKho(trangThai, dsMa)
+  + demDangGiu(dsMa, trangThaiDon)
+}
+class SanPham <<entity>> {
+  - tenSanPham : String
+  - model : String
+  - giaBan : Long
+  - trangThai : TrangThaiSanPham
+}
+class KhuyenMai <<entity>> {
+  - loai : LoaiKhuyenMai
+  - mucGiam : long
+  - ngayBatDau, ngayKetThuc
+}
+class SanPhamSerial <<entity>> {
+  - soSerial : String
+  - trangThai : TrangThaiSerial
+}
+
+Trang ..> SanPhamKhachController : GET /san-pham
+SanPhamKhachController ..> SanPhamKhachBUS
+SanPhamKhachController ..> LocSanPham
+SanPhamKhachBUS ..> LocSanPham
+SanPhamKhachBUS ..> GiaBUS
+SanPhamKhachBUS ..> SanPhamTruyVanKhach
+GiaBUS ..> KhuyenMaiTruyVanKhach
+GiaBUS ..> TonKhoTruyVanKhach
+SanPhamTruyVanKhach ..> SanPham
+KhuyenMaiTruyVanKhach ..> KhuyenMai
+TonKhoTruyVanKhach ..> SanPhamSerial
+KhuyenMai "*" --> "*" SanPham : áp cho
+SanPhamSerial "*" --> "1" SanPham : là chiếc của
+@enduml

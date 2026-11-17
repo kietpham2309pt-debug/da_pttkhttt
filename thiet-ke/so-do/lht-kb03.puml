@@ -1,0 +1,99 @@
+@startuml lht-kb03
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "phieu-nhap-chon-don.html" as T1 <<boundary>> {
+  đơn đặt hàng chờ nhập
+}
+class "phieu-nhap-lap.html" as T2 <<boundary>> {
+  số hoá đơn, chứng từ,
+  thực nhập, đơn giá, serial
+}
+class "phieu-nhap-chi-tiet.html" as T3 <<boundary>> {
+  phiếu đã khoá, serial
+}
+class PhieuNhapController <<boundary>> {
+  + danhSach(model) : String
+  + lap(donDat, model, ra) : String
+  + luu(maDonDat, p, model, ra) : String
+  + chiTiet(ma, model, ra) : String
+}
+class QuyenG5 <<control>> {
+  + batBuoc(vai…) : NhanVien
+}
+class PhieuNhapBUS <<control>> {
+  + MUC_GIA_TRI_CAO = 15 000 000
+  + danhSach() : List<PhieuNhapDong>
+  + taoNhap(maDonDat) : PhieuNhapNhap
+  + luu(f, thuKho) : Long
+  + xem(ma) : PhieuNhapXem
+  + tachSerial(s) : List<String>
+}
+class DonDatBUS <<control>> {
+  + choNhap() : List<DonDatHangNCC>
+  + xem(ma) : DonDatXem
+  + daNhapTheoMau(maDonDat)
+  + capNhatSauNhap(maDonDat) : boolean
+}
+class PhieuNhapTruyVanG5 <<DAO>> {
+  + danhSach()
+  + chiTiet(ma)
+  + donGiaGanNhat(maSP)
+}
+class SerialTruyVanG5 <<DAO>> {
+  + phieuNhapCuaSerial(dsSerial)
+  + theoPhieuNhap(ma)
+}
+class DonDatTruyVanG5 <<DAO>> {
+  + theoTrangThai(tt)
+  + chiTiet(ma)
+  + daNhapTheoMau(ma)
+}
+class "EntityManager (JPA)" as EM <<DAO>> {
+  + persist(obj)
+  + flush()
+}
+class PhieuNhap <<entity>> {
+  - soHoaDonNCC : String
+  - ngayNhap : LocalDateTime
+  - ghiChu : String
+}
+class ChiTietPhieuNhap <<entity>> {
+  - soLuongChungTu : int
+  - soLuongThucNhap : int
+  - donGiaNhap : long
+}
+class SanPhamSerial <<entity>> {
+  - soSerial : String
+  - ngayNhap : LocalDateTime
+  - trangThai : TrangThaiSerial
+}
+class DonDatHangNCC <<entity>> {
+  - trangThai : TrangThaiDonDat
+}
+
+T1 ..> PhieuNhapController : GET /lap
+T2 ..> PhieuNhapController : POST /lap
+T3 ..> PhieuNhapController
+PhieuNhapController ..> QuyenG5
+PhieuNhapController ..> PhieuNhapBUS
+PhieuNhapController ..> DonDatBUS
+PhieuNhapBUS ..> DonDatBUS
+PhieuNhapBUS ..> PhieuNhapTruyVanG5
+PhieuNhapBUS ..> SerialTruyVanG5
+PhieuNhapBUS ..> EM
+DonDatBUS ..> DonDatTruyVanG5
+EM ..> PhieuNhap
+EM ..> SanPhamSerial
+DonDatTruyVanG5 ..> DonDatHangNCC
+PhieuNhap "1" *-- "1..*" ChiTietPhieuNhap
+ChiTietPhieuNhap "1" -- "0..*" SanPhamSerial
+PhieuNhap "*" --> "0..1" DonDatHangNCC
+@enduml

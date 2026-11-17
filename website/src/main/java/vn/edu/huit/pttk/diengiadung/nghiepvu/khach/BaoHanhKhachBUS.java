@@ -10,6 +10,7 @@ import vn.edu.huit.pttk.diengiadung.khodulieu.khach.TonKhoTruyVanKhach;
 import vn.edu.huit.pttk.diengiadung.nghiepvu.LoiNghiepVu;
 import vn.edu.huit.pttk.diengiadung.thucthe.PhieuBaoHanh;
 import vn.edu.huit.pttk.diengiadung.thucthe.SanPhamSerial;
+import vn.edu.huit.pttk.diengiadung.thucthe.TrangThaiSerial;
 
 @Service
 public class BaoHanhKhachBUS {
@@ -61,9 +62,10 @@ public class BaoHanhKhachBUS {
         LocalDate han = ngayBan.plusMonths(thang);
         List<PhieuBaoHanh> phieu = hauMaiTV.phieuBaoHanh(may.getSoSerial());
         Long maDon = may.getDonHangBan() == null ? null : may.getDonHangBan().getMaDonHang();
+        boolean daTraLai = may.getTrangThai() != TrangThaiSerial.DA_BAN && may.getTrangThai() != TrangThaiSerial.DANG_BAO_HANH;
         return new KetQuaBaoHanh(may.getSoSerial(), may.getSanPham().getTenSanPham(), may.getSanPham().getModel(),
-                may.getSanPham().getThuongHieu().getTenThuongHieu(), maDon, ngayBan, thang, han, !LocalDate.now().isAfter(han),
-                may.getTrangThai().getNhan(), phieu);
+                may.getSanPham().getThuongHieu().getTenThuongHieu(), maDon, ngayBan, thang, han,
+                !daTraLai && !LocalDate.now().isAfter(han), daTraLai, may.getTrangThai().getNhan(), phieu);
     }
 
     public static class KetQuaBaoHanh {
@@ -77,11 +79,13 @@ public class BaoHanhKhachBUS {
         private final int thoiHanThang;
         private final LocalDate hanBaoHanh;
         private final boolean conHan;
+        private final boolean daTraLai;
         private final String trangThaiMay;
         private final List<PhieuBaoHanh> phieu;
 
         public KetQuaBaoHanh(String soSerial, String tenSanPham, String model, String thuongHieu, Long maDon, LocalDate ngayBan,
-                             int thoiHanThang, LocalDate hanBaoHanh, boolean conHan, String trangThaiMay, List<PhieuBaoHanh> phieu) {
+                             int thoiHanThang, LocalDate hanBaoHanh, boolean conHan, boolean daTraLai, String trangThaiMay,
+                             List<PhieuBaoHanh> phieu) {
             this.soSerial = soSerial;
             this.tenSanPham = tenSanPham;
             this.model = model;
@@ -91,6 +95,7 @@ public class BaoHanhKhachBUS {
             this.thoiHanThang = thoiHanThang;
             this.hanBaoHanh = hanBaoHanh;
             this.conHan = conHan;
+            this.daTraLai = daTraLai;
             this.trangThaiMay = trangThaiMay;
             this.phieu = phieu;
         }
@@ -129,6 +134,10 @@ public class BaoHanhKhachBUS {
 
         public boolean isConHan() {
             return conHan;
+        }
+
+        public boolean isDaTraLai() {
+            return daTraLai;
         }
 
         public String getTrangThaiMay() {

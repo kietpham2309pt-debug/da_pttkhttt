@@ -23,8 +23,10 @@ import vn.edu.huit.pttk.diengiadung.nghiepvu.TaiKhoanBUS;
 import vn.edu.huit.pttk.diengiadung.thucthe.ChiTietDonHang;
 import vn.edu.huit.pttk.diengiadung.thucthe.DonHang;
 import vn.edu.huit.pttk.diengiadung.thucthe.GiaoDichThanhToan;
+import vn.edu.huit.pttk.diengiadung.thucthe.KhuyenMai;
 import vn.edu.huit.pttk.diengiadung.thucthe.LichSuTrangThaiDon;
 import vn.edu.huit.pttk.diengiadung.thucthe.LoaiGiaoDich;
+import vn.edu.huit.pttk.diengiadung.thucthe.LoaiKhuyenMai;
 import vn.edu.huit.pttk.diengiadung.thucthe.NhanVien;
 import vn.edu.huit.pttk.diengiadung.thucthe.PhieuGiaoHang;
 import vn.edu.huit.pttk.diengiadung.thucthe.PhieuXuat;
@@ -241,11 +243,20 @@ public class DonHangQuanTriBUS {
         }
         String lyDo = G4Chung.gioiHan(ct == null ? loai : loai + ": " + ct, 255, "Lý do huỷ");
         don.setLyDoHuy(lyDo);
-        long hoan = don.getTienCoc() == null ? 0 : don.getTienCoc();
+        long hoan = 0;
+        String cach = "Hoàn theo cách khách đã trả";
+        for (GiaoDichThanhToan gd : giaoDichDAO.theoDon(don)) {
+            if (gd.getTrangThai() != TrangThaiGiaoDich.THANH_CONG) {
+                continue;
+            }
+            if (gd.getLoai() == LoaiGiaoDich.HOAN_TIEN) {
+                hoan -= gd.getSoTien();
+            } else {
+                hoan += gd.getSoTien();
+                cach = gd.getPhuongThuc() == null ? cach : gd.getPhuongThuc();
+            }
+        }
         if (hoan > 0) {
-            String cach = giaoDichDAO.theoDon(don).stream()
-                    .filter(g -> g.getLoai() == LoaiGiaoDich.COC && g.getTrangThai() == TrangThaiGiaoDich.THANH_CONG)
-                    .map(GiaoDichThanhToan::getPhuongThuc).findFirst().orElse("Hoàn theo cách khách đã trả");
             GiaoDichThanhToan g = new GiaoDichThanhToan();
             g.setDonHang(don);
             g.setLoai(LoaiGiaoDich.HOAN_TIEN);
@@ -264,7 +275,11 @@ public class DonHangQuanTriBUS {
                 phieuGiaoDAO.save(p);
             }
         }
+        KhuyenMai km = don.getKhuyenMai();
+        if (km != null && km.getLoai() == LoaiKhuyenMai.MA_GIAM_GIA && km.getSoLuotDaDung() != null && km.getSoLuotDaDung() > 0) {
+            km.setSoLuotDaDung(km.getSoLuotDaDung() - 1);
+        }
         donHangBUS.doiTrangThai(don, TrangThaiDonHang.DA_HUY, nv, "Huỷ đơn: " + lyDo);
-        return hoan;
+        return Math.max(0, hoan);
     }
 }

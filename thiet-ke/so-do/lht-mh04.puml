@@ -1,0 +1,96 @@
+@startuml lht-mh04
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "dat-hang.html" as T1 <<boundary>> {
+  người nhận, địa chỉ, khu vực,
+  lắp đặt, cách thanh toán,
+  mã giảm giá
+}
+class "xac-nhan.html" as T2 <<boundary>> {
+  tóm tắt đơn, 3 ô đồng ý
+}
+class "hoan-tat.html" as T3 <<boundary>> {
+  mã đơn, nút Thanh toán ngay
+}
+class DatHangController <<boundary>> {
+  + moTrang(model, ra) : String
+  + guiForm(phieu, nut, model, ra) : String
+  + xacNhan(model, ra) : String
+  + datHang(maLuot, tongDaXem, dongY…, model)
+  + hoanTat(ma, model) : String
+}
+class GioHang <<control>> {
+  + getDong() : Map
+  + coLapDat(maSanPham) : boolean
+  + xoaHet()
+}
+class PhienKhach <<control>> {
+  + getBanNhap() : PhieuDatHang
+  + capMaLuotDat() : String
+  + dungMaLuotDat(ma) : boolean
+}
+class DatHangBUS <<control>> {
+  + dienMacDinh(phieu, kh)
+  + apLapDat(gio, phieu)
+  + tinh(gio, noiThanh, maGiamGia)
+  + datHang(phieu, gio, kh, dongY…, tongDaXem)
+}
+class GiaBUS <<control>> {
+  + dongThe(dsSanPham)
+  + kiemMaGiamGia(maCode, giaTriDon)
+  + phiLapDat(coLap, giaTriSauGiam)
+  + tienCoc(tongTien) : long
+}
+class DonHangBUS <<control>> {
+  + ghiTaoMoi(don, nguoiLam)
+}
+class SanPhamTruyVanKhach <<DAO>> {
+  + theoMa(dsMa)
+}
+class DonHangTruyVanKhach <<DAO>> {
+  + save(don) : DonHang
+}
+class LichSuTrangThaiDonDAO <<DAO>> {
+  + save(ls)
+}
+class DonHang <<entity>> {
+  - hoTenNguoiNhan, soDienThoaiNhan
+  - diaChiGiao : String
+  - tongTien, tienCoc : long
+  - trangThai : TrangThaiDonHang
+  - dongYXuLyDuLieu : Boolean
+}
+class ChiTietDonHang <<entity>> {
+  - tenSanPhamLucBan : String
+  - soLuong : int
+  - donGia : long
+}
+class LichSuTrangThaiDon <<entity>> {
+  - trangThaiCu, trangThaiMoi
+  - thoiDiem : LocalDateTime
+}
+
+T1 ..> DatHangController : /dat-hang
+T2 ..> DatHangController : /dat-hang/xac-nhan
+T3 ..> DatHangController
+DatHangController ..> DatHangBUS
+DatHangController ..> GioHang
+DatHangController ..> PhienKhach
+DatHangBUS ..> GiaBUS
+DatHangBUS ..> DonHangBUS
+DatHangBUS ..> SanPhamTruyVanKhach
+DatHangBUS ..> DonHangTruyVanKhach
+DonHangBUS ..> LichSuTrangThaiDonDAO
+DonHangTruyVanKhach ..> DonHang
+LichSuTrangThaiDonDAO ..> LichSuTrangThaiDon
+DonHang "1" *-- "1..*" ChiTietDonHang : gồm
+DonHang "1" *-- "1..*" LichSuTrangThaiDon : ghi
+@enduml

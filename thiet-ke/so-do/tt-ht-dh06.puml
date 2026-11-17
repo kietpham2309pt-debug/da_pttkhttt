@@ -1,0 +1,62 @@
+@startuml tt-ht-dh06
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: NV bán__\n__hàng__" as NV
+actor "__: Quản lý__" as QL
+actor "__: Kế toán__" as KT
+boundary "__: doi-tra-tao,__\n__doi-tra-chi-__\n__tiet.html__" as TR
+boundary "__: DoiTra__\n__Controller__" as CTL
+control "__: DoiTraBUS__" as BUS
+participant "__: YeuCauDoiTra__\n__TruyVanG4__" as YCD <<DAO>>
+participant "__: GiaoDich__\n__TruyVanG4__" as GDD <<DAO>>
+control "__: SerialBUS__" as SB
+
+== Nhân viên bán hàng tiếp nhận ==
+NV -> TR : 1: Chọn máy, hình\nthức, lý do, tình\ntrạng; Gửi duyệt
+TR -> CTL ++ : 2: tao(don, serial,\nhinhThuc, …)
+CTL -> BUS ++ : 3: tao(maDon,\nsoSerial, …)
+BUS -> YCD ++ : 4: choDuyetCua\nSerial(so)
+deactivate YCD
+BUS -> BUS : 5: doiChieu(loai,\nsoNgay, …)
+alt không đạt và không xin ngoại lệ
+  BUS --> CTL : 6: KetQuaTao\n(khongDat)
+  CTL --> TR : 7: "Không đủ điều\nkiện đổi trả"
+else đủ điều kiện hoặc xin ngoại lệ
+  BUS -> YCD ++ : 8: save(y)\n[CHO_DUYET]
+  deactivate YCD
+  BUS --> CTL -- : 9: KetQuaTao\n(maYeuCau)
+  deactivate CTL
+end
+== Quản lý cửa hàng duyệt ==
+QL -> TR : 10: Sửa phí,\nbấm Duyệt
+TR -> CTL ++ : 11: duyet(ma, lucMo,\nphiKhauTru, …)
+CTL -> BUS ++ : 12: duyet(ma,\nlucMo, …)
+BUS -> YCD ++ : 13: layDayDu(ma)
+deactivate YCD
+loop mỗi chiếc máy trong yêu cầu
+  BUS -> SB ++ : 14: doiTrangThai\n(s, TRA_VE_KHO)
+  deactivate SB
+end
+BUS -> YCD ++ : 15: save(y)\n[DA_DUYET]
+deactivate YCD
+deactivate BUS
+CTL --> TR -- : 16: "Đã duyệt …"
+== Kế toán hoàn tiền (hình thức Trả hàng) ==
+KT -> TR : 17: Bấm Đã\nhoàn tiền
+TR -> CTL ++ : 18: hoanTien(ma,\nlucMo, cachHoan, …)
+CTL -> BUS ++ : 19: hoanTien(ma,\nlucMo, …)
+BUS -> BUS : 20: cachDaTra\n(don)
+BUS -> GDD ++ : 21: save(g)\n[HOAN_TIEN]
+deactivate GDD
+BUS -> YCD ++ : 22: save(y)\n[HOAN_TAT]
+deactivate YCD
+BUS -> BUS : 23: traToanBo(don)
+deactivate BUS
+CTL --> TR -- : 24: "Đã ghi hoàn …"
+@enduml

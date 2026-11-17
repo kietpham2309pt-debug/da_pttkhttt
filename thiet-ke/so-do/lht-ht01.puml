@@ -1,0 +1,58 @@
+@startuml lht-ht01
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "dang-nhap.html" as Trang <<boundary>> {
+  tenDangNhap, matKhau
+}
+class ChungController <<boundary>> {
+  + dangNhap() : String
+  + doiMatKhau(matKhauCu, matKhauMoi, nhapLai, …) : String
+}
+class BaoMat <<control>> {
+  + chuoiLoc(http, xuLy) : SecurityFilterChain
+  + maHoaMatKhau() : PasswordEncoder
+}
+class TaiKhoanBUS <<control>> {
+  + loadUserByUsername(ten) : UserDetails
+  + tenDangNhapHienTai() : Optional<String>
+}
+class XuLyDangNhap <<control>> {
+  + SO_LAN_SAI_TOI_DA = 5
+  + PHUT_KHOA = 15
+  + onAuthenticationSuccess(req, res, auth)
+  + onAuthenticationFailure(req, res, ex)
+}
+class TaiKhoanDAO <<DAO>> {
+  + findByTenDangNhap(ten) : Optional<TaiKhoan>
+  + save(tk) : TaiKhoan
+}
+class TaiKhoan <<entity>> {
+  - tenDangNhap : String
+  - matKhau : String
+  - trangThai : TrangThaiTaiKhoan
+  - soLanSaiLienTiep : Integer
+  - khoaDenLuc : LocalDateTime
+  - phaiDoiMatKhau : Boolean
+}
+class VaiTro <<entity>> {
+  - maVaiTro : String
+  - tenVaiTro : String
+}
+
+Trang ..> ChungController : GET /dang-nhap
+Trang ..> BaoMat : POST /dang-nhap
+BaoMat ..> TaiKhoanBUS : UserDetailsService
+BaoMat ..> XuLyDangNhap : thành công,\nthất bại
+TaiKhoanBUS ..> TaiKhoanDAO
+XuLyDangNhap ..> TaiKhoanDAO
+TaiKhoanDAO ..> TaiKhoan
+TaiKhoan "*" -right-> "1..*" VaiTro : có vai trò
+@enduml

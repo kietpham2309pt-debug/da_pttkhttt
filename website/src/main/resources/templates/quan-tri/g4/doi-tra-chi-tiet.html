@@ -154,7 +154,7 @@
 
                     <div class="khoi" th:if="${tt == 'DA_DUYET' and y.hinhThuc.name() == 'DOI_MAY'}">
                         <div class="khoi__dau"><h2>Đổi máy</h2></div>
-                        <p>Đã ghi chú cho thủ kho xuất một máy cùng mẫu cho đơn (module kho lập phiếu xuất). Máy khách trả đang ở trạng thái Trả về kho.</p>
+                        <p>Đã ghi chú cho thủ kho xuất một máy cùng mẫu cho đơn (thủ kho lập phiếu xuất máy đổi ở phần Xuất kho). Máy mới ở trạng thái Đã xuất cho tới khi nhân viên bán hàng bấm "Đã giao máy đổi".</p>
                         <p th:if="${#lists.isEmpty(ct.phieuXuatMayDoi)}">Chưa có phiếu xuất máy đổi.</p>
                         <ul class="g4-ds" th:unless="${#lists.isEmpty(ct.phieuXuatMayDoi)}">
                             <li th:each="x : ${ct.phieuXuatMayDoi}">

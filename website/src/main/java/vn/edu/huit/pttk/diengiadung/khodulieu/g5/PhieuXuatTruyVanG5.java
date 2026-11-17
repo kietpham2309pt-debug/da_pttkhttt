@@ -19,6 +19,7 @@ public interface PhieuXuatTruyVanG5 extends JpaRepository<PhieuXuat, Long> {
 
     boolean existsByLyDoXuat(String lyDoXuat);
 
-    @Query("select s.soSerial, d.maDonHang, p.maPhieuXuat from PhieuXuat p join p.serial s join p.donHang d where s.trangThai = :ts and d.trangThai = :td order by p.ngayXuat asc")
+    @Query("select s.soSerial, d.maDonHang, p.maPhieuXuat from PhieuXuat p join p.serial s join p.donHang d where s.trangThai = :ts and d.trangThai = :td"
+            + " and not exists (select p2.maPhieuXuat from PhieuXuat p2 join p2.serial s2 where s2 = s and p2.maPhieuXuat > p.maPhieuXuat) order by p.ngayXuat asc")
     List<Object[]> serialCuaDonTheoTrangThai(@Param("ts") TrangThaiSerial ts, @Param("td") TrangThaiDonHang td);
 }

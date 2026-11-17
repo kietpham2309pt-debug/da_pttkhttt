@@ -86,6 +86,9 @@ public class GiaoHangBUS {
 
     private static List<String> mayCanLap(DonHang don) {
         List<String> kq = new ArrayList<>();
+        if (!Boolean.TRUE.equals(don.getCanLapDat())) {
+            return kq;
+        }
         for (ChiTietDonHang ct : don.getChiTiet()) {
             if (Boolean.TRUE.equals(ct.getSanPham().getCanLapDat())) {
                 kq.add(ct.getTenSanPhamLucBan() + " × " + ct.getSoLuong());
@@ -230,7 +233,7 @@ public class GiaoHangBUS {
             throw new LoiNghiepVu("Chọn ngày giờ sau thời điểm hiện tại");
         }
         boolean noiThanh = !Boolean.FALSE.equals(don.getNoiThanh());
-        boolean coLap = Boolean.TRUE.equals(don.getCanLapDat()) || !mayCanLap(don).isEmpty();
+        boolean coLap = Boolean.TRUE.equals(don.getCanLapDat());
         boolean vanChuyen = PhanCongForm.VAN_CHUYEN.equals(f.getCachGiao());
         if (!noiThanh && !vanChuyen) {
             throw new LoiNghiepVu("Đơn giao tỉnh phải gửi đơn vị vận chuyển (QĐ2)");
@@ -242,10 +245,10 @@ public class GiaoHangBUS {
             throw new LoiNghiepVu("Đơn gửi đơn vị vận chuyển chỉ có loại việc Giao hàng, cửa hàng không lắp đặt");
         }
         if (!vanChuyen && coLap && f.getLoaiViec() == LoaiViecGiao.GIAO) {
-            throw new LoiNghiepVu("Đơn có máy cần lắp: chọn Giao kèm lắp đặt, hoặc Khảo sát lắp đặt trước");
+            throw new LoiNghiepVu("Khách đã chọn lắp đặt: chọn Giao kèm lắp đặt, hoặc Khảo sát lắp đặt trước");
         }
         if (!coLap && f.getLoaiViec() != LoaiViecGiao.GIAO) {
-            throw new LoiNghiepVu("Đơn không có máy cần lắp, chọn loại việc Giao hàng");
+            throw new LoiNghiepVu("Khách không chọn lắp đặt cho đơn này, chọn loại việc Giao hàng");
         }
         if (f.getLoaiViec() != LoaiViecGiao.KHAO_SAT && (f.getMaPhieu() == null || phieu.getLoaiViec() == LoaiViecGiao.KHAO_SAT)) {
             boolean daCo = phieuDAO.theoDon(don).stream()

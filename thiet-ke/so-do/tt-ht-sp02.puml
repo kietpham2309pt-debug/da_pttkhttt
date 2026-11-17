@@ -1,0 +1,49 @@
+@startuml tt-ht-sp02
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam sequenceMessageAlign left
+hide footbox
+
+actor "__: Nhân viên__\n__bán hàng__" as NV
+boundary "__: san-pham-__\n__form.html__" as TR
+boundary "__: QuanTri__\n__SanPham__\n__Controller__" as CTL
+control "__: QuanTri__\n__SanPhamBUS__" as BUS
+participant "__: SanPham__\n__TruyVanG12__" as SPD <<DAO>>
+participant "__: DanhMuc__\n__DAO__" as DMD <<DAO>>
+participant "__: ThuongHieu__\n__DAO__" as THD <<DAO>>
+
+NV -> TR : 1: Bấm Thêm\nmẫu máy
+activate TR
+TR -> CTL ++ : 2: them(model)
+CTL -> BUS ++ : 3: thongSoGoiY()
+BUS -> SPD ++ : 4: thongSoThuongGap\nTheoDanhMuc()
+SPD --> BUS -- : 5: tên thông số\ntheo danh mục
+BUS --> CTL -- : 6: Map gợi ý
+CTL --> TR -- : 7: "san-pham-form"
+NV -> TR : 8: Nhập thông tin,\nthông số, bấm Lưu
+TR -> CTL ++ : 9: luu(bm, kq,\nmodel, ra)
+CTL -> BUS ++ : 10: luu(bm)
+BUS -> SPD ++ : 11: findFirstBy\nModelIgnoreCase(model)
+SPD --> BUS -- : 12: Optional<SanPham>
+BUS -> DMD ++ : 13: findById\n(maDanhMuc)
+DMD --> BUS -- : 14: DanhMuc
+BUS -> THD ++ : 15: findById\n(maThuongHieu)
+THD --> BUS -- : 16: ThuongHieu
+BUS -> BUS : 17: kiểm tra ô bắt buộc,\nthông số đo là số,\nbếp âm phải có\nkích thước khoét đá
+alt model trùng, thiếu ô hoặc thông số sai
+  BUS --> CTL : 18: LoiNhapLieu(loiO)
+  CTL --> TR : 19: "san-pham-form"\n(loiO)
+  TR --> NV : 20: Báo lỗi dưới\ntừng ô, không lưu
+else hợp lệ
+  BUS -> SPD ++ : 21: save(sp)\n[CHUA_MO_BAN,\nngayTao, thông số]
+  SPD --> BUS -- : 22: SanPham
+  BUS --> CTL : 23: SanPham
+  CTL --> TR : 24: redirect\n/quan-tri/san-pham\n"Đã lưu mẫu máy …,\nchờ Quản lý cửa\nhàng đặt giá bán"
+end
+deactivate BUS
+deactivate CTL
+deactivate TR
+@enduml

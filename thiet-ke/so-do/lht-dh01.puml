@@ -1,0 +1,87 @@
+@startuml lht-dh01
+!pragma layout smetana
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 15
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam classAttributeIconSize 0
+hide circle
+hide empty members
+
+class "don-hang.html" as T1 <<boundary>> {
+  lọc trạng thái, tìm mã đơn,
+  số điện thoại, phút chờ
+}
+class "don-hang-chi-tiet.html" as T2 <<boundary>> {
+  chi tiết đơn, tồn kho,
+  nút Xác nhận, Gọi lại, Huỷ
+}
+class DonHangQuanTriController <<boundary>> {
+  + danhSach(trangThai, tuKhoa, model)
+  + chiTiet(ma, model, ra) : String
+  + luuGhiChu(ma, ghiChu, diaChiGiao, …)
+  + goiLai(ma, trangThaiLucMo, ra) : String
+  + xacNhan(ma, trangThaiLucMo, ra) : String
+  + huy(ma, trangThaiLucMo, loaiLyDo, …)
+}
+class DonHangQuanTriBUS <<control>> {
+  + PHUT_GOI_TOI_DA = 30
+  + SO_LAN_GOI_TOI_DA = 3
+  + danhSach(trangThai, tuKhoa)
+  + chiTiet(ma) : ChiTietDon
+  + goiLaiSau(ma, lucMo) : int
+  + xacNhan(ma, lucMo)
+  + huy(ma, lucMo, loaiLyDo, …) : long
+}
+class DonHangBUS <<control>> {
+  + duocDoi(tu, sang) : boolean
+  + doiTrangThai(don, moi, nguoiLam, …)
+  + lichSu(don)
+}
+class TaiKhoanBUS <<control>> {
+  + batBuocNhanVien()
+}
+class DonHangTruyVanG4 <<DAO>> {
+  + timDon(tt, sdt, ma)
+  + layDayDu(ma)
+  + soLuongDangGiu(maSP, maDon)
+}
+class SerialTruyVanG4 <<DAO>> {
+  + demTheoTrangThai(maSP, tt)
+}
+class PhieuXuatTruyVanG4 <<DAO>> {
+  + demTheoDon(maDon)
+}
+class LichSuTrangThaiDonDAO <<DAO>> {
+  + save(ls)
+}
+class DonHang <<entity>> {
+  - trangThai : TrangThaiDonHang
+  - ghiChu, lyDoHuy : String
+  - tienCoc : Long
+  - nhanVienDuyet : NhanVien
+}
+class SanPhamSerial <<entity>> {
+  - soSerial : String
+  - trangThai : TrangThaiSerial
+}
+class LichSuTrangThaiDon <<entity>> {
+  - trangThaiCu, trangThaiMoi
+  - thoiDiem, nhanVien
+}
+
+T1 ..> DonHangQuanTriController : GET /quan-tri/don-hang
+T2 ..> DonHangQuanTriController : POST /{ma}/xac-nhan
+DonHangQuanTriController ..> DonHangQuanTriBUS
+DonHangQuanTriBUS ..> DonHangBUS
+DonHangQuanTriBUS ...> TaiKhoanBUS
+DonHangQuanTriBUS ..> DonHangTruyVanG4
+DonHangQuanTriBUS ..> SerialTruyVanG4
+DonHangQuanTriBUS ...> PhieuXuatTruyVanG4
+DonHangBUS ..> LichSuTrangThaiDonDAO
+DonHangTruyVanG4 ..> DonHang
+SerialTruyVanG4 ..> SanPhamSerial
+LichSuTrangThaiDonDAO ..> LichSuTrangThaiDon
+DonHang "1" *-- "1..*" LichSuTrangThaiDon
+@enduml

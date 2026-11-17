@@ -300,10 +300,6 @@ public class PhieuXuatBUS {
             for (SanPhamSerial s : ds) {
                 s.setDonHangBan(don);
                 serialBUS.doiTrangThai(s, TrangThaiSerial.DA_XUAT);
-                if (LOAI_DOI.equals(loai)) {
-                    s.setNgayBan(bayGio);
-                    serialBUS.doiTrangThai(s, TrangThaiSerial.DA_BAN);
-                }
                 p.getSerial().add(s);
             }
         }

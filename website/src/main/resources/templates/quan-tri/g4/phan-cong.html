@@ -37,6 +37,7 @@
                                 <dt>Người nhận</dt><dd th:text="${don.hoTenNguoiNhan} + ' · ' + ${don.soDienThoaiNhan}"></dd>
                                 <dt>Địa chỉ</dt><dd th:text="${don.diaChiGiao}"></dd>
                                 <dt>Khu vực</dt><dd th:text="${don.noiThanh} ? 'Nội thành: nhân viên cửa hàng tự giao' : 'Tỉnh: gửi đơn vị vận chuyển, không lắp'"></dd>
+                                <dt>Lắp đặt</dt><dd th:text="${don.canLapDat} ? 'Khách chọn lắp đặt tại nhà' : 'Khách không chọn lắp đặt'"></dd>
                                 <dt>Trạng thái</dt><dd th:text="${don.trangThai.nhan}"></dd>
                                 <dt>Ghi chú</dt><dd class="g4-ghi-chu" th:text="${don.ghiChu != null ? don.ghiChu : 'Không có'}"></dd>
                             </dl>

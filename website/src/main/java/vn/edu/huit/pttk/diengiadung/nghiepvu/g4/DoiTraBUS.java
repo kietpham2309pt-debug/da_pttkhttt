@@ -24,6 +24,7 @@ import vn.edu.huit.pttk.diengiadung.nghiepvu.DonHangBUS;
 import vn.edu.huit.pttk.diengiadung.nghiepvu.LoiNghiepVu;
 import vn.edu.huit.pttk.diengiadung.nghiepvu.SerialBUS;
 import vn.edu.huit.pttk.diengiadung.nghiepvu.TaiKhoanBUS;
+import vn.edu.huit.pttk.diengiadung.nghiepvu.g5.PhieuXuatBUS;
 import vn.edu.huit.pttk.diengiadung.thucthe.ChiTietDonHang;
 import vn.edu.huit.pttk.diengiadung.thucthe.DonHang;
 import vn.edu.huit.pttk.diengiadung.thucthe.GiaoDichThanhToan;
@@ -216,7 +217,8 @@ public class DoiTraBUS {
         for (String so : soSerial) {
             MayCuaDon m = dd.may().stream().filter(x -> x.serial().getSoSerial().equalsIgnoreCase(so.trim())).findFirst()
                     .orElseThrow(() -> new LoiNghiepVu("Serial " + so + " không khớp đơn " + G4Chung.maDon(maDon)));
-            if (m.serial().getTrangThai() != TrangThaiSerial.DA_BAN) {
+            if (m.serial().getTrangThai() != TrangThaiSerial.DA_BAN || m.serial().getDonHangBan() == null
+                    || !m.serial().getDonHangBan().getMaDonHang().equals(maDon)) {
                 throw new LoiNghiepVu("Serial " + so + " đang \"" + m.serial().getTrangThai().getNhan() + "\", không phải máy Đã bán của đơn");
             }
             List<YeuCauDoiTra> trung = yeuCauDAO.choDuyetCuaSerial(m.serial().getSoSerial());
@@ -294,7 +296,8 @@ public class DoiTraBUS {
         if (y.getNgayDuyet() == null) {
             return List.of();
         }
-        return phieuXuatDAO.theoDon(don).stream().filter(x -> x.getNgayXuat().isAfter(y.getNgayDuyet())).toList();
+        String lyDo = PhieuXuatBUS.lyDoDoiMay(y.getMaYeuCau());
+        return phieuXuatDAO.theoDon(don).stream().filter(x -> lyDo.equals(x.getLyDoXuat())).toList();
     }
 
     @Transactional(readOnly = true)
